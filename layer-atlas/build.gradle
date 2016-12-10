@@ -29,7 +29,7 @@ android {
 }
 
 repositories {
-    maven { url "https://raw.githubusercontent.com/layerhq/releases-android/master/releases/" }
+    maven { url "https://raw.githubusercontent.com/layerhq/releases-android/bug/APPS_2667_nightly/releases/" }
     jcenter()
 }
 
@@ -41,7 +41,7 @@ ext {
 
 dependencies {
     // Layer SDK
-    compile ('com.layer.sdk:layer-sdk:0.23.2') {
+    compile ('com.layer.sdk:layer-sdk:0.23.3-NIGHTLY') {
         exclude group: 'com.google.firebase', module: 'firebase-messaging'
         exclude group: 'com.google.firebase', module: 'firebase-core'
     }
