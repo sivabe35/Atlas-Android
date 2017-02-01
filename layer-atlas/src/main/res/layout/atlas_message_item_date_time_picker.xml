@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:paddingLeft="8dp"
+              android:paddingRight="8dp"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal">
+    <Button
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        android:text="7:00 PM"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"/>
+    <Button
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        android:text="7:30 PM"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"/>
+    <Button
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        android:text="8:30 PM"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"/>
+    <Button
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        android:text="9:30 PM"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"/>
+
+</LinearLayout>
