@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import com.layer.atlas.messagetypes.AtlasCellFactory;
 import com.layer.sdk.LayerClient;
 import com.layer.sdk.messaging.Message;
+import com.layer.sdk.messaging.MessagePart;
+
+import java.util.List;
 
 /**
  * Created by archit on 1/30/17.
@@ -20,7 +23,7 @@ public class DateTimeOptionPickerCellFactory extends AtlasCellFactory<DateTimeOp
 
     @Override
     public boolean isBindable(Message message) {
-        return false;
+        return isType(message);
     }
 
     @Override
