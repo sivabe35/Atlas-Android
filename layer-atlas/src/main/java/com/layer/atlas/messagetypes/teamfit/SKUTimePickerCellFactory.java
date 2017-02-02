@@ -8,23 +8,22 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.layer.atlas.R;
 import com.layer.atlas.messagetypes.AtlasCellFactory;
-import com.layer.atlas.util.Util;
 import com.layer.sdk.LayerClient;
-import com.layer.sdk.messaging.Identity;
 import com.layer.sdk.messaging.Message;
 import com.layer.sdk.messaging.MessagePart;
 
 import java.util.List;
 
 /**
- * Created by archit on 2/1/17.
+ * Created by archit on 2/2/17.
  */
 
-public class SKUPickerCellFactory extends AtlasCellFactory<SKUPickerCellFactory.CellHolder, SKUPickerCellFactory.SKUPickerCellInfo> {
+public class SKUTimePickerCellFactory extends AtlasCellFactory<SKUTimePickerCellFactory.CellHolder, SKUTimePickerCellFactory.SKUTimePickerCellInfo> {
 
-    public SKUPickerCellFactory() {
+    public SKUTimePickerCellFactory() {
         super(256 * 1024);
     }
 
@@ -42,31 +41,31 @@ public class SKUPickerCellFactory extends AtlasCellFactory<SKUPickerCellFactory.
     }
 
     @Override
-    public SKUPickerCellInfo parseContent(LayerClient layerClient, Message message) {
+    public SKUTimePickerCellInfo parseContent(LayerClient layerClient, Message message) {
         MessagePart part = message.getMessageParts().get(0);
         String text = part.isContentReady() ? new String(part.getData()) : "";
 
         Gson gson = new Gson();
-        return gson.fromJson(text, SKUPickerCellInfo.class);
+        return gson.fromJson(text, SKUTimePickerCellInfo.class);
     }
 
     @Override
-    public void bindCellHolder(CellHolder cellHolder, SKUPickerCellInfo cached, Message message, CellHolderSpecs specs) {
-        cellHolder.getOption1().setText(cached.getSkus().get(0).getName());
+    public void bindCellHolder(CellHolder cellHolder, SKUTimePickerCellInfo cached, Message message, CellHolderSpecs specs) {
+        cellHolder.getOption1().setText(cached.getSkuTimes().get(0).getName());
         cellHolder.getOption1().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             }
         });
 
-        cellHolder.getOption2().setText(cached.getSkus().get(1).getName());
+        cellHolder.getOption2().setText(cached.getSkuTimes().get(1).getName());
         cellHolder.getOption2().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             }
         });
 
-        cellHolder.getOption3().setText(cached.getSkus().get(2).getName());
+        cellHolder.getOption3().setText(cached.getSkuTimes().get(2).getName());
         cellHolder.getOption3().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,18 +76,15 @@ public class SKUPickerCellFactory extends AtlasCellFactory<SKUPickerCellFactory.
     @Override
     public boolean isType(Message message) {
         List<MessagePart> messageParts = message.getMessageParts();
-        return messageParts.size() == 1 && messageParts.get(0).getMimeType().equals("application/skus+json");
+        return messageParts.size() == 1 && messageParts.get(0).getMimeType().equals("application/sku-times+json");
     }
 
     @Override
     public String getPreviewText(Context context, Message message) {
-        if (isType(message)) {
-            MessagePart part = message.getMessageParts().get(0);
-            // For large text content, the MessagePart may not be downloaded yet.
-            return part.isContentReady() ? new String(part.getData()) : "";
-        } else {
-            throw new IllegalArgumentException("Message is not of the correct type - Text");
-        }
+        MessagePart part = message.getMessageParts().get(0);
+        String text = part.isContentReady() ? new String(part.getData()) : "";
+
+        return text;
     }
 
     public static class CellHolder extends AtlasCellFactory.CellHolder {
@@ -113,50 +109,39 @@ public class SKUPickerCellFactory extends AtlasCellFactory<SKUPickerCellFactory.
         }
     }
 
-    public static class SKUPickerCellInfo implements AtlasCellFactory.ParsedContent {
-        private List<SKUPickerCell> skus;
+    public static class SKUTimePickerCellInfo implements AtlasCellFactory.ParsedContent {
+        @SerializedName("sku-times")
+        private List<SKUTime> skuTimes;
 
-        public SKUPickerCellInfo() {
-        }
-
-        public List<SKUPickerCell> getSkus() {
-            return skus;
-        }
-
-        public void setSkus(List<SKUPickerCell> skus) {
-            this.skus = skus;
+        public SKUTimePickerCellInfo() {
         }
 
         @Override
         public int sizeOf() {
-            int size = 0;
-            for (SKUPickerCell cell: skus) {
-                size += Integer.SIZE + cell.name.getBytes().length;
-            }
-            return size;
+            return 0;
         }
 
-        public static class SKUPickerCell {
-            private int id;
-            private String name;
+        public List<SKUTime> getSkuTimes() {
+            return skuTimes;
+        }
 
-            public SKUPickerCell() {
+        public void setSkuTimes(List<SKUTime> skuTimes) {
+            this.skuTimes = skuTimes;
+        }
+
+        public static class SKUTime {
+            int id;
+            String name;
+
+            public SKUTime() {
             }
 
             public int getId() {
                 return id;
             }
 
-            public void setId(int id) {
-                this.id = id;
-            }
-
             public String getName() {
                 return name;
-            }
-
-            public void setName(String name) {
-                this.name = name;
             }
         }
     }
