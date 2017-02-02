@@ -15,7 +15,7 @@
 -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
        android:shape="rectangle">
-    <corners android:radius="@dimen/atlas_message_item_cell_radius"/>
+    <corners android:radius="30dp"/>
     <padding
         android:bottom="@dimen/atlas_message_item_cell_padding_bottom"
         android:left="@dimen/atlas_message_item_cell_padding_far"

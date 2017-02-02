@@ -61,4 +61,6 @@
     <color name="atlas_delete_icon">@android:color/white</color>
 
     <color name="atlas_image_popup_background">@android:color/black</color>
+
+    <color name="hackathon_chat_background">#E6222222</color>
 </resources>

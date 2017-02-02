@@ -51,13 +51,13 @@
     </style>
 
     <style name="AtlasMessagesRecyclerView">
-        <item name="myBubbleColor">@color/atlas_color_primary_blue</item>
-        <item name="myTextColor">@color/atlas_text_white</item>
+        <item name="myBubbleColor">#E6ffffff</item>
+        <item name="myTextColor">#F2000000</item>
         <item name="myTextSize">@dimen/atlas_text_size_message_item</item>
         <item name="myTextTypeface">normal</item>
         <item name="myTextStyle">normal</item>
-        <item name="theirBubbleColor">@color/atlas_color_primary_gray</item>
-        <item name="theirTextColor">@color/atlas_text_black</item>
+        <item name="theirBubbleColor">#4dffffff</item>
+        <item name="theirTextColor">#E6ffffff</item>
         <item name="theirTextSize">@dimen/atlas_text_size_message_item</item>
         <item name="theirTextTypeface">normal</item>
         <item name="theirTextStyle">normal</item>
