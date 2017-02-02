@@ -45,6 +45,9 @@ public class FrequencyOptionsPickerCellFactory extends SKUPickerCellFactory{
     @Override
     public void bindCellHolder(final CellHolder cellHolder, SKUPickerCellInfo cached, final Message message, CellHolderSpecs specs) {
         cellHolder.getOption1().setText(cached.getSkus().get(0).getName());
+
+        cellHolder.titleText.setText("Ok great! Pick below if you would like to schedule a single class, a pack of 5, or start joining us all the time and subscribe monthly.");
+
         cellHolder.getOption1().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

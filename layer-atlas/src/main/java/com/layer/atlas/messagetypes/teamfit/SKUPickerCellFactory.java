@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.layer.atlas.R;
 import com.layer.atlas.messagetypes.AtlasCellFactory;
@@ -119,11 +120,13 @@ public class SKUPickerCellFactory extends AtlasCellFactory<SKUPickerCellFactory.
 
     public static class CellHolder extends AtlasCellFactory.CellHolder {
         Button option1, option2, option3;
+        TextView titleText;
 
         public CellHolder(View v) {
             option1 = (Button) v.findViewById(R.id.sku_picker_option_0);
             option2 = (Button) v.findViewById(R.id.sku_picker_option_1);
             option3 = (Button) v.findViewById(R.id.sku_picker_option_2);
+            titleText = (TextView) v.findViewById(R.id.card_title);
         }
 
         public Button getOption1() {

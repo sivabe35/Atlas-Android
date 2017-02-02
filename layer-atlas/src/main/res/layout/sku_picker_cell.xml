@@ -2,33 +2,53 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:background="@drawable/rounded_background"
               android:orientation="vertical">
 
-    <Button
-        android:id="@+id/sku_picker_option_0"
+    <TextView
+        android:id="@+id/card_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/rounded_background_two"
+        android:paddingBottom="10dp"
         android:paddingLeft="30dp"
-        android:gravity="left|center_vertical"
+        android:paddingRight="30dp"
+        android:paddingTop="10dp"
+        android:text="Awesome! We have three different types of classes available for tomorrow. Tap the one you would like to join..."/>
 
-        android:text="Option 1"
-        style="?android:attr/borderlessButtonStyle"/>
-    <Button
-        android:id="@+id/sku_picker_option_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="30dp"
-        android:gravity="left|center_vertical"
-        android:text="Option 1"
-        style="?android:attr/borderlessButtonStyle"/>
-    <Button
-        android:id="@+id/sku_picker_option_2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="30dp"
-        android:gravity="left|center_vertical"
-        android:text="Option 3"
-        style="?android:attr/borderlessButtonStyle"/>
+    <LinearLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:background="@drawable/rounded_background"
+                  android:orientation="vertical">
 
+        <Button
+            android:id="@+id/sku_picker_option_0"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left|center_vertical"
+
+            android:paddingLeft="30dp"
+            android:text="Option 1"/>
+
+        <Button
+            android:id="@+id/sku_picker_option_1"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="30dp"
+            android:text="Option 1"/>
+
+        <Button
+            android:id="@+id/sku_picker_option_2"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="30dp"
+            android:text="Option 3"/>
+
+    </LinearLayout>
 </LinearLayout>
