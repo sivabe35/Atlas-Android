@@ -1,21 +1,20 @@
 package com.layer.atlas.messagetypes.teamfit;
 
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.google.gson.Gson;
 import com.layer.atlas.R;
 import com.layer.atlas.messagetypes.AtlasCellFactory;
-import com.layer.atlas.util.Util;
 import com.layer.sdk.LayerClient;
-import com.layer.sdk.messaging.Identity;
 import com.layer.sdk.messaging.Message;
+import com.layer.sdk.messaging.MessageOptions;
 import com.layer.sdk.messaging.MessagePart;
+import com.layer.sdk.messaging.PushNotificationPayload;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,8 +23,11 @@ import java.util.List;
 
 public class SKUPickerCellFactory extends AtlasCellFactory<SKUPickerCellFactory.CellHolder, SKUPickerCellFactory.SKUPickerCellInfo> {
 
-    public SKUPickerCellFactory() {
+    protected LayerClient mLayerClient;
+
+    public SKUPickerCellFactory(LayerClient layerClient) {
         super(256 * 1024);
+        this.mLayerClient = layerClient;
     }
 
     @Override
@@ -36,7 +38,7 @@ public class SKUPickerCellFactory extends AtlasCellFactory<SKUPickerCellFactory.
     @Override
     public CellHolder createCellHolder(ViewGroup cellView, boolean isMe, LayoutInflater layoutInflater) {
         View v = layoutInflater.inflate(R.layout.sku_picker_cell, cellView, true);
-        ((GradientDrawable) v.getBackground()).setColor(isMe ? mMessageStyle.getMyBubbleColor() : mMessageStyle.getOtherBubbleColor());
+        //((GradientDrawable) v.getBackground()).setColor(isMe ? mMessageStyle.getMyBubbleColor() : mMessageStyle.getOtherBubbleColor());
 
         return new CellHolder(v);
     }
@@ -46,16 +48,28 @@ public class SKUPickerCellFactory extends AtlasCellFactory<SKUPickerCellFactory.
         MessagePart part = message.getMessageParts().get(0);
         String text = part.isContentReady() ? new String(part.getData()) : "";
 
-        Gson gson = new Gson();
-        return gson.fromJson(text, SKUPickerCellInfo.class);
+        SKUPickerCellInfo info = new SKUPickerCellInfo();
+        List<SKUPickerCellInfo.SKUPickerCell> skus = new ArrayList<>();
+
+        skus.add(new SKUPickerCellInfo.SKUPickerCell(123, "Crossfit"));
+        skus.add(new SKUPickerCellInfo.SKUPickerCell(456, "Olympic Weightlifting"));
+        skus.add(new SKUPickerCellInfo.SKUPickerCell(789, "Beginners Introduction"));
+
+        info.setSkus(skus);
+        return info;
     }
 
     @Override
-    public void bindCellHolder(CellHolder cellHolder, SKUPickerCellInfo cached, Message message, CellHolderSpecs specs) {
+    public void bindCellHolder(final CellHolder cellHolder, SKUPickerCellInfo cached, final Message message, CellHolderSpecs specs) {
         cellHolder.getOption1().setText(cached.getSkus().get(0).getName());
         cellHolder.getOption1().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String text = cellHolder.getOption1().getText().toString();
+                MessagePart part = mLayerClient.newMessagePart(text);
+                PushNotificationPayload pushNotificationPayload = new PushNotificationPayload.Builder().text(text).build();
+                Message reply = mLayerClient.newMessage(new MessageOptions().defaultPushNotificationPayload(pushNotificationPayload), part);
+                message.getConversation().send(reply);
             }
         });
 
@@ -63,6 +77,11 @@ public class SKUPickerCellFactory extends AtlasCellFactory<SKUPickerCellFactory.
         cellHolder.getOption2().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String text = cellHolder.getOption2().getText().toString();
+                MessagePart part = mLayerClient.newMessagePart(text);
+                PushNotificationPayload pushNotificationPayload = new PushNotificationPayload.Builder().text(text).build();
+                Message reply = mLayerClient.newMessage(new MessageOptions().defaultPushNotificationPayload(pushNotificationPayload), part);
+                message.getConversation().send(reply);
             }
         });
 
@@ -70,6 +89,11 @@ public class SKUPickerCellFactory extends AtlasCellFactory<SKUPickerCellFactory.
         cellHolder.getOption3().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String text = cellHolder.getOption3().getText().toString();
+                MessagePart part = mLayerClient.newMessagePart(text);
+                PushNotificationPayload pushNotificationPayload = new PushNotificationPayload.Builder().text(text).build();
+                Message reply = mLayerClient.newMessage(new MessageOptions().defaultPushNotificationPayload(pushNotificationPayload), part);
+                message.getConversation().send(reply);
             }
         });
     }
@@ -77,7 +101,9 @@ public class SKUPickerCellFactory extends AtlasCellFactory<SKUPickerCellFactory.
     @Override
     public boolean isType(Message message) {
         List<MessagePart> messageParts = message.getMessageParts();
-        return messageParts.size() == 1 && messageParts.get(0).getMimeType().equals("application/skus+json");
+        MessagePart part = messageParts.get(0);
+        String text = part.isContentReady() ? new String(part.getData()) : "";
+        return messageParts.size() == 1 && messageParts.get(0).getMimeType().equals("text/plain") && text.equals("[application/skus+json]");
     }
 
     @Override
@@ -130,7 +156,7 @@ public class SKUPickerCellFactory extends AtlasCellFactory<SKUPickerCellFactory.
         @Override
         public int sizeOf() {
             int size = 0;
-            for (SKUPickerCell cell: skus) {
+            for (SKUPickerCell cell : skus) {
                 size += Integer.SIZE + cell.name.getBytes().length;
             }
             return size;
@@ -141,6 +167,11 @@ public class SKUPickerCellFactory extends AtlasCellFactory<SKUPickerCellFactory.
             private String name;
 
             public SKUPickerCell() {
+            }
+
+            public SKUPickerCell(int id, String name) {
+                this.id = id;
+                this.name = name;
             }
 
             public int getId() {

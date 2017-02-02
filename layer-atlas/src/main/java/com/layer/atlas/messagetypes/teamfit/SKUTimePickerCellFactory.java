@@ -13,8 +13,11 @@ import com.layer.atlas.R;
 import com.layer.atlas.messagetypes.AtlasCellFactory;
 import com.layer.sdk.LayerClient;
 import com.layer.sdk.messaging.Message;
+import com.layer.sdk.messaging.MessageOptions;
 import com.layer.sdk.messaging.MessagePart;
+import com.layer.sdk.messaging.PushNotificationPayload;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,8 +26,10 @@ import java.util.List;
 
 public class SKUTimePickerCellFactory extends AtlasCellFactory<SKUTimePickerCellFactory.CellHolder, SKUTimePickerCellFactory.SKUTimePickerCellInfo> {
 
-    public SKUTimePickerCellFactory() {
+    private LayerClient mLayerClient;
+    public SKUTimePickerCellFactory(LayerClient layerClient) {
         super(256 * 1024);
+        this.mLayerClient = layerClient;
     }
 
     @Override
@@ -35,7 +40,7 @@ public class SKUTimePickerCellFactory extends AtlasCellFactory<SKUTimePickerCell
     @Override
     public CellHolder createCellHolder(ViewGroup cellView, boolean isMe, LayoutInflater layoutInflater) {
         View v = layoutInflater.inflate(R.layout.sku_picker_cell, cellView, true);
-        ((GradientDrawable) v.getBackground()).setColor(isMe ? mMessageStyle.getMyBubbleColor() : mMessageStyle.getOtherBubbleColor());
+        //((GradientDrawable) v.getBackground()).setColor(isMe ? mMessageStyle.getMyBubbleColor() : mMessageStyle.getOtherBubbleColor());
 
         return new CellHolder(v);
     }
@@ -45,16 +50,29 @@ public class SKUTimePickerCellFactory extends AtlasCellFactory<SKUTimePickerCell
         MessagePart part = message.getMessageParts().get(0);
         String text = part.isContentReady() ? new String(part.getData()) : "";
 
-        Gson gson = new Gson();
-        return gson.fromJson(text, SKUTimePickerCellInfo.class);
+        SKUTimePickerCellInfo info = new SKUTimePickerCellInfo();
+        List<SKUTimePickerCellInfo.SKUTime> skuTimes = new ArrayList<>();
+
+        skuTimes.add(new SKUTimePickerCellInfo.SKUTime(321, "8:00 AM - 9:00 AM (2 Spots available)"));
+        skuTimes.add(new SKUTimePickerCellInfo.SKUTime(654, "11:00 AM - 12:00 PM (4 Spots available)"));
+        skuTimes.add(new SKUTimePickerCellInfo.SKUTime(987, "3:00 PM - 4:00 PM (1 Spots available)"));
+
+        info.setSkuTimes(skuTimes);
+        return info;
     }
 
     @Override
-    public void bindCellHolder(CellHolder cellHolder, SKUTimePickerCellInfo cached, Message message, CellHolderSpecs specs) {
+    public void bindCellHolder(final CellHolder cellHolder, SKUTimePickerCellInfo cached, final Message message, CellHolderSpecs specs) {
         cellHolder.getOption1().setText(cached.getSkuTimes().get(0).getName());
         cellHolder.getOption1().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String fullText = cellHolder.getOption1().getText().toString();
+                String text = fullText.split("[(]")[0].trim();
+                MessagePart part = mLayerClient.newMessagePart(text);
+                PushNotificationPayload pushNotificationPayload = new PushNotificationPayload.Builder().text(text).build();
+                Message reply = mLayerClient.newMessage(new MessageOptions().defaultPushNotificationPayload(pushNotificationPayload), part);
+                message.getConversation().send(reply);
             }
         });
 
@@ -62,6 +80,12 @@ public class SKUTimePickerCellFactory extends AtlasCellFactory<SKUTimePickerCell
         cellHolder.getOption2().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String fullText = cellHolder.getOption1().getText().toString();
+                String text = fullText.split("[(]")[0].trim();
+                MessagePart part = mLayerClient.newMessagePart(text);
+                PushNotificationPayload pushNotificationPayload = new PushNotificationPayload.Builder().text(text).build();
+                Message reply = mLayerClient.newMessage(new MessageOptions().defaultPushNotificationPayload(pushNotificationPayload), part);
+                message.getConversation().send(reply);
             }
         });
 
@@ -69,6 +93,12 @@ public class SKUTimePickerCellFactory extends AtlasCellFactory<SKUTimePickerCell
         cellHolder.getOption3().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String fullText = cellHolder.getOption1().getText().toString();
+                String text = fullText.split("[(]")[0].trim();
+                MessagePart part = mLayerClient.newMessagePart(text);
+                PushNotificationPayload pushNotificationPayload = new PushNotificationPayload.Builder().text(text).build();
+                Message reply = mLayerClient.newMessage(new MessageOptions().defaultPushNotificationPayload(pushNotificationPayload), part);
+                message.getConversation().send(reply);
             }
         });
     }
@@ -76,7 +106,9 @@ public class SKUTimePickerCellFactory extends AtlasCellFactory<SKUTimePickerCell
     @Override
     public boolean isType(Message message) {
         List<MessagePart> messageParts = message.getMessageParts();
-        return messageParts.size() == 1 && messageParts.get(0).getMimeType().equals("application/sku-times+json");
+        MessagePart part = messageParts.get(0);
+        String text = part.isContentReady() ? new String(part.getData()) : "";
+        return messageParts.size() == 1 && messageParts.get(0).getMimeType().equals("text/plain") && text.equals("[application/sku-times+json]");
     }
 
     @Override
@@ -134,6 +166,11 @@ public class SKUTimePickerCellFactory extends AtlasCellFactory<SKUTimePickerCell
             String name;
 
             public SKUTime() {
+            }
+
+            public SKUTime(int id, String name) {
+                this.id = id;
+                this.name = name;
             }
 
             public int getId() {
