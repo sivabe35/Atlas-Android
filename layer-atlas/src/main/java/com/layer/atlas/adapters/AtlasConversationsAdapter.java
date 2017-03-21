@@ -132,28 +132,28 @@ public class AtlasConversationsAdapter extends RecyclerView.Adapter<AtlasConvers
     }
 
     private void syncInitialMessages(final int start, final int length) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                long desiredHistory = mInitialHistory;
-                if (desiredHistory <= 0) return;
-                for (int i = start; i < start + length; i++) {
-                    try {
-                        final Conversation conversation = getItem(i);
-                        if (conversation == null || conversation.getHistoricSyncStatus() != Conversation.HistoricSyncStatus.MORE_AVAILABLE) {
-                            continue;
-                        }
-                        Query<Message> localCountQuery = Query.builder(Message.class)
-                                .predicate(new Predicate(Message.Property.CONVERSATION, Predicate.Operator.EQUAL_TO, conversation))
-                                .build();
-                        long delta = desiredHistory - mLayerClient.executeQueryForCount(localCountQuery);
-                        if (delta > 0) conversation.syncMoreHistoricMessages((int) delta);
-                    } catch (IndexOutOfBoundsException e) {
-                        // Concurrent modification
-                    }
-                }
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                long desiredHistory = mInitialHistory;
+//                if (desiredHistory <= 0) return;
+//                for (int i = start; i < start + length; i++) {
+//                    try {
+//                        final Conversation conversation = getItem(i);
+//                        if (conversation == null || conversation.getHistoricSyncStatus() != Conversation.HistoricSyncStatus.MORE_AVAILABLE) {
+//                            continue;
+//                        }
+//                        Query<Message> localCountQuery = Query.builder(Message.class)
+//                                .predicate(new Predicate(Message.Property.CONVERSATION, Predicate.Operator.EQUAL_TO, conversation))
+//                                .build();
+//                        long delta = desiredHistory - mLayerClient.executeQueryForCount(localCountQuery);
+//                        if (delta > 0) conversation.syncMoreHistoricMessages((int) delta);
+//                    } catch (IndexOutOfBoundsException e) {
+//                        // Concurrent modification
+//                    }
+//                }
+//            }
+//        }).start();
     }
 
 

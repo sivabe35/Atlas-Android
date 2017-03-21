@@ -29,7 +29,7 @@ android {
 }
 
 repositories {
-    maven { url "https://raw.githubusercontent.com/layerhq/releases-android/master/releases/" }
+    maven { url "/Users/amar/.gitRepos/layerhq/releases-android/releases/" }
     jcenter()
 }
 
@@ -41,7 +41,7 @@ ext {
 
 dependencies {
     // Layer SDK
-    compile ('com.layer.sdk:layer-sdk:0.23.8') {
+    compile ('com.layer.sdk:layer-sdk:0.23.9-LOCAL') {
         exclude group: 'com.google.firebase', module: 'firebase-messaging'
         exclude group: 'com.google.firebase', module: 'firebase-core'
     }
