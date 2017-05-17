@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="layer_ui_avatar_width">72dp</dimen>
+    <dimen name="layer_ui_avatar_height">72dp</dimen>
+    <dimen name="layer_ui_avatar_presence_height">16dp</dimen>
+
+    <dimen name="layer_ui_avatar_single_line_user_padding">16dp</dimen>
+    <dimen name="layer_ui_avatar_message_left_margin">12dp</dimen>
+    <dimen name="layer_ui_avatar_message_right_margin">8dp</dimen>
+</resources>

@@ -1,4 +1,4 @@
-package com.layer.ui.util.picasso.transformations;
+package com.layer.ui.util.imagecache.transformations;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

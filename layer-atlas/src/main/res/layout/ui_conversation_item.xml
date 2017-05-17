@@ -46,10 +46,10 @@
         android:duplicateParentState="true"
         android:orientation="horizontal">
 
-        <com.layer.ui.Avatar
+        <com.layer.ui.avatar.AvatarView
             android:id="@+id/avatar"
-            android:layout_width="@dimen/layer_ui_avatar_item_single"
-            android:layout_height="@dimen/layer_ui_avatar_item_single"
+            android:layout_width="@dimen/layer_ui_avatar_width"
+            android:layout_height="@dimen/layer_ui_avatar_height"
             android:layout_margin="@dimen/layer_ui_padding_normal"/>
 
         <!-- right content part -->

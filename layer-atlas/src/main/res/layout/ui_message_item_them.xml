@@ -102,7 +102,7 @@
             android:orientation="horizontal"
             >
 
-            <com.layer.ui.Avatar
+            <com.layer.ui.avatar.AvatarView
                 android:id="@+id/avatar"
                 android:layout_width="@dimen/layer_ui_message_avatar_item_single"
                 android:layout_height="@dimen/layer_ui_message_avatar_item_single"

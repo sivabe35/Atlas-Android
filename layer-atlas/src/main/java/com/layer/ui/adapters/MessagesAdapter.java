@@ -13,8 +13,9 @@ import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.TextView;
 
-import com.layer.ui.Avatar;
+import com.layer.ui.avatar.AvatarView;
 import com.layer.ui.R;
+import com.layer.ui.avatar.AvatarViewModel;
 import com.layer.ui.messagetypes.CellFactory;
 import com.layer.ui.messagetypes.MessageStyle;
 import com.layer.ui.util.IdentityRecyclerViewEventListener;
@@ -26,7 +27,7 @@ import com.layer.sdk.messaging.Message;
 import com.layer.sdk.query.ListViewController;
 import com.layer.sdk.query.Query;
 import com.layer.sdk.query.RecyclerViewController;
-import com.squareup.picasso.Picasso;
+import com.layer.ui.util.imagecache.ImageCacheWrapper;
 
 import java.text.DateFormat;
 import java.util.Collections;
@@ -63,9 +64,7 @@ import java.util.Set;
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHolder> implements
         BaseAdapter<Message>, RecyclerViewController.Callback {
     private final static int VIEW_TYPE_FOOTER = 0;
-
     protected final LayerClient mLayerClient;
-    protected final Picasso mPicasso;
     private final RecyclerViewController<Message> mQueryController;
     protected final LayoutInflater mLayoutInflater;
     protected final Handler mUiThreadHandler;
@@ -92,20 +91,23 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
 
     //Style
     private MessageStyle mMessageStyle;
+
     private RecyclerView mRecyclerView;
     private boolean mReadReceiptsEnabled = true;
 
     protected boolean mShouldShowAvatarInOneOnOneConversations;
     protected boolean mShouldShowAvatarPresence = true;
+    private ImageCacheWrapper mImageCacheWrapper;
 
-    public MessagesAdapter(Context context, LayerClient layerClient, Picasso picasso) {
+    public MessagesAdapter(Context context, LayerClient layerClient, ImageCacheWrapper imageCacheWrapper) {
+        mImageCacheWrapper = imageCacheWrapper;
         mLayerClient = layerClient;
-        mPicasso = picasso;
         mLayoutInflater = LayoutInflater.from(context);
         mUiThreadHandler = new Handler(Looper.getMainLooper());
         mDateFormat = android.text.format.DateFormat.getDateFormat(context);
         mTimeFormat = android.text.format.DateFormat.getTimeFormat(context);
         mDisplayMetrics = context.getResources().getDisplayMetrics();
+
         mQueryController = layerClient.newRecyclerViewController(null, null, this);
         mQueryController.setPreProcessCallback(new ListViewController.PreProcessCallback<Message>() {
             @Override
@@ -297,7 +299,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
 
         CellType cellType = mCellTypesByViewType.get(viewType);
         int rootResId = cellType.mMe ? CellViewHolder.RESOURCE_ID_ME : CellViewHolder.RESOURCE_ID_THEM;
-        CellViewHolder rootViewHolder = new CellViewHolder(mLayoutInflater.inflate(rootResId, parent, false), mPicasso, mShouldShowAvatarPresence);
+        CellViewHolder rootViewHolder = new CellViewHolder(mLayoutInflater.inflate(rootResId, parent, false), mShouldShowAvatarPresence, mImageCacheWrapper);
         rootViewHolder.mCellHolder = cellType.mCellFactory.createCellHolder(rootViewHolder.mCell, cellType.mMe, mLayoutInflater);
         rootViewHolder.mCellHolderSpecs = new CellFactory.CellHolderSpecs();
         return rootViewHolder;
@@ -382,21 +384,21 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
             // Avatars
             if (oneOnOne) {
                 if (mShouldShowAvatarInOneOnOneConversations) {
-                    viewHolder.mAvatar.setVisibility(View.VISIBLE);
-                    viewHolder.mAvatar.setParticipants(message.getSender());
+                    viewHolder.mAvatarView.setVisibility(View.VISIBLE);
+                    viewHolder.mAvatarView.setParticipants(message.getSender());
 
                 } else {
-                    viewHolder.mAvatar.setVisibility(View.GONE);
+                    viewHolder.mAvatarView.setVisibility(View.GONE);
                 }
             } else if (cluster.mClusterWithNext == null || cluster.mClusterWithNext != ClusterType.LESS_THAN_MINUTE) {
                 // Last message in cluster
-                viewHolder.mAvatar.setVisibility(View.VISIBLE);
-                viewHolder.mAvatar.setParticipants(message.getSender());
+                viewHolder.mAvatarView.setVisibility(View.VISIBLE);
+                viewHolder.mAvatarView.setParticipants(message.getSender());
                 // Add the position to the positions map for Identity updates
                 mIdentityEventListener.addIdentityPosition(position, Collections.singleton(message.getSender()));
             } else {
                 // Invisible for clustered messages to preserve proper spacing
-                viewHolder.mAvatar.setVisibility(View.INVISIBLE);
+                viewHolder.mAvatarView.setVisibility(View.INVISIBLE);
             }
         }
 
@@ -409,7 +411,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         int maxWidth = mRecyclerView.getWidth() - viewHolder.mRoot.getPaddingLeft() - viewHolder.mRoot.getPaddingRight() - params.leftMargin - params.rightMargin;
         if (!oneOnOne && !cellType.mMe) {
             // Subtract off avatar width if needed
-            ViewGroup.MarginLayoutParams avatarParams = (ViewGroup.MarginLayoutParams) viewHolder.mAvatar.getLayoutParams();
+            ViewGroup.MarginLayoutParams avatarParams = (ViewGroup.MarginLayoutParams) viewHolder.mAvatarView.getLayoutParams();
             maxWidth -= avatarParams.width + avatarParams.rightMargin + avatarParams.leftMargin;
         }
         // TODO: subtract spacing rather than multiply by 0.8 to handle screen sizes more cleanly
@@ -711,7 +713,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         protected TextView mTimeGroupDay;
         protected TextView mTimeGroupTime;
         protected Space mClusterSpaceGap;
-        protected Avatar mAvatar;
+        protected AvatarView mAvatarView;
         protected ViewGroup mCell;
         protected TextView mReceipt;
 
@@ -719,7 +721,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         protected CellFactory.CellHolder mCellHolder;
         protected CellFactory.CellHolderSpecs mCellHolderSpecs;
 
-        public CellViewHolder(View itemView, Picasso picasso, boolean shouldShowAvatarPresence) {
+        public CellViewHolder(View itemView, boolean shouldShowAvatarPresence, ImageCacheWrapper imageCachWrapper) {
             super(itemView);
             mUserName = (TextView) itemView.findViewById(R.id.sender);
             mTimeGroup = itemView.findViewById(R.id.time_group);
@@ -729,10 +731,10 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
             mCell = (ViewGroup) itemView.findViewById(R.id.cell);
             mReceipt = (TextView) itemView.findViewById(R.id.receipt);
 
-            mAvatar = ((Avatar) itemView.findViewById(R.id.avatar));
-            if (mAvatar != null)  {
-                mAvatar.init(picasso);
-                mAvatar.setShouldShowPresence(shouldShowAvatarPresence);
+            mAvatarView = ((AvatarView) itemView.findViewById(R.id.avatar));
+            if (mAvatarView != null)  {
+                mAvatarView.init(new AvatarViewModel(imageCachWrapper));
+                mAvatarView.setShouldShowPresence(shouldShowAvatarPresence);
             }
         }
     }

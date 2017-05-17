@@ -7,8 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.layer.ui.Avatar;
+import com.layer.ui.avatar.AvatarView;
 import com.layer.ui.R;
+import com.layer.ui.avatar.AvatarViewModel;
 import com.layer.ui.messagetypes.CellFactory;
 import com.layer.ui.messagetypes.generic.GenericCellFactory;
 import com.layer.ui.messagetypes.location.LocationCellFactory;
@@ -28,6 +29,7 @@ import com.layer.sdk.query.Predicate;
 import com.layer.sdk.query.Query;
 import com.layer.sdk.query.RecyclerViewController;
 import com.layer.sdk.query.SortDescriptor;
+import com.layer.ui.util.imagecache.ImageCacheWrapper;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
@@ -58,13 +60,15 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
     private Set<CellFactory> mDefaultCellFactories;
 
     protected ConversationFormatter mConversationFormatter;
+    private ImageCacheWrapper mImageCacheWrapper;
 
-    public ConversationsAdapter(Context context, LayerClient client, Picasso picasso, ConversationFormatter conversationFormatter) {
-        this(context, client, picasso, null, conversationFormatter);
+    public ConversationsAdapter(Context context, LayerClient client, Picasso picasso, ConversationFormatter conversationFormatter, ImageCacheWrapper imageCacheWrapper) {
+        this(context, client, picasso, null, conversationFormatter, imageCacheWrapper);
     }
 
-    public ConversationsAdapter(Context context, LayerClient client, Picasso picasso, Collection<String> updateAttributes, ConversationFormatter conversationFormatter) {
+    public ConversationsAdapter(Context context, LayerClient client, Picasso picasso, Collection<String> updateAttributes, ConversationFormatter conversationFormatter, ImageCacheWrapper imageCacheWrapper) {
         mConversationFormatter = conversationFormatter;
+        mImageCacheWrapper =imageCacheWrapper;
         Query<Conversation> query = Query.builder(Conversation.class)
                 /* Only show conversations we're still a member of */
                 .predicate(new Predicate(Conversation.Property.PARTICIPANT_COUNT, Predicate.Operator.GREATER_THAN, 1))
@@ -185,8 +189,8 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewHolder viewHolder = new ViewHolder(mInflater.inflate(ViewHolder.RESOURCE_ID, parent, false), conversationStyle);
         viewHolder.setClickListener(mViewHolderClickListener);
-        viewHolder.mAvatarCluster
-                .init(mPicasso)
+        viewHolder.mAvatarViewCluster
+                .init(new AvatarViewModel(mImageCacheWrapper))
                 .setStyle(conversationStyle.getAvatarStyle());
         return viewHolder;
     }
@@ -205,7 +209,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
         // Add the position to the positions map for Identity updates
         mIdentityEventListener.addIdentityPosition(position, participants);
 
-        viewHolder.mAvatarCluster.setParticipants(participants);
+        viewHolder.mAvatarViewCluster.setParticipants(participants);
         viewHolder.mTitleView.setText(mConversationFormatter.getConversationTitle(mLayerClient, conversation, participants));
         viewHolder.applyStyle(conversation.getTotalUnreadMessageCount() > 0);
 
@@ -367,7 +371,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
 
         // View cache
         protected TextView mTitleView;
-        protected Avatar mAvatarCluster;
+        protected AvatarView mAvatarViewCluster;
         protected TextView mMessageView;
         protected TextView mTimeView;
 
@@ -381,7 +385,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
             itemView.setOnLongClickListener(this);
             this.conversationStyle = conversationStyle;
 
-            mAvatarCluster = (Avatar) itemView.findViewById(R.id.avatar);
+            mAvatarViewCluster = (AvatarView) itemView.findViewById(R.id.avatar);
             mTitleView = (TextView) itemView.findViewById(R.id.title);
             mMessageView = (TextView) itemView.findViewById(R.id.last_message);
             mTimeView = (TextView) itemView.findViewById(R.id.time);

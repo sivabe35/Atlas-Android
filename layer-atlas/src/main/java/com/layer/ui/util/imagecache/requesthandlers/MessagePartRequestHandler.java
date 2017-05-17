@@ -1,4 +1,4 @@
-package com.layer.ui.util.picasso.requesthandlers;
+package com.layer.ui.util.imagecache.requesthandlers;
 
 import android.net.Uri;
 

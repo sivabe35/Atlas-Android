@@ -24,9 +24,6 @@
     <dimen name="layer_ui_primary_item_height">72dp</dimen>
     <dimen name="layer_ui_secondary_item_height">56dp</dimen>
     <dimen name="layer_ui_dropdown_item_height">48dp</dimen>
-    <dimen name="layer_ui_avatar_item_single">40dp</dimen>
-    <dimen name="layer_ui_avatar_item_multi">26dp</dimen>
-    <dimen name="layer_ui_message_avatar_item_single">24dp</dimen>
     <dimen name="layer_ui_primary_icon_size">24dp</dimen>
     <dimen name="layer_ui_icon_button_size">48dp</dimen>
     <dimen name="layer_ui_icon_button_side_padding">4dp</dimen>
@@ -85,9 +82,24 @@
     <dimen name="layer_ui_participant_filter_min_width">32dp</dimen>
     <dimen name="layer_ui_selected_participant_group_max_height">96dp</dimen>
 
-    <!-- ####################################################################################### -->
     <!-- # Recycler Maximum Cell Height Dimension                                             # -->
     <!-- ####################################################################################### -->
     <dimen name="layer_ui_messages_max_cell_height">370dp</dimen>
+
+    <!-- ####################################################################################### -->
+    <!-- # Avatar                                                                         # -->
+    <!-- ####################################################################################### -->
+    <dimen name="layer_ui_avatar_item_single">40dp</dimen>
+    <dimen name="layer_ui_avatar_item_multi">26dp</dimen>
+    <dimen name="layer_ui_message_avatar_item_single">24dp</dimen>
+
+    <dimen name="layer_ui_avatar_width">40dp</dimen>
+    <dimen name="layer_ui_avatar_height">40dp</dimen>
+    <dimen name="layer_ui_avatar_presence_height">12dp</dimen>
+    <dimen name="layer_ui_avatar_single_line_user_padding">16dp</dimen>
+
+    <dimen name="layer_ui_avatar_message_left_margin">12dp</dimen>
+    <dimen name="layer_ui_avatar_message_right_margin">8dp</dimen>
+
 
 </resources>
