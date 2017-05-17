@@ -22,7 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.layer.ui.avatar.AvatarView;
 import com.layer.ui.util.AvatarStyle;
 import com.layer.ui.util.EditTextUtil;
 import com.layer.ui.util.IdentityDisplayNameComparator;
@@ -97,12 +96,14 @@ public class AddressBar extends LinearLayout {
         mFilter = (EmptyDelEditText) findViewById(R.id.filter);
         mSelectedParticipantLayout.setStretchChild(mFilter);
         mParticipantList = (RecyclerView) findViewById(R.id.participant_list);
-        ((MaxHeightScrollView) findViewById(R.id.selected_participant_scroll)).setMaximumHeight(getResources().getDimensionPixelSize(R.dimen.layer_ui_selected_participant_group_max_height));
+        ((MaxHeightScrollView) findViewById(R.id.selected_participant_scroll)).setMaximumHeight(getResources().getDimensionPixelSize(R.dimen.atlas_selected_participant_group_max_height));
         setOrientation(VERTICAL);
     }
 
     public AddressBar init(LayerClient layerClient, Picasso picasso) {
         mLayerClient = layerClient;
+        mPicasso = picasso;
+
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mParticipantList.setLayoutManager(manager);
         mAvailableConversationAdapter = new AvailableConversationAdapter(mLayerClient, mPicasso);
@@ -270,18 +271,18 @@ public class AddressBar extends LinearLayout {
     }
 
     private void parseStyle(Context context, AttributeSet attrs, int defStyle) {
-        TypedArray ta = context.getTheme().obtainStyledAttributes(attrs, R.styleable.AddressBar, R.attr.AddressBar, defStyle);
+        TypedArray ta = context.getTheme().obtainStyledAttributes(attrs, R.styleable.AddressBar, R.attr.AtlasAddressBar, defStyle);
         Resources resources = context.getResources();
-        this.mInputTextSize = ta.getDimensionPixelSize(R.styleable.AddressBar_inputTextSize, resources.getDimensionPixelSize(R.dimen.layer_ui_text_size_input));
-        this.mInputTextColor = ta.getColor(R.styleable.AddressBar_inputTextColor, resources.getColor(R.color.layer_ui_text_black));
+        this.mInputTextSize = ta.getDimensionPixelSize(R.styleable.AddressBar_inputTextSize, resources.getDimensionPixelSize(R.dimen.atlas_text_size_input));
+        this.mInputTextColor = ta.getColor(R.styleable.AddressBar_inputTextColor, resources.getColor(R.color.atlas_text_black));
         this.mInputTextStyle = ta.getInt(R.styleable.AddressBar_inputTextStyle, Typeface.NORMAL);
         String inputTextTypefaceName = ta.getString(R.styleable.AddressBar_inputTextTypeface);
         this.mInputTextTypeface = inputTextTypefaceName != null ? Typeface.create(inputTextTypefaceName, mInputTextStyle) : null;
-        this.mInputCursorColor = ta.getColor(R.styleable.AddressBar_inputCursorColor, resources.getColor(R.color.layer_ui_color_primary_blue));
-        this.mInputUnderlineColor = ta.getColor(R.styleable.AddressBar_inputUnderlineColor, resources.getColor(R.color.layer_ui_color_primary_blue));
+        this.mInputCursorColor = ta.getColor(R.styleable.AddressBar_inputCursorColor, resources.getColor(R.color.atlas_color_primary_blue));
+        this.mInputUnderlineColor = ta.getColor(R.styleable.AddressBar_inputUnderlineColor, resources.getColor(R.color.atlas_color_primary_blue));
 
-        this.mListTextSize = ta.getDimensionPixelSize(R.styleable.AddressBar_listTextSize, resources.getDimensionPixelSize(R.dimen.layer_ui_text_size_secondary_item));
-        this.mListTextColor = ta.getColor(R.styleable.AddressBar_listTextColor, resources.getColor(R.color.layer_ui_text_black));
+        this.mListTextSize = ta.getDimensionPixelSize(R.styleable.AddressBar_listTextSize, resources.getDimensionPixelSize(R.dimen.atlas_text_size_secondary_item));
+        this.mListTextColor = ta.getColor(R.styleable.AddressBar_listTextColor, resources.getColor(R.color.atlas_text_black));
         this.mListTextStyle = ta.getInt(R.styleable.AddressBar_listTextStyle, Typeface.NORMAL);
         String listTextTypefaceName = ta.getString(R.styleable.AddressBar_listTextTypeface);
         this.mListTextTypeface = listTextTypefaceName != null ? Typeface.create(listTextTypefaceName, mInputTextStyle) : null;
@@ -291,9 +292,9 @@ public class AddressBar extends LinearLayout {
         this.mChipTypeface = chipTypefaceName != null ? Typeface.create(chipTypefaceName, mChipStyle) : null;
 
         AvatarStyle.Builder avatarStyleBuilder = new AvatarStyle.Builder();
-        avatarStyleBuilder.avatarBackgroundColor(ta.getColor(R.styleable.AddressBar_avatarBackgroundColor, resources.getColor(R.color.layer_ui_avatar_background)));
-        avatarStyleBuilder.avatarTextColor(ta.getColor(R.styleable.AddressBar_avatarTextColor, resources.getColor(R.color.layer_ui_avatar_text)));
-        avatarStyleBuilder.avatarBorderColor(ta.getColor(R.styleable.AddressBar_avatarBorderColor, resources.getColor(R.color.layer_ui_avatar_border)));
+        avatarStyleBuilder.avatarBackgroundColor(ta.getColor(R.styleable.AddressBar_avatarBackgroundColor, resources.getColor(R.color.atlas_avatar_background)));
+        avatarStyleBuilder.avatarTextColor(ta.getColor(R.styleable.AddressBar_avatarTextColor, resources.getColor(R.color.atlas_avatar_text)));
+        avatarStyleBuilder.avatarBorderColor(ta.getColor(R.styleable.AddressBar_avatarBorderColor, resources.getColor(R.color.atlas_avatar_border)));
         int avatarTextStyle = ta.getInt(R.styleable.AddressBar_avatarTextStyle, Typeface.NORMAL);
         String avatarTextTypefaceName = ta.getString(R.styleable.AddressBar_avatarTextTypeface);
         avatarStyleBuilder.avatarTextTypeface(inputTextTypefaceName != null ? Typeface.create(avatarTextTypefaceName, avatarTextStyle) : null);
@@ -424,7 +425,7 @@ public class AddressBar extends LinearLayout {
     private class ParticipantChip extends LinearLayout {
         private Identity mParticipant;
 
-        private AvatarView mAvatarView;
+        private Avatar mAvatar;
         private TextView mName;
         private ImageView mRemove;
 
@@ -436,7 +437,7 @@ public class AddressBar extends LinearLayout {
 
             // Inflate and cache views
             inflater.inflate(R.layout.ui_participant_chip, this, true);
-            mAvatarView = (AvatarView) findViewById(R.id.avatar);
+            mAvatar = (Avatar) findViewById(R.id.avatar);
             mName = (TextView) findViewById(R.id.name);
             mRemove = (ImageView) findViewById(R.id.remove);
 
@@ -444,8 +445,8 @@ public class AddressBar extends LinearLayout {
             mName.setTypeface(mChipTypeface);
 
             // Set layout
-            int height = r.getDimensionPixelSize(R.dimen.layer_ui_chip_height);
-            int margin = r.getDimensionPixelSize(R.dimen.layer_ui_chip_margin);
+            int height = r.getDimensionPixelSize(R.dimen.atlas_chip_height);
+            int margin = r.getDimensionPixelSize(R.dimen.atlas_chip_margin);
             FlowLayout.LayoutParams p = new FlowLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, height);
             p.setMargins(margin, margin, margin, margin);
             setLayoutParams(p);
@@ -454,7 +455,7 @@ public class AddressBar extends LinearLayout {
 
             // Initialize participant data
             mName.setText(Util.getDisplayName(participant));
-            mAvatarView.init()
+            mAvatar.init(picasso)
                     .setStyle(mAvatarStyle)
                     .setParticipants(participant);
 
@@ -607,8 +608,8 @@ public class AddressBar extends LinearLayout {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             ViewHolder viewHolder = new ViewHolder(parent);
-            viewHolder.mAvatarView
-                    .init()
+            viewHolder.mAvatar
+                    .init(mPicasso)
                     .setStyle(mAvatarStyle);
             return viewHolder;
         }
@@ -628,7 +629,7 @@ public class AddressBar extends LinearLayout {
                                 selectParticipant((Identity) v.getTag());
                             }
                         });
-                        viewHolder.mAvatarView.setParticipants(participant);
+                        viewHolder.mAvatar.setParticipants(participant);
                     }
                     break;
 
@@ -651,7 +652,7 @@ public class AddressBar extends LinearLayout {
                                 mOnConversationClickListener.onConversationClick(AddressBar.this, (Conversation) v.getTag());
                             }
                         });
-                        viewHolder.mAvatarView.setParticipants(participants);
+                        viewHolder.mAvatar.setParticipants(participants);
                     }
                     break;
                 }
@@ -739,12 +740,12 @@ public class AddressBar extends LinearLayout {
         //==============================================================================================
 
         protected class ViewHolder extends RecyclerView.ViewHolder {
-            private AvatarView mAvatarView;
+            private Avatar mAvatar;
             private TextView mTitle;
 
             public ViewHolder(ViewGroup parent) {
                 super(LayoutInflater.from(parent.getContext()).inflate(R.layout.ui_address_bar_item, parent, false));
-                mAvatarView = (AvatarView) itemView.findViewById(R.id.avatar);
+                mAvatar = (Avatar) itemView.findViewById(R.id.avatar);
                 mTitle = (TextView) itemView.findViewById(R.id.title);
                 mTitle.setTextColor(mListTextColor);
                 mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mListTextSize);

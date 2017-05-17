@@ -22,7 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.layer.ui.avatar.AvatarView;
 import com.layer.ui.util.AvatarStyle;
 import com.layer.ui.util.EditTextUtil;
 import com.layer.ui.util.IdentityDisplayNameComparator;
@@ -103,6 +102,8 @@ public class AddressBar extends LinearLayout {
 
     public AddressBar init(LayerClient layerClient, Picasso picasso) {
         mLayerClient = layerClient;
+        mPicasso = picasso;
+
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mParticipantList.setLayoutManager(manager);
         mAvailableConversationAdapter = new AvailableConversationAdapter(mLayerClient, mPicasso);
@@ -424,7 +425,7 @@ public class AddressBar extends LinearLayout {
     private class ParticipantChip extends LinearLayout {
         private Identity mParticipant;
 
-        private AvatarView mAvatarView;
+        private Avatar mAvatar;
         private TextView mName;
         private ImageView mRemove;
 
@@ -436,7 +437,7 @@ public class AddressBar extends LinearLayout {
 
             // Inflate and cache views
             inflater.inflate(R.layout.ui_participant_chip, this, true);
-            mAvatarView = (AvatarView) findViewById(R.id.avatar);
+            mAvatar = (Avatar) findViewById(R.id.avatar);
             mName = (TextView) findViewById(R.id.name);
             mRemove = (ImageView) findViewById(R.id.remove);
 
@@ -454,7 +455,7 @@ public class AddressBar extends LinearLayout {
 
             // Initialize participant data
             mName.setText(Util.getDisplayName(participant));
-            mAvatarView.init()
+            mAvatar.init(picasso)
                     .setStyle(mAvatarStyle)
                     .setParticipants(participant);
 
@@ -607,8 +608,8 @@ public class AddressBar extends LinearLayout {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             ViewHolder viewHolder = new ViewHolder(parent);
-            viewHolder.mAvatarView
-                    .init()
+            viewHolder.mAvatar
+                    .init(mPicasso)
                     .setStyle(mAvatarStyle);
             return viewHolder;
         }
@@ -628,7 +629,7 @@ public class AddressBar extends LinearLayout {
                                 selectParticipant((Identity) v.getTag());
                             }
                         });
-                        viewHolder.mAvatarView.setParticipants(participant);
+                        viewHolder.mAvatar.setParticipants(participant);
                     }
                     break;
 
@@ -651,7 +652,7 @@ public class AddressBar extends LinearLayout {
                                 mOnConversationClickListener.onConversationClick(AddressBar.this, (Conversation) v.getTag());
                             }
                         });
-                        viewHolder.mAvatarView.setParticipants(participants);
+                        viewHolder.mAvatar.setParticipants(participants);
                     }
                     break;
                 }
@@ -739,12 +740,12 @@ public class AddressBar extends LinearLayout {
         //==============================================================================================
 
         protected class ViewHolder extends RecyclerView.ViewHolder {
-            private AvatarView mAvatarView;
+            private Avatar mAvatar;
             private TextView mTitle;
 
             public ViewHolder(ViewGroup parent) {
                 super(LayoutInflater.from(parent.getContext()).inflate(R.layout.ui_address_bar_item, parent, false));
-                mAvatarView = (AvatarView) itemView.findViewById(R.id.avatar);
+                mAvatar = (Avatar) itemView.findViewById(R.id.avatar);
                 mTitle = (TextView) itemView.findViewById(R.id.title);
                 mTitle.setTextColor(mListTextColor);
                 mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mListTextSize);
