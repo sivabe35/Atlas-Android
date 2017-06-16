@@ -1,15 +1,12 @@
 package com.layer.ui.avatar;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.text.TextUtils;
 
 import com.layer.sdk.messaging.Identity;
 import com.layer.sdk.messaging.Presence;
 import com.layer.ui.util.Util;
 import com.layer.ui.util.picasso.ImageCacheWrapper;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -158,61 +155,6 @@ public class AvatarViewModel implements AvatarContract.ViewModel  {
     public void loadImage(String targetUrl, String tag, Object placeHolder, Object fade, int size,
             int size1, boolean flag, ImageCacheWrapper.ImageTarget imageTarget) {
         mImageCacheWrapper.load(targetUrl,tag,null,null,size,size1,flag,imageTarget);
-
-        mPicasso.load(targetUrl)
-                .tag(Avatar.TAG).noPlaceholder().noFade()
-                .centerCrop().resize(size, size)
-                .transform(multiTransform)
-                .into(imageTarget);
-    }
-
-    //TODO Delete this, injected in the Constructor
-    @Override
-    public void checkPresence(Presence.PresenceStatus currentStatus, Canvas canvas) {
-        switch (currentStatus) {
-            case AVAILABLE:
-                mView.drawAvailable(canvas);
-                break;
-            case AWAY:
-                mView.drawAway(canvas);
-                break;
-            case OFFLINE:
-                mView.drawOffline(canvas);
-                break;
-            case INVISIBLE:
-                mView.drawInvisible(canvas);
-                break;
-            case BUSY:
-                mView.drawBusy(canvas);
-                break;
-            default:
-                mView.drawDefault(canvas);
-                break;
-        }
-    }
-
-    @Override
-    public void checkPresence(Presence.PresenceStatus currentStatus, Canvas canvas) {
-        switch (currentStatus) {
-            case AVAILABLE:
-                mView.drawAvailable(canvas);
-                break;
-            case AWAY:
-                mView.drawAway(canvas);
-                break;
-            case OFFLINE:
-                mView.drawOffline(canvas);
-                break;
-            case INVISIBLE:
-               mView.drawInvisible(canvas);
-                break;
-            case BUSY:
-                mView.drawBusy(canvas);
-                break;
-            default:
-                mView.drawDefault(canvas);
-                break;
-        }
     }
 
     @Override

@@ -411,7 +411,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
             maxWidth -= avatarParams.width + avatarParams.rightMargin + avatarParams.leftMargin;
         }
         // TODO: subtract spacing rather than multiply by 0.8 to handle screen sizes more cleanly
-        int maxHeight = (int) Math.round(0.8 * mRecyclerView.getHeight());
+        int maxHeight = (int) viewHolder.mRoot.getContext().getResources().getDimension(R.dimen.layer_ui_messages_max_cell_height);
 
         viewHolder.mCellHolderSpecs.isMe = cellType.mMe;
         viewHolder.mCellHolderSpecs.position = position;

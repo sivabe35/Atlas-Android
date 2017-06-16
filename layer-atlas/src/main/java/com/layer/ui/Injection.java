@@ -16,7 +16,7 @@ public class Injection {
 
     public static AvatarContract.ViewModel provideAvatarViewModel(Context context) {
         return sImageCacheWrapper != null ? new AvatarViewModel(sImageCacheWrapper)
-                                     : new AvatarViewModel(provideImageCachingLibrary(context));
+                : new AvatarViewModel(provideImageCachingLibrary(context));
     }
 
     public static ImageCacheWrapper provideImageCachingLibrary(Context context) {

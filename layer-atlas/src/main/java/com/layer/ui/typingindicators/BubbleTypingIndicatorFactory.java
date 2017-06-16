@@ -44,6 +44,7 @@ public class BubbleTypingIndicatorFactory implements TypingIndicatorLayout.Typin
         l.setOrientation(LinearLayout.HORIZONTAL);
         l.setLayoutParams(new TypingIndicatorLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         l.setBackgroundDrawable(r.getDrawable(R.drawable.ui_message_item_cell_them));
+
         ImageView v;
         LinearLayout.LayoutParams vp;
 
