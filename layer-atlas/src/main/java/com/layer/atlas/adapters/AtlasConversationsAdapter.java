@@ -102,7 +102,7 @@ public class AtlasConversationsAdapter extends RecyclerView.Adapter<AtlasConvers
 
     public AtlasConversationsAdapter addCellFactories(AtlasCellFactory... cellFactories) {
         if (mCellFactories == null) {
-            mCellFactories = new LinkedHashSet<AtlasCellFactory>();
+            mCellFactories = new LinkedHashSet<>();
         }
         Collections.addAll(mCellFactories, cellFactories);
         return this;
@@ -389,10 +389,10 @@ public class AtlasConversationsAdapter extends RecyclerView.Adapter<AtlasConvers
         public void applyStyle(boolean unread) {
             mTitleView.setTextColor(unread ? conversationStyle.getTitleUnreadTextColor() : conversationStyle.getTitleTextColor());
             mTitleView.setTypeface(unread ? conversationStyle.getTitleUnreadTextTypeface() : conversationStyle.getTitleTextTypeface(), unread ? conversationStyle.getTitleUnreadTextStyle() : conversationStyle.getTitleTextStyle());
-            mMessageView.setTextColor(unread ? conversationStyle.getSubtitleTextColor() : conversationStyle.getSubtitleTextColor());
+            mMessageView.setTextColor(unread ? conversationStyle.getSubtitleUnreadTextColor() : conversationStyle.getSubtitleTextColor());
             mMessageView.setTypeface(unread ? conversationStyle.getSubtitleUnreadTextTypeface() : conversationStyle.getSubtitleTextTypeface(), unread ? conversationStyle.getSubtitleUnreadTextStyle() : conversationStyle.getSubtitleTextStyle());
-            mTimeView.setTextColor(conversationStyle.getDateTextColor());
-            mTimeView.setTypeface(conversationStyle.getDateTextTypeface());
+            mTimeView.setTextColor(unread ? conversationStyle.getDateUnreadTextColor() : conversationStyle.getDateTextColor());
+            mTimeView.setTypeface(unread ? conversationStyle.getDateUnreadTextTypeface() : conversationStyle.getDateTextTypeface());
         }
 
         protected ViewHolder setClickListener(OnClickListener clickListener) {
