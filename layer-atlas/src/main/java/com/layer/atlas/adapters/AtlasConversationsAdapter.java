@@ -56,6 +56,7 @@ public class AtlasConversationsAdapter extends RecyclerView.Adapter<AtlasConvers
     private Set<AtlasCellFactory> mDefaultCellFactories;
 
     protected ConversationFormatter mConversationFormatter;
+    protected boolean mShouldShowAvatarPresence = true;
 
     public AtlasConversationsAdapter(Context context, LayerClient client, Picasso picasso, ConversationFormatter conversationFormatter) {
         this(context, client, picasso, null, conversationFormatter);
@@ -139,6 +140,23 @@ public class AtlasConversationsAdapter extends RecyclerView.Adapter<AtlasConvers
         this.mConversationFormatter = mConversationFormatter;
     }
 
+    /**
+     * @return If the Avatar for the other participant in a one on one conversation will be shown
+     * or not. Defaults to `true`.
+     */
+    public boolean getShouldShowAvatarPresence() {
+        return mShouldShowAvatarPresence;
+    }
+
+    /**
+     * @param shouldShowPresence Whether the Avatar for the other participant in a one on one
+     *                           conversation should be shown or not. Default is `true`.
+     */
+    public AtlasConversationsAdapter setShouldShowAvatarPresence(boolean shouldShowPresence) {
+        mShouldShowAvatarPresence = shouldShowPresence;
+        return this;
+    }
+
     private void syncInitialMessages(final int start, final int length) {
         new Thread(new Runnable() {
             @Override
@@ -181,7 +199,7 @@ public class AtlasConversationsAdapter extends RecyclerView.Adapter<AtlasConvers
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ViewHolder viewHolder = new ViewHolder(mInflater.inflate(ViewHolder.RESOURCE_ID, parent, false), conversationStyle);
+        ViewHolder viewHolder = new ViewHolder(mInflater.inflate(ViewHolder.RESOURCE_ID, parent, false), conversationStyle, mShouldShowAvatarPresence);
         viewHolder.setClickListener(mViewHolderClickListener);
         viewHolder.mAvatarCluster
                 .init(mPicasso)
@@ -373,7 +391,7 @@ public class AtlasConversationsAdapter extends RecyclerView.Adapter<AtlasConvers
         protected Conversation mConversation;
         protected OnClickListener mClickListener;
 
-        public ViewHolder(View itemView, ConversationStyle conversationStyle) {
+        public ViewHolder(View itemView, ConversationStyle conversationStyle,  boolean shouldShowAvatarPresence) {
             super(itemView);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
@@ -384,6 +402,7 @@ public class AtlasConversationsAdapter extends RecyclerView.Adapter<AtlasConvers
             mMessageView = (TextView) itemView.findViewById(R.id.last_message);
             mTimeView = (TextView) itemView.findViewById(R.id.time);
             itemView.setBackgroundColor(conversationStyle.getCellBackgroundColor());
+            mAvatarCluster.setShouldShowPresence(shouldShowAvatarPresence);
         }
 
         public void applyStyle(boolean unread) {

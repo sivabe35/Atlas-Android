@@ -134,6 +134,25 @@ public class AtlasConversationsRecyclerView extends RecyclerView {
     }
 
     /**
+     * Convenience pass-through to this list's AtlasMessagesAdapter.
+     *
+     * @see AtlasConversationsAdapter#getShouldShowAvatarPresence()
+     */
+    public boolean getShouldShowAvatarPresence() {
+        return mAdapter.getShouldShowAvatarPresence();
+    }
+
+    /**
+     * Convenience pass-through to this list's AtlasMessagesAdapter.
+     *
+     * @see AtlasConversationsAdapter#setShouldShowAvatarPresence(boolean)
+     */
+    public AtlasConversationsRecyclerView setShouldShowAvatarPresence(boolean shouldShowAvatarPresence) {
+        mAdapter.setShouldShowAvatarPresence(shouldShowAvatarPresence);
+        return this;
+    }
+
+    /**
      * Convenience pass-through to this list's AtlasConversationsAdapter.
      *
      * @see AtlasConversationsAdapter#setInitialHistoricMessagesToFetch(long)
