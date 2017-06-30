@@ -122,7 +122,6 @@ public class AvatarView extends View implements Avatar.View{
         return this;
     }
 
-    @Override
     public AvatarView setParticipants(Identity... participants) {
         mViewModel.setParticipants(participants);
         mViewModel.update();
@@ -157,7 +156,6 @@ public class AvatarView extends View implements Avatar.View{
     /**
      * Should be called from UI thread.
      */
-    @Override
     public AvatarView setParticipants(Set<Identity> participants) {
         mViewModel.setParticipants(participants);
         return this;
@@ -227,7 +225,7 @@ public class AvatarView extends View implements Avatar.View{
     @Override
     public void revalidateView() {
         // Invalidate the current view, so it refreshes with new value.
-        invalidate();
+        postInvalidate();
     }
 
     @Override
@@ -279,40 +277,54 @@ public class AvatarView extends View implements Avatar.View{
         if (currentStatus == null) {
             return;
         }
-        mViewModel.checkPresence(currentStatus, canvas);
+
+        switch (currentStatus) {
+            case AVAILABLE:
+                drawAvailable(canvas);
+                break;
+            case AWAY:
+                drawAway(canvas);
+                break;
+            case OFFLINE:
+                drawOffline(canvas);
+                break;
+            case INVISIBLE:
+                drawInvisible(canvas);
+                break;
+            case BUSY:
+                drawBusy(canvas);
+                break;
+            default:
+                drawDefault(canvas);
+                break;
+        }
     }
 
-    @Override
     public void drawAvailable(Canvas canvas) {
         mPresencePaint.setColor(Color.rgb(0x4F, 0xBF, 0x62));
         drawPresence(canvas, false, true);
     }
 
-    @Override
     public void drawAway(Canvas canvas) {
         mPresencePaint.setColor(Color.rgb(0xF7, 0xCA, 0x40));
         drawPresence(canvas, false, true);
     }
 
-    @Override
     public void drawOffline(Canvas canvas) {
         mPresencePaint.setColor(Color.rgb(0x99, 0x99, 0x9c));
         drawPresence(canvas, true, true);
     }
 
-    @Override
     public void drawInvisible(Canvas canvas) {
         mPresencePaint.setColor(Color.rgb(0x50, 0xC0, 0x62));
         drawPresence(canvas, true, true);
     }
 
-    @Override
     public void drawBusy(Canvas canvas) {
         mPresencePaint.setColor(Color.rgb(0xE6, 0x44, 0x3F));
         drawPresence(canvas, false, true);
     }
 
-    @Override
     public void drawDefault(Canvas canvas) {
         drawPresence(canvas, false, false);
     }
@@ -334,10 +346,5 @@ public class AvatarView extends View implements Avatar.View{
             }
         }
 
-    }
-
-    @Override
-    public AvatarView getAvatar() {
-        return this;
     }
 }

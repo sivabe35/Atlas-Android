@@ -54,7 +54,8 @@ public class PicassoImageCacheWrapper implements ImageCacheWrapper {
             Object... args) {
 
         boolean isMultiTransform = false;
-        if (args != null && args.length > 0) {
+        //Boolean is passed in to toggle between Picasso Single Transform and multi transform
+        if ((args != null && args.length > 0) && (args[0] instanceof Boolean)) {
             isMultiTransform = (boolean) args[0];
         }
 

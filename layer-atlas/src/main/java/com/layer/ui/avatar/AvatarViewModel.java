@@ -1,11 +1,9 @@
 package com.layer.ui.avatar;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.text.TextUtils;
 
 import com.layer.sdk.messaging.Identity;
-import com.layer.sdk.messaging.Presence;
 import com.layer.ui.util.Util;
 import com.layer.ui.util.imagecache.BitmapWrapper;
 import com.layer.ui.util.imagecache.ImageCacheWrapper;
@@ -191,30 +189,6 @@ public class AvatarViewModel implements Avatar.ViewModel  {
                         mView.revalidateView();
                     }
                 }, args);
-    }
-
-    @Override
-    public void checkPresence(Presence.PresenceStatus currentStatus, Canvas canvas) {
-        switch (currentStatus) {
-            case AVAILABLE:
-                mView.drawAvailable(canvas);
-                break;
-            case AWAY:
-                mView.drawAway(canvas);
-                break;
-            case OFFLINE:
-                mView.drawOffline(canvas);
-                break;
-            case INVISIBLE:
-               mView.drawInvisible(canvas);
-                break;
-            case BUSY:
-                mView.drawBusy(canvas);
-                break;
-            default:
-                mView.drawDefault(canvas);
-                break;
-        }
     }
 
     @Override

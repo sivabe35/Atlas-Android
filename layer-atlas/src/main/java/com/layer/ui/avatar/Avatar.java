@@ -1,7 +1,5 @@
 package com.layer.ui.avatar;
 
-import android.graphics.Canvas;
-
 import com.layer.sdk.messaging.Identity;
 import com.layer.sdk.messaging.Presence;
 import com.layer.ui.util.imagecache.BitmapWrapper;
@@ -43,15 +41,11 @@ public interface Avatar {
         //setClusterSizes is called in the View onLayout which in turns call the corresponding method on the View
         void setClusterSizes();
 
-
          //loadImage Work with Image Caching Library to provide Bitmap to the View
         void loadImage(String url, String tag, int width, int height, BitmapWrapper bitmapWrapper, Object... args);
 
         //Set the view on the ViewViewModel
         void setView(Avatar.View avatar);
-
-        //Pass presence status to the ViewModel and calls the corresponding method to draw in the view
-        void checkPresence(Presence.PresenceStatus currentStatus, Canvas canvas);
 
         //Set custom AvatarInitial on the ViewModel to allow client plug in their custom Initials
         void setAvatarInitials(AvatarInitials avatarInitials);
@@ -59,26 +53,8 @@ public interface Avatar {
 
     interface View {
 
-        Avatar.View getAvatar();
-
         boolean setClusterSizes(Map<Identity, String> initials, List<BitmapWrapper> pendingLoads);
 
         void revalidateView();
-
-        Avatar.View setParticipants(Identity... participants);
-
-        Avatar.View setParticipants(Set<Identity> participants);
-
-        void drawAvailable(Canvas canvas);
-
-        void drawAway(Canvas canvas);
-
-        void drawOffline(Canvas canvas);
-
-        void drawInvisible(Canvas canvas);
-
-        void drawBusy(Canvas canvas);
-
-        void drawDefault(Canvas canvas);
     }
 }
