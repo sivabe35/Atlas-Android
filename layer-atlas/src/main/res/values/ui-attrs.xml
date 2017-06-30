@@ -10,7 +10,7 @@
     <attr name="AddressBar" format="reference" />
     <attr name="TypingIndicator" format="reference" />
     <attr name="AvatarView" format="reference" />
-
+    <attr name="PresenceView" format="reference" />
     <declare-styleable name="SwipeableItemState">
         <attr name="state_swiping" format="boolean" />
     </declare-styleable>
@@ -18,6 +18,17 @@
     <!-- #################################### -->
     <!-- Styleable UI Component Attributes -->
     <!-- #################################### -->
+
+    <declare-styleable name="PresenceView">
+        <attr name="presenceColor" format="color"/>
+        <attr name="presenceAvailableColor" format="color"/>
+        <attr name="presenceBusyColor" format="color"/>
+        <attr name="presenceAwayColor" format="color"/>
+        <attr name="presenceInvisibleColor" format="color"/>
+        <attr name="presenceOfflineColor" format="color"/>
+        <attr name="presenceGroupColor" format="color"/>
+
+    </declare-styleable>
 
     <declare-styleable name="ConversationsRecyclerView">
         <attr name="cellTitleTextColor" />
