@@ -20,7 +20,6 @@
     <!-- #################################### -->
 
     <declare-styleable name="PresenceView">
-        <attr name="presenceColor" format="color"/>
         <attr name="presenceAvailableColor" format="color"/>
         <attr name="presenceBusyColor" format="color"/>
         <attr name="presenceAwayColor" format="color"/>

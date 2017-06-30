@@ -12,6 +12,7 @@ import android.view.View;
 import com.layer.sdk.messaging.Identity;
 import com.layer.sdk.messaging.Presence;
 import com.layer.ui.R;
+import com.layer.ui.util.Log;
 
 public class PresenceView extends View {
 
@@ -19,7 +20,6 @@ public class PresenceView extends View {
     private final Paint mPresencePaint = new Paint();
 
     private Identity mIdentity;
-    private int mSpecifiedColor;
     private int mAvailableColor;
     private int mBusyColor;
     private int mAwayColor;
@@ -52,8 +52,10 @@ public class PresenceView extends View {
     private void drawPresence(Canvas canvas, Identity identity) {
 
         if (identity == null) {
-            drawAsStandAlone(canvas);
-            return;
+            if (Log.isLoggable(Log.DEBUG)) {
+                Log.d("Identity cannot be Null, set Identity in init method");
+            }
+            throw new RuntimeException("Identity cannot be Null, set Identity in init method");
         }
 
         Presence.PresenceStatus currentStatus = identity.getPresenceStatus();
@@ -83,40 +85,36 @@ public class PresenceView extends View {
         }
     }
 
-    private void drawAsStandAlone(Canvas canvas) {
-        drawPresence(canvas, false, false);
-    }
-
     public void drawAvailable(Canvas canvas) {
         mPresencePaint.setColor(mAvailableColor);
-        drawPresence(canvas, false, true);
+        drawPresence(canvas, false);
     }
 
     public void drawAway(Canvas canvas) {
         mPresencePaint.setColor(mAwayColor);
-        drawPresence(canvas, false, true);
+        drawPresence(canvas, false);
     }
 
     public void drawOffline(Canvas canvas) {
         mPresencePaint.setColor(mOfflineColor);
-        drawPresence(canvas, true, true);
+        drawPresence(canvas, true);
     }
 
     public void drawInvisible(Canvas canvas) {
         mPresencePaint.setColor(mInvisibleColor);
-        drawPresence(canvas, true, true);
+        drawPresence(canvas, true);
     }
 
     public void drawBusy(Canvas canvas) {
         mPresencePaint.setColor(mBusyColor);
-        drawPresence(canvas, false, true);
+        drawPresence(canvas, false);
     }
 
     public void drawDefault(Canvas canvas) {
-        drawPresence(canvas, false, false);
+        drawPresence(canvas, false);
     }
 
-    private void drawPresence(Canvas canvas,boolean makeCircleHollow,  boolean drawPresence) {
+    private void drawPresence(Canvas canvas,boolean makeCircleHollow) {
 
         int drawableWidth = getWidth() - (getPaddingLeft() + getPaddingRight());
         int drawableHeight = getHeight() - (getPaddingTop() + getPaddingBottom());
@@ -136,7 +134,6 @@ public class PresenceView extends View {
         float presenceCenterX = centerX + outerRadius - presenceOuterRadius;
         float presenceCenterY = centerY + outerRadius - presenceOuterRadius;
 
-        if (drawPresence) {
             // Clear background + create border
             mBackgroundPaint.setColor(Color.WHITE);
             mBackgroundPaint.setAntiAlias(true);
@@ -150,14 +147,6 @@ public class PresenceView extends View {
             if (makeCircleHollow) {
                 canvas.drawCircle(presenceCenterX, presenceCenterY, (presenceInnerRadius / 2f), mBackgroundPaint);
             }
-        } else {
-            mBackgroundPaint.setColor(mSpecifiedColor);
-            canvas.drawCircle(presenceCenterX, presenceCenterY, presenceInnerRadius, mBackgroundPaint);
-        }
-    }
-
-    public void setSpecifiedColor(int specifiedColor) {
-        mSpecifiedColor = specifiedColor;
     }
 
     public void setAvailableColor(int availableColor) {
@@ -182,7 +171,6 @@ public class PresenceView extends View {
 
     private void parseStyle(Context context, AttributeSet attrs, int defStyle) {
         TypedArray ta = context.getTheme().obtainStyledAttributes(attrs, R.styleable.PresenceView, R.attr.PresenceView, defStyle);
-        this.mSpecifiedColor = ta.getColor(R.styleable.PresenceView_presenceColor, context.getResources().getColor(R.color.layer_ui_text_black));
         this.mAvailableColor = ta.getColor(R.styleable.PresenceView_presenceAvailableColor, Color.rgb(0x4F, 0xBF, 0x62));
         this.mBusyColor = ta.getColor(R.styleable.PresenceView_presenceBusyColor, Color.rgb(0xE6, 0x44, 0x3F));
         this.mAwayColor = ta.getColor(R.styleable.PresenceView_presenceAwayColor, Color.rgb(0xF7, 0xCA, 0x40));
