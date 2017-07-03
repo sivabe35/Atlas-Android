@@ -31,8 +31,7 @@ public class AvatarViewModel implements Avatar.ViewModel  {
 
     private Avatar.View mView;
 
-    // TODO: make these styleable
-    private static final int MAX_AVATARS = 3;
+    private int mMaxAvatar = 3;
     private ImageCacheWrapper mImageCacheWrapper;
 
     public AvatarViewModel(ImageCacheWrapper imageCacheWrapper) {
@@ -46,8 +45,8 @@ public class AvatarViewModel implements Avatar.ViewModel  {
 
     @Override
     public void update() {
-        // Limit to MAX_AVATARS valid avatars, prioritizing participants with avatars.
-        if (mParticipants.size() > MAX_AVATARS) {
+        // Limit to mMaxAvatar valid avatars, prioritizing participants with avatars.
+        if (mParticipants.size() > mMaxAvatar) {
             Queue<Identity> withAvatars = new LinkedList<>();
             Queue<Identity> withoutAvatars = new LinkedList<>();
             for (Identity participant : mParticipants) {
@@ -60,11 +59,11 @@ public class AvatarViewModel implements Avatar.ViewModel  {
             }
 
             mParticipants = new LinkedHashSet<>();
-            int numWithout = Math.min(MAX_AVATARS - withAvatars.size(), withoutAvatars.size());
+            int numWithout = Math.min(mMaxAvatar - withAvatars.size(), withoutAvatars.size());
             for (int i = 0; i < numWithout; i++) {
                 mParticipants.add(withoutAvatars.remove());
             }
-            int numWith = Math.min(MAX_AVATARS, withAvatars.size());
+            int numWith = Math.min(mMaxAvatar, withAvatars.size());
             for (int i = 0; i < numWith; i++) {
                 mParticipants.add(withAvatars.remove());
             }
@@ -137,6 +136,11 @@ public class AvatarViewModel implements Avatar.ViewModel  {
         mParticipants.clear();
         mParticipants.addAll(participants);
         update();
+    }
+
+    @Override
+    public void setMaximumAvatar(int maximumAvatar) {
+        mMaxAvatar = maximumAvatar;
     }
 
     @Override

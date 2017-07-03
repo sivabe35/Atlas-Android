@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.layer.ui.avatar.AvatarInitials;
 import com.layer.ui.avatar.AvatarView;
 import com.layer.ui.R;
 import com.layer.ui.avatar.AvatarViewModel;

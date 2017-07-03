@@ -1,6 +1,7 @@
 package com.layer.ui.avatar;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -28,8 +29,6 @@ import java.util.Set;
  */
 public class AvatarView extends View implements Avatar.View{
 
-    public static final String TAG = AvatarView.class.getSimpleName();
-
     private static final Paint PAINT_TRANSPARENT = new Paint();
     private static final Paint PAINT_BITMAP = new Paint();
 
@@ -40,7 +39,6 @@ public class AvatarView extends View implements Avatar.View{
     private final Paint mBackgroundPaint = new Paint();
 
     private boolean mShouldShowPresence = true;
-    private AvatarInitials mAvatarInitials;
 
     // TODO: make these styleable
     private static final float BORDER_SIZE_DP = 1f;
@@ -72,17 +70,19 @@ public class AvatarView extends View implements Avatar.View{
 
     private Rect mRect = new Rect();
     private RectF mContentRect = new RectF();
+    private int maximumAvatar;
 
     public AvatarView(Context context) {
         super(context);
     }
 
     public AvatarView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public AvatarView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        parseStyle(getContext(), attrs, defStyleAttr);
     }
 
     public AvatarView init(Avatar.ViewModel avatarViewModel) {
@@ -97,17 +97,13 @@ public class AvatarView extends View implements Avatar.View{
         mPaintBackground.setColor(getResources().getColor(R.color.layer_ui_avatar_background));
         mPaintBorder.setColor(getResources().getColor(R.color.layer_ui_avatar_border));
         mPaintInitials.setColor(getResources().getColor(R.color.layer_ui_avatar_text));
+        mViewModel.setMaximumAvatar(maximumAvatar);
 
         return this;
     }
 
-    public AvatarView init(Avatar.ViewModel avatarViewModel, AvatarInitials avatarInitials) {
-        return init(avatarViewModel).setAvatarInitials(avatarInitials);
-    }
-
-    public AvatarView setAvatarInitials(AvatarInitials avatarInitials) {
-        mAvatarInitials = avatarInitials;
-        return this;
+    public void setAvatarInitials(AvatarInitials avatarInitials) {
+        mViewModel.setAvatarInitials(avatarInitials);
     }
 
     private void setUpAvatarViewModel() {
@@ -271,7 +267,6 @@ public class AvatarView extends View implements Avatar.View{
         }
     }
 
-
     private void drawPresence(Canvas canvas, Identity identity) {
         Presence.PresenceStatus currentStatus = identity.getPresenceStatus();
         if (currentStatus == null) {
@@ -345,6 +340,11 @@ public class AvatarView extends View implements Avatar.View{
                 canvas.drawCircle(mPresenceCenterX, mPresenceCenterY, (mPresenceInnerRadius / 2f), mBackgroundPaint);
             }
         }
+    }
 
+    private void parseStyle(Context context, AttributeSet attrs, int defStyleAttr) {
+        TypedArray ta = context.getTheme().obtainStyledAttributes(attrs, R.styleable.AvatarView, R.attr.AvatarView, defStyleAttr);
+        maximumAvatar = ta.getInt(R.styleable.AvatarView_maximumAvatar, 3);
+        ta.recycle();
     }
 }

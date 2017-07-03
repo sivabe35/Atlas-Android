@@ -1,7 +1,6 @@
 package com.layer.ui.avatar;
 
 import com.layer.sdk.messaging.Identity;
-import com.layer.sdk.messaging.Presence;
 import com.layer.ui.util.imagecache.BitmapWrapper;
 
 import java.util.List;
@@ -49,6 +48,8 @@ public interface Avatar {
 
         //Set custom AvatarInitial on the ViewModel to allow client plug in their custom Initials
         void setAvatarInitials(AvatarInitials avatarInitials);
+
+        void setMaximumAvatar(int maximumAvatar);
     }
 
     interface View {
