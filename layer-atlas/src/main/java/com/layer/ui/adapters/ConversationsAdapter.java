@@ -17,6 +17,7 @@ import com.layer.ui.messagetypes.location.LocationCellFactory;
 import com.layer.ui.messagetypes.singlepartimage.SinglePartImageCellFactory;
 import com.layer.ui.messagetypes.text.TextCellFactory;
 import com.layer.ui.messagetypes.threepartimage.ThreePartImageCellFactory;
+import com.layer.ui.presence.PresenceView;
 import com.layer.ui.util.ConversationFormatter;
 import com.layer.ui.util.ConversationStyle;
 import com.layer.ui.util.IdentityRecyclerViewEventListener;
@@ -193,6 +194,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
         viewHolder.mAvatarViewCluster
                 .init(new AvatarViewModel(mImageCacheWrapper))
                 .setStyle(conversationStyle.getAvatarStyle());
+        viewHolder.mPresenceView.init();
         return viewHolder;
     }
 
@@ -211,6 +213,10 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
         mIdentityEventListener.addIdentityPosition(position, participants);
 
         viewHolder.mAvatarViewCluster.setParticipants(participants);
+        if (participants.size() == 1) {
+            Identity identity = (Identity) participants.toArray()[0];
+            viewHolder.mPresenceView.setIdentity(identity);
+        }
         viewHolder.mTitleView.setText(mConversationFormatter.getConversationTitle(mLayerClient, conversation, participants));
         viewHolder.applyStyle(conversation.getTotalUnreadMessageCount() > 0);
 
@@ -379,6 +385,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
         protected ConversationStyle conversationStyle;
         protected Conversation mConversation;
         protected OnClickListener mClickListener;
+        public PresenceView mPresenceView;
 
         public ViewHolder(View itemView, ConversationStyle conversationStyle) {
             super(itemView);
@@ -390,6 +397,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
             mTitleView = (TextView) itemView.findViewById(R.id.title);
             mMessageView = (TextView) itemView.findViewById(R.id.last_message);
             mTimeView = (TextView) itemView.findViewById(R.id.time);
+            mPresenceView = (PresenceView) itemView.findViewById(R.id.presence);
             itemView.setBackgroundColor(conversationStyle.getCellBackgroundColor());
         }
 

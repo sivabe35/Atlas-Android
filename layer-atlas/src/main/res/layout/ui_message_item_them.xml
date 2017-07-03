@@ -102,12 +102,25 @@
             android:orientation="horizontal"
             >
 
-            <com.layer.ui.avatar.AvatarView
-                android:id="@+id/avatar"
-                android:layout_width="@dimen/layer_ui_message_avatar_item_single"
-                android:layout_height="@dimen/layer_ui_message_avatar_item_single"
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_marginRight="@dimen/layer_ui_padding_narrow"/>
+                android:layout_marginRight="@dimen/layer_ui_padding_narrow">
+
+                <com.layer.ui.avatar.AvatarView
+                    android:id="@+id/avatar"
+                    android:layout_width="@dimen/layer_ui_avatar_width"
+                    android:layout_height="@dimen/layer_ui_avatar_height"
+                    android:layout_gravity="center_vertical" />
+
+                <com.layer.ui.presence.PresenceView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="bottom|right"
+                    android:id="@+id/presence" />
+
+            </FrameLayout>
 
             <FrameLayout
                 android:id="@+id/cell"

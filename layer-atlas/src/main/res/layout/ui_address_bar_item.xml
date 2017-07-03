@@ -20,15 +20,26 @@
     android:background="@drawable/ui_address_bar_item_background"
     android:orientation="horizontal">
 
-    <com.layer.ui.avatar.AvatarView
-        android:id="@+id/avatar"
-        android:layout_width="@dimen/layer_ui_avatar_width"
-        android:layout_height="@dimen/layer_ui_avatar_height"
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/layer_ui_padding_narrow"
         android:layout_marginLeft="@dimen/layer_ui_avatar_message_left_margin"
         android:layout_marginRight="@dimen/layer_ui_avatar_message_right_margin"
-        android:layout_marginTop="@dimen/layer_ui_padding_narrow"
-        />
+        android:layout_marginTop="@dimen/layer_ui_padding_narrow">
+
+        <com.layer.ui.avatar.AvatarView
+            android:id="@+id/avatar"
+            android:layout_width="@dimen/layer_ui_avatar_width"
+            android:layout_height="@dimen/layer_ui_avatar_height" />
+
+        <com.layer.ui.presence.PresenceView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="bottom|right"
+            android:id="@+id/presence" />
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/title"

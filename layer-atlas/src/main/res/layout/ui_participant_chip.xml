@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <com.layer.ui.avatar.AvatarView
-        android:id="@+id/avatar"
-        android:layout_width="@dimen/layer_ui_avatar_width"
-        android:layout_height="@dimen/layer_ui_avatar_height"/>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.layer.ui.avatar.AvatarView
+            android:id="@+id/avatar"
+            android:layout_width="@dimen/layer_ui_avatar_width"
+            android:layout_height="@dimen/layer_ui_avatar_height"/>
+
+        <com.layer.ui.presence.PresenceView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="bottom|right"
+            android:id="@+id/presence" />
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/name"

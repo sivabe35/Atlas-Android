@@ -18,6 +18,7 @@ import com.layer.ui.R;
 import com.layer.ui.avatar.AvatarViewModel;
 import com.layer.ui.messagetypes.CellFactory;
 import com.layer.ui.messagetypes.MessageStyle;
+import com.layer.ui.presence.PresenceView;
 import com.layer.ui.util.IdentityRecyclerViewEventListener;
 import com.layer.ui.util.Log;
 import com.layer.ui.util.Util;
@@ -386,6 +387,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
                 if (mShouldShowAvatarInOneOnOneConversations) {
                     viewHolder.mAvatarView.setVisibility(View.VISIBLE);
                     viewHolder.mAvatarView.setParticipants(message.getSender());
+                    viewHolder.mPresenceView.setIdentity(message.getSender());
 
                 } else {
                     viewHolder.mAvatarView.setVisibility(View.GONE);
@@ -714,6 +716,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         protected TextView mTimeGroupTime;
         protected Space mClusterSpaceGap;
         protected AvatarView mAvatarView;
+        protected PresenceView mPresenceView;
         protected ViewGroup mCell;
         protected TextView mReceipt;
 
@@ -732,6 +735,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
             mReceipt = (TextView) itemView.findViewById(R.id.receipt);
 
             mAvatarView = ((AvatarView) itemView.findViewById(R.id.avatar));
+            mPresenceView = (PresenceView) itemView.findViewById(R.id.presence);
             if (mAvatarView != null)  {
                 mAvatarView.init(new AvatarViewModel(imageCachWrapper));
                 mAvatarView.setShouldShowPresence(shouldShowAvatarPresence);

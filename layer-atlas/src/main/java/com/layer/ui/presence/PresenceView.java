@@ -12,7 +12,6 @@ import android.view.View;
 import com.layer.sdk.messaging.Identity;
 import com.layer.sdk.messaging.Presence;
 import com.layer.ui.R;
-import com.layer.ui.util.Log;
 
 public class PresenceView extends View {
 
@@ -41,6 +40,7 @@ public class PresenceView extends View {
 
     public void init(Identity identity) {
         mIdentity = identity;
+        postInvalidate();
     }
 
     @Override
@@ -52,10 +52,7 @@ public class PresenceView extends View {
     private void drawPresence(Canvas canvas, Identity identity) {
 
         if (identity == null) {
-            if (Log.isLoggable(Log.DEBUG)) {
-                Log.d("Identity cannot be Null, set Identity in init method");
-            }
-            throw new RuntimeException("Identity cannot be Null, set Identity in init method");
+           return;
         }
 
         Presence.PresenceStatus currentStatus = identity.getPresenceStatus();
@@ -177,5 +174,13 @@ public class PresenceView extends View {
         this.mInvisibleColor = ta.getColor(R.styleable.PresenceView_presenceInvisibleColor, Color.rgb(0x50, 0xC0, 0x62));
         this.mOfflineColor = ta.getColor(R.styleable.PresenceView_presenceOfflineColor, Color.rgb(0x99, 0x99, 0x9c));
         ta.recycle();
+    }
+
+    public void init() {
+
+    }
+
+    public void setIdentity(Identity identity) {
+        mIdentity = identity;
     }
 }

@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.layer.ui.avatar.AvatarView;
 import com.layer.ui.avatar.AvatarViewModel;
+import com.layer.ui.presence.PresenceView;
 import com.layer.ui.util.AvatarStyle;
 import com.layer.ui.util.EditTextUtil;
 import com.layer.ui.util.IdentityDisplayNameComparator;
@@ -430,6 +431,7 @@ public class AddressBar extends LinearLayout {
         private AvatarView mAvatarView;
         private TextView mName;
         private ImageView mRemove;
+        private PresenceView mPresenceView;
 
         public ParticipantChip(Context context, Identity participant) {
             super(context);
@@ -442,6 +444,8 @@ public class AddressBar extends LinearLayout {
             mAvatarView = (AvatarView) findViewById(R.id.avatar);
             mName = (TextView) findViewById(R.id.name);
             mRemove = (ImageView) findViewById(R.id.remove);
+            mPresenceView = (PresenceView) findViewById(R.id.presence);
+            mPresenceView.init(participant);
 
             // Set Style
             mName.setTypeface(mChipTypeface);
@@ -630,6 +634,7 @@ public class AddressBar extends LinearLayout {
                             }
                         });
                         viewHolder.mAvatarView.setParticipants(participant);
+                        viewHolder.mPresenceView.init(participant);
                     }
                     break;
 
@@ -741,11 +746,13 @@ public class AddressBar extends LinearLayout {
 
         protected class ViewHolder extends RecyclerView.ViewHolder {
             private AvatarView mAvatarView;
+            private PresenceView mPresenceView;
             private TextView mTitle;
 
             public ViewHolder(ViewGroup parent) {
                 super(LayoutInflater.from(parent.getContext()).inflate(R.layout.ui_address_bar_item, parent, false));
                 mAvatarView = (AvatarView) itemView.findViewById(R.id.avatar);
+                mPresenceView = (PresenceView) itemView.findViewById(R.id.presence);
                 mTitle = (TextView) itemView.findViewById(R.id.title);
                 mTitle.setTextColor(mListTextColor);
                 mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mListTextSize);
