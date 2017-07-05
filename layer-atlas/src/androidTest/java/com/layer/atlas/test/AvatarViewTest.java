@@ -30,12 +30,12 @@ public class AvatarViewTest {
 
     @Test
     public void testThatAvatarColorChangeWhenSpinnerIsChanged() {
-        String selectionText = "away";
+        String selectionText = "AWAY";
 
         onView(withId(R.id.test_spinner)).perform(click());
-        //onData(allOf(is(instanceOf(String.class)), is(selectionText))).perform(click());
-        //onView(withId(R.id.test_spinner)).check(matches(withSpinnerText(containsString(selectionText))));
-    }
+        onData(allOf(is(instanceOf(String.class)), is(selectionText))).perform(click());
+        onView(withId(R.id.test_spinner)).check(matches(withSpinnerText(containsString(selectionText))));
 
+    }
 
 }

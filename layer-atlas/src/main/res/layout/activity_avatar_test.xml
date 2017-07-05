@@ -4,9 +4,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.layer.ui.avatar.AvatarView
-        android:id="@+id/test_avatar"
-        android:layout_width="@dimen/layer_ui_avatar_width"
-        android:layout_height="@dimen/layer_ui_avatar_height" />
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.layer.ui.avatar.AvatarView
+            android:id="@+id/test_avatar"
+            android:layout_width="@dimen/layer_ui_avatar_width"
+            android:layout_height="@dimen/layer_ui_avatar_height"
+            android:layout_gravity="center_vertical" />
+
+        <com.layer.ui.presence.PresenceView
+            android:layout_width="@dimen/layer_ui_avatar_presence_diameter"
+            android:layout_height="@dimen/layer_ui_avatar_presence_diameter"
+            android:layout_gravity="bottom|right"
+            android:id="@+id/presence" />
+
+    </FrameLayout>
+
+    <Spinner
+        android:id="@+id/test_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"/>
 
 </LinearLayout>

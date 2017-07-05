@@ -34,8 +34,8 @@
             android:layout_height="@dimen/layer_ui_avatar_height" />
 
         <com.layer.ui.presence.PresenceView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/layer_ui_avatar_presence_diameter"
+            android:layout_height="@dimen/layer_ui_avatar_presence_diameter"
             android:layout_gravity="bottom|right"
             android:id="@+id/presence" />
 

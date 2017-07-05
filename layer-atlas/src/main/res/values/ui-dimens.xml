@@ -100,6 +100,8 @@
 
     <dimen name="layer_ui_avatar_message_left_margin">12dp</dimen>
     <dimen name="layer_ui_avatar_message_right_margin">8dp</dimen>
+    <dimen name="layer_ui_avatar_presence_diameter">30dp</dimen>
+
 
 
 </resources>
