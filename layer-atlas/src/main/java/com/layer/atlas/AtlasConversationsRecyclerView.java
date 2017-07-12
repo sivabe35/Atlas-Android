@@ -134,6 +134,25 @@ public class AtlasConversationsRecyclerView extends RecyclerView {
     }
 
     /**
+     * Convenience pass-through to this list's AtlasMessagesAdapter.
+     *
+     * @see AtlasConversationsAdapter#getShouldShowAvatarPresence()
+     */
+    public boolean getShouldShowAvatarPresence() {
+        return mAdapter.getShouldShowAvatarPresence();
+    }
+
+    /**
+     * Convenience pass-through to this list's AtlasMessagesAdapter.
+     *
+     * @see AtlasConversationsAdapter#setShouldShowAvatarPresence(boolean)
+     */
+    public AtlasConversationsRecyclerView setShouldShowAvatarPresence(boolean shouldShowAvatarPresence) {
+        mAdapter.setShouldShowAvatarPresence(shouldShowAvatarPresence);
+        return this;
+    }
+
+    /**
      * Convenience pass-through to this list's AtlasConversationsAdapter.
      *
      * @see AtlasConversationsAdapter#setInitialHistoricMessagesToFetch(long)
@@ -143,12 +162,13 @@ public class AtlasConversationsRecyclerView extends RecyclerView {
         return this;
     }
 
-    public AtlasConversationsRecyclerView setTypeface(Typeface titleTypeface, Typeface titleUnreadTypeface, Typeface subtitleTypeface, Typeface subtitleUnreadTypeface, Typeface dateTypeface) {
+    public AtlasConversationsRecyclerView setTypeface(Typeface titleTypeface, Typeface titleUnreadTypeface, Typeface subtitleTypeface, Typeface subtitleUnreadTypeface, Typeface dateTypeface, Typeface dateUnreadTypeface) {
         conversationStyle.setTitleTextTypeface(titleTypeface);
         conversationStyle.setTitleUnreadTextTypeface(titleUnreadTypeface);
         conversationStyle.setSubtitleTextTypeface(subtitleTypeface);
         conversationStyle.setSubtitleUnreadTextTypeface(subtitleUnreadTypeface);
         conversationStyle.setDateTextTypeface(dateTypeface);
+        conversationStyle.setDateUnreadTextTypeface(dateUnreadTypeface);
         return this;
     }
 
@@ -182,6 +202,7 @@ public class AtlasConversationsRecyclerView extends RecyclerView {
         styleBuilder.cellBackgroundColor(ta.getColor(R.styleable.AtlasConversationsRecyclerView_cellBackgroundColor, Color.TRANSPARENT));
         styleBuilder.cellUnreadBackgroundColor(ta.getColor(R.styleable.AtlasConversationsRecyclerView_cellUnreadBackgroundColor, Color.TRANSPARENT));
         styleBuilder.dateTextColor(ta.getColor(R.styleable.AtlasConversationsRecyclerView_dateTextColor, context.getResources().getColor(R.color.atlas_color_primary_blue)));
+        styleBuilder.dateUnreadTextColor(ta.getColor(R.styleable.AtlasConversationsRecyclerView_dateUnreadTextColor, context.getResources().getColor(R.color.atlas_color_primary_blue)));
 
         AvatarStyle.Builder avatarStyleBuilder = new AvatarStyle.Builder();
         avatarStyleBuilder.avatarTextColor(ta.getColor(R.styleable.AtlasConversationsRecyclerView_avatarTextColor, context.getResources().getColor(R.color.atlas_avatar_text)));
