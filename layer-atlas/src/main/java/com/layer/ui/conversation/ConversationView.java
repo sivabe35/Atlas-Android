@@ -20,6 +20,10 @@ import com.layer.ui.typingindicators.BubbleTypingIndicatorFactory;
 
 import java.util.Set;
 
+/**
+ * ConversationView displays the Messages in a Conversation and also allow user to reply
+ * to messages {@link MessageItemsListView} and {@link ComposeBar}
+ */
 public class ConversationView extends ConstraintLayout {
 
     protected LayerClient mLayerClient;

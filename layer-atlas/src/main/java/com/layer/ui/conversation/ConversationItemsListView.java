@@ -8,6 +8,12 @@ import com.layer.ui.adapters.ConversationItemsAdapter;
 
 import com.layer.ui.fourpartitem.FourPartItemsListView;
 
+/**
+ * ConversationItemsListView list Conversations, the adapter, itemHeight and adapter are set from the
+ * {@link ConversationItemsListViewModel}. ConversationItemsListView adjusts itself to the
+ * item height specified.
+ */
+
 public class ConversationItemsListView extends FourPartItemsListView<Conversation, ConversationItemsAdapter> {
 
     public ConversationItemsListView(Context context) {

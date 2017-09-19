@@ -31,6 +31,12 @@ import com.layer.ui.util.views.SwipeableItem;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * MessageItemsListView display messages in a Conversation, MessageItemsListView uses RecyclerView
+ * which displays the message. The adapter, cell factories and Item Swipe Listener are set from
+ * the {@link MessageItemsListViewModel}
+ */
+
 public class MessageItemsListView extends SwipeRefreshLayout implements LayerChangeEventListener.BackgroundThread.Weak {
 
     protected boolean mShouldShowAvatarsInOneOnOneConversations;
