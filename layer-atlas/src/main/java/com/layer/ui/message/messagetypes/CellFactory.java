@@ -146,9 +146,6 @@ public abstract class CellFactory<Tholder extends CellFactory.CellHolder, Tcache
         // True if the CellHolder is for my message, or false if for a remote user.
         public boolean isMe;
 
-        // Position of the CellHolder in the AtlasMessagesList.
-        public int position;
-
         // Maximum width allowed for the CellHolder, useful when resizing images.
         public int maxWidth;
 

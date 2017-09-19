@@ -29,6 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/layer_ui_padding_normal"
+        android:layout_marginStart="@dimen/layer_ui_padding_normal"
         android:paddingTop="@dimen/layer_ui_message_cluster_space">
 
         <LinearLayout
@@ -42,6 +43,7 @@
                 android:layout_width="@dimen/layer_ui_message_avatar_item_single"
                 android:layout_height="@dimen/layer_ui_message_avatar_item_single"
                 android:layout_marginRight="@dimen/layer_ui_padding_narrow"
+                android:layout_marginEnd="@dimen/layer_ui_padding_narrow"
                 android:visibility="@{viewModel.avatarVisibility ? View.VISIBLE : View.GONE}"
                 app:participants="@{viewModel.participants}" />
 
@@ -65,6 +67,7 @@
             android:textColor="@color/layer_ui_text_gray"
             android:textSize="@dimen/layer_ui_text_size_message_item_metadata"
             android:paddingLeft="@dimen/layer_ui_padding_normal"
+            android:paddingStart="@dimen/layer_ui_padding_normal"
             android:layout_alignParentBottom="true"
             android:gravity="center_horizontal"
             android:maxLines="1"/>

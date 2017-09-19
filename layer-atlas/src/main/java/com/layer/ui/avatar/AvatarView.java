@@ -59,7 +59,7 @@ public class AvatarView extends View {
         PAINT_BITMAP.setAntiAlias(true);
     }
 
-    private Set<Identity> mParticipants = new LinkedHashSet<>();
+    private Set<Identity> mParticipants;
 
     private final Map<Identity, BitmapWrapper> mIdentityBitmapWrapperMap = new HashMap<>();
     private final Map<Identity, String> mInitials = new HashMap<>();
@@ -81,20 +81,25 @@ public class AvatarView extends View {
 
     public AvatarView(Context context) {
         super(context);
+        mParticipants = new LinkedHashSet<>();
     }
 
     public AvatarView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
+        mParticipants = new LinkedHashSet<>();
     }
 
     public AvatarView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         parseStyle(getContext(), attrs, defStyleAttr);
+        mParticipants = new LinkedHashSet<>();
     }
 
     public AvatarView init(@NonNull AvatarViewModel avatarViewModel, @NonNull IdentityFormatter identityFormatter) {
         mViewModel = avatarViewModel;
         mViewModel.setIdentityFormatter(identityFormatter);
+
+        mParticipants = new LinkedHashSet<>();
 
         mPaintInitials.setAntiAlias(true);
         mPaintInitials.setSubpixelText(true);
@@ -126,9 +131,8 @@ public class AvatarView extends View {
      * Should be called from UI thread.
      */
     public void setParticipants(Set<Identity> participants) {
-        mParticipants.clear();
-        mParticipants.addAll(participants);
-        mParticipantsInitialSize = mParticipants.size();
+        mParticipants = participants;
+        mParticipantsInitialSize = mParticipants != null ? mParticipants.size() : 0;
         update();
     }
 
@@ -284,11 +288,11 @@ public class AvatarView extends View {
         Handler handler = getHandler();
         if (handler != null) {
             handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        invalidate();
-                    }
-                });
+                @Override
+                public void run() {
+                    invalidate();
+                }
+            });
         }
     }
 

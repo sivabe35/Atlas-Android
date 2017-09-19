@@ -50,7 +50,7 @@ public class ConversationItemsAdapter extends ItemRecyclerViewAdapter<Conversati
         layerClient.registerEventListener(mIdentityEventListener);
 
         mIdentityFormatter = identityFormatter;
-        mIdentityFormatter = new IdentityFormatterImpl();
+        mIdentityFormatter = new IdentityFormatterImpl(context);
     }
 
     //==============================================================================================
@@ -60,7 +60,10 @@ public class ConversationItemsAdapter extends ItemRecyclerViewAdapter<Conversati
     @Override
     public FourPartItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         UiFourPartItemBinding binding = UiFourPartItemBinding.inflate(getLayoutInflater(), parent, false);
-        ConversationItemViewModel viewModel = new ConversationItemViewModel(mConversationItemFormatter, mItemClickListener, mLayerClient.getAuthenticatedUser());
+        ConversationItemViewModel viewModel = new ConversationItemViewModel();
+        viewModel.setItemClickListener(mItemClickListener);
+        viewModel.setConversationItemFormatter(mConversationItemFormatter);
+        viewModel.setAuthenticatedUser(mLayerClient.getAuthenticatedUser());
         FourPartItemViewHolder itemViewHolder = new FourPartItemViewHolder<>(binding, viewModel, getStyle(), mImageCacheWrapper, mIdentityFormatter);
 
         binding.addOnRebindCallback(mOnRebindCallback);

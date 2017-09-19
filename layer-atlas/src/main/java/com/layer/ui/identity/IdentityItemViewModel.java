@@ -13,17 +13,22 @@ public class IdentityItemViewModel extends FourPartItemViewModel<Identity> {
     protected IdentityFormatter mIdentityFormatter;
     protected DateFormatter mDateFormatter;
 
-    public IdentityItemViewModel(OnItemClickListener<Identity> onItemClickListener,
-                                 IdentityFormatter identityFormatter, DateFormatter dateFormatter) {
-        super(onItemClickListener);
-        mIdentityFormatter = identityFormatter;
-        mDateFormatter = dateFormatter;
+    public IdentityItemViewModel() {
+        super();
     }
 
     @Override
     public void setItem(Identity identity) {
         super.setItem(identity);
         notifyChange();
+    }
+
+    public void setIdentityFormatter(IdentityFormatter identityFormatter) {
+        mIdentityFormatter = identityFormatter;
+    }
+
+    public void setDateFormatter(DateFormatter dateFormatter) {
+        mDateFormatter = dateFormatter;
     }
 
     @Override

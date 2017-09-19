@@ -19,7 +19,7 @@ public class IdentityItemsAdapter extends ItemRecyclerViewAdapter<Identity, Iden
     protected static final String TAG = "IdentityItemsAdapter";
 
     protected IdentityFormatter mIdentityFormatter;
-    protected DateFormatter mLayerDateFormatter;
+    protected DateFormatter mDateFormatter;
     protected ImageCacheWrapper mImageCacheWrapper;
 
     public IdentityItemsAdapter(Context context, LayerClient layerClient,
@@ -27,14 +27,17 @@ public class IdentityItemsAdapter extends ItemRecyclerViewAdapter<Identity, Iden
                                 DateFormatter dateFormatter) {
         super(context, layerClient, TAG, false);
         mIdentityFormatter = identityFormatter;
-        mLayerDateFormatter = dateFormatter;
+        mDateFormatter = dateFormatter;
         mImageCacheWrapper = imageCacheWrapper;
     }
 
     @Override
     public FourPartItemViewHolder<Identity, IdentityItemViewModel> onCreateViewHolder(ViewGroup parent, int viewType) {
         UiFourPartItemBinding binding = UiFourPartItemBinding.inflate(getLayoutInflater(), parent, false);
-        IdentityItemViewModel viewModel = new IdentityItemViewModel(getItemClickListener(), mIdentityFormatter, mLayerDateFormatter);
+        IdentityItemViewModel viewModel = new IdentityItemViewModel();
+        viewModel.setItemClickListener(getItemClickListener());
+        viewModel.setIdentityFormatter(mIdentityFormatter);
+        viewModel.setDateFormatter(mDateFormatter);
         FourPartItemViewHolder<Identity, IdentityItemViewModel> viewHolder = new FourPartItemViewHolder<>(binding, viewModel, getStyle(), mImageCacheWrapper, mIdentityFormatter);
 
         binding.addOnRebindCallback(mOnRebindCallback);

@@ -117,7 +117,7 @@ public class AvatarTypingIndicatorFactory implements TypingIndicatorLayout.Typin
             AvatarView avatarView = tag.mPassives.poll();
             if (avatarView == null) {
                 // TODO: allow styling
-                avatarView = new AvatarView(l.getContext()).init(new AvatarViewModelImpl(mImageCacheWrapper), new IdentityFormatterImpl());
+                avatarView = new AvatarView(l.getContext()).init(new AvatarViewModelImpl(mImageCacheWrapper), new IdentityFormatterImpl(l.getContext()));
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(avatarDim, avatarDim);
                 params.setMargins(0, 0, avatarSpace, 0);
                 avatarView.setLayoutParams(params);

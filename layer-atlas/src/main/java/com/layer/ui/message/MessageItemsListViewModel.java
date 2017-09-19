@@ -5,8 +5,8 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
 import com.layer.sdk.LayerClient;
-import com.layer.sdk.messaging.Conversation;
 import com.layer.sdk.messaging.Message;
+import com.layer.ui.identity.IdentityFormatter;
 import com.layer.ui.message.messagetypes.CellFactory;
 import com.layer.ui.util.DateFormatter;
 import com.layer.ui.util.imagecache.ImageCacheWrapper;
@@ -15,17 +15,19 @@ import com.layer.ui.util.views.SwipeableItem;
 import java.util.List;
 
 public class MessageItemsListViewModel extends BaseObservable {
-    protected MessagesAdapter mMessageItemsAdapter;
+    protected MessageItemsAdapter mMessageItemsAdapter;
     protected List<CellFactory> mCellFactories;
     protected SwipeableItem.OnItemSwipeListener<Message> mItemSwipeListener;
 
     public MessageItemsListViewModel(Context context, LayerClient layerClient,
-            ImageCacheWrapper imageCacheWrapper, DateFormatter dateFormatter) {
-        mMessageItemsAdapter = new MessagesAdapter(context, layerClient, imageCacheWrapper, dateFormatter);
+                                     ImageCacheWrapper imageCacheWrapper, DateFormatter dateFormatter,
+                                     IdentityFormatter identityFormatter) {
+        mMessageItemsAdapter = new MessageItemsAdapter(context, layerClient,
+                imageCacheWrapper, dateFormatter, identityFormatter);
     }
 
     @Bindable
-    public MessagesAdapter getAdapter() {
+    public MessageItemsAdapter getAdapter() {
         return mMessageItemsAdapter;
     }
 

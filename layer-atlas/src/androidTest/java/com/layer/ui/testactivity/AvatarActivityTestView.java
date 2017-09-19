@@ -44,9 +44,9 @@ public class AvatarActivityTestView extends Activity implements AdapterView.OnIt
         mPresenceView = (PresenceView) findViewById(R.id.test_presence);
         mPresenceView.setParticipants(mMockIdentity);
         ImageCacheWrapper imageCacheWrapper = new PicassoImageCacheWrapper(Picasso.with(this));
-        mAvatarView.init(new AvatarViewModelImpl(imageCacheWrapper), new IdentityFormatterImpl());
+        mAvatarView.init(new AvatarViewModelImpl(imageCacheWrapper), new IdentityFormatterImpl(getApplicationContext()));
         mAvatarView.setParticipants(mMockIdentity);
-        mAvatarView.init(new AvatarViewModelImpl(imageCacheWrapper), new IdentityFormatterImpl());
+        mAvatarView.init(new AvatarViewModelImpl(imageCacheWrapper), new IdentityFormatterImpl(getApplicationContext()));
         setUp();
     }
 

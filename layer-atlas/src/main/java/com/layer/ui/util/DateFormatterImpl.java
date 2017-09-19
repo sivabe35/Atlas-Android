@@ -10,12 +10,14 @@ import java.util.Locale;
 
 public class DateFormatterImpl implements DateFormatter {
     private final int TIME_HOURS_24 = 24 * 60 * 60 * 1000;
-    private final SimpleDateFormat DAY_OF_WEEK = new SimpleDateFormat("EEE, LLL dd",
-            Locale.getDefault());
+    private final SimpleDateFormat DAY_OF_WEEK;
+    private final DateFormat TIME_FORMAT;
     private Context mContext;
 
     public DateFormatterImpl(Context context) {
         mContext = context;
+        DAY_OF_WEEK = new SimpleDateFormat("EEE, LLL dd", Locale.getDefault());
+        TIME_FORMAT = android.text.format.DateFormat.getTimeFormat(context);
     }
 
     /**
@@ -47,6 +49,11 @@ public class DateFormatterImpl implements DateFormatter {
             timeBarDayText = DAY_OF_WEEK.format(date);
         }
         return timeBarDayText;
+    }
+
+    @Override
+    public String formatTime(Date date) {
+        return TIME_FORMAT.format(date);
     }
 
     @Override

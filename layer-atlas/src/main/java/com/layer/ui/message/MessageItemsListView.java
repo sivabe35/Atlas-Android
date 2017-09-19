@@ -37,7 +37,7 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerCha
     protected MessageStyle mMessageStyle;
     protected ItemsRecyclerView<Message> mMessagesRecyclerView;
     protected LinearLayoutManager mLinearLayoutManager;
-    protected MessagesAdapter mAdapter;
+    protected MessageItemsAdapter mAdapter;
 
     protected LayerClient mLayerClient;
     protected Conversation mConversation;
@@ -87,7 +87,7 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerCha
         mLayerClient.unregisterEventListener(this);
     }
 
-    public void setAdapter(final MessagesAdapter adapter) {
+    public void setAdapter(final MessageItemsAdapter adapter) {
         adapter.setStyle(mMessageStyle);
         mAdapter = adapter;
         mMessagesRecyclerView.setAdapter(adapter);
@@ -96,20 +96,19 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerCha
         mMessagesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                for (CellFactory factory : adapter.getCellFactories()) {
+                for (CellFactory factory : (List<CellFactory>) adapter.getCellFactories()) {
                     factory.onScrollStateChanged(newState);
                 }
             }
         });
 
         // Create an adapter that auto-scrolls if we're already at the bottom
-        adapter.setRecyclerView(mMessagesRecyclerView)
-                .setOnMessageAppendListener(new MessagesAdapter.OnMessageAppendListener() {
-                    @Override
-                    public void onMessageAppend(MessagesAdapter adapter, Message message) {
-                        autoScroll();
-                    }
-                });
+        adapter.setOnMessageAppendListener(new MessagesAdapter.OnMessageAppendListener() {
+            @Override
+            public void onMessageAppend(MessagesAdapter adapter, Message message) {
+                autoScroll();
+            }
+        });
     }
 
     //============================================================================================
@@ -193,7 +192,7 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerCha
     /**
      * Convenience pass-through to this list's MessagesAdapter.
      *
-     * @see MessagesAdapter#addCellFactories(List)
+     * @see MessageItemsAdapter#addCellFactories(List)
      */
     public void setCellFactories(List<CellFactory> cellFactories) {
         mAdapter.addCellFactories(cellFactories);
@@ -266,7 +265,13 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerCha
         mLayerClient = layerClient;
         mLayerClient.registerEventListener(this);
 
-        mAdapter.setQuery(query).refresh();
+        mAdapter.setQuery(query, null);
+        Set<Identity> participants = conversation.getParticipants();
+        if (participants != null) {
+            mAdapter.setIsOneOnOneConversation(conversation.getParticipants().size() == 2);
+        }
+
+        mAdapter.refresh();
     }
 
     protected void parseStyle(Context context, AttributeSet attrs, int defStyle) {

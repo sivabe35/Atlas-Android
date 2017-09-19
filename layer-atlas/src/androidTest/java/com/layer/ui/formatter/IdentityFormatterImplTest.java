@@ -1,5 +1,6 @@
 package com.layer.ui.formatter;
 
+import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.layer.sdk.messaging.Identity;
@@ -21,7 +22,7 @@ public class IdentityFormatterImplTest {
 
     @Before
     public void setup() {
-        mIdentityFormatter = new IdentityFormatterImpl();
+        mIdentityFormatter = new IdentityFormatterImpl(InstrumentationRegistry.getTargetContext());
         mMockIdentity = new MockIdentity();
     }
 

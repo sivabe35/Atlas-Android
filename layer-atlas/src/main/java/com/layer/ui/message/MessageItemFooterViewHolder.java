@@ -1,7 +1,8 @@
 package com.layer.ui.message;
 
 import android.content.res.Resources;
-import android.databinding.ViewDataBinding;
+import android.databinding.DataBindingUtil;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,28 +19,27 @@ import com.layer.ui.util.imagecache.ImageCacheWrapper;
 import java.util.Set;
 
 public class MessageItemFooterViewHolder extends
-        ItemViewHolder<Message, MessageItemViewModel, ViewDataBinding, MessageStyle> {
+        ItemViewHolder<Message, MessageItemViewModel, UiMessageItemFooterBinding, MessageStyle> {
 
-    protected ViewGroup mRoot;
+    public MessageItemFooterViewHolder(ViewGroup parent, MessageItemViewModel messageItemViewModel,
+                                       ImageCacheWrapper imageCacheWrapper) {
+        super(parent, R.layout.ui_message_item_footer, messageItemViewModel);
+        getBinding().avatar.init(new AvatarViewModelImpl(imageCacheWrapper), new IdentityFormatterImpl(parent.getContext()));
+    }
 
-    public MessageItemFooterViewHolder(UiMessageItemFooterBinding binding,
-            MessageItemViewModel messageItemViewModel, ImageCacheWrapper imageCacheWrapper) {
-
-        super(binding, messageItemViewModel);
-        mRoot = binding.swipeable;
-        binding.avatar.init(new AvatarViewModelImpl(imageCacheWrapper), new IdentityFormatterImpl());
+    public void clear() {
+        getBinding().swipeable.removeAllViews();
     }
 
     public void bind(Set<Identity> users, View mFooterView, boolean shouldAvatarBeVisible) {
-
-        mRoot.addView(mFooterView);
-        super.getViewModel().setParticipants(users);
-        super.getViewModel().setAvatarViewVisibilityType(shouldAvatarBeVisible);
+        getBinding().swipeable.addView(mFooterView);
+        getViewModel().setParticipants(users);
+        getViewModel().setAvatarViewVisibilityType(shouldAvatarBeVisible);
         int numberOfUsers = users.size();
 
         if (numberOfUsers > 2) {
-            super.getViewModel().setTypingIndicatorMessageVisibility(true);
-            super.getViewModel().setMessageFooterAnimationVisibility(false);
+            getViewModel().setTypingIndicatorMessageVisibility(true);
+            getViewModel().setMessageFooterAnimationVisibility(false);
             String firstUser = "", secondUser = "";
             int counter = 0;
 
@@ -56,13 +56,13 @@ public class MessageItemFooterViewHolder extends
             int remainingUsers = numberOfUsers % 2;
             String typingIndicatorMessage = resources.getQuantityString(R.plurals.layer_ui_typing_indicator_message,
                     remainingUsers, firstUser, secondUser, remainingUsers);
-            super.getViewModel().setTypingIndicatorMessage(typingIndicatorMessage);
+            getViewModel().setTypingIndicatorMessage(typingIndicatorMessage);
         } else {
-            super.getViewModel().setTypingIndicatorMessageVisibility(false);
-            super.getViewModel().setMessageFooterAnimationVisibility(true);
+            getViewModel().setTypingIndicatorMessageVisibility(false);
+            getViewModel().setMessageFooterAnimationVisibility(true);
         }
 
-        super.getViewModel().notifyChange();
-        ((UiMessageItemFooterBinding) mBinding).setViewModel(super.getViewModel());
+        getViewModel().notifyChange();
+        getBinding().setViewModel(getViewModel());
     }
 }

@@ -17,4 +17,6 @@ public interface IdentityFormatter {
     String getDisplayName(Identity identity);
 
     String getMetaData(Identity identity);
+
+    String getUnknownNameString();
 }

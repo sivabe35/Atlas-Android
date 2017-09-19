@@ -8,6 +8,7 @@ import com.layer.sdk.LayerClient;
 import com.layer.sdk.messaging.Conversation;
 import com.layer.sdk.messaging.Message;
 import com.layer.sdk.query.Query;
+import com.layer.ui.identity.IdentityFormatter;
 import com.layer.ui.message.MessageItemsListViewModel;
 import com.layer.ui.message.messagetypes.CellFactory;
 import com.layer.ui.util.DateFormatter;
@@ -24,8 +25,10 @@ public class ConversationViewModel extends BaseObservable {
 
     public ConversationViewModel(Context context, LayerClient layerClient, List<CellFactory> cellFactories,
                                  ImageCacheWrapper imageCacheWrapper, DateFormatter dateFormatter,
+                                 IdentityFormatter identityFormatter,
                                  SwipeableItem.OnItemSwipeListener<Message> onItemSwipeListener) {
-        mMessageItemsListViewModel = new MessageItemsListViewModel(context, layerClient, imageCacheWrapper, dateFormatter);
+        mMessageItemsListViewModel = new MessageItemsListViewModel(context, layerClient,
+                imageCacheWrapper, dateFormatter, identityFormatter);
         mMessageItemsListViewModel.setCellFactories(cellFactories);
         mMessageItemsListViewModel.setOnItemSwipeListener(onItemSwipeListener);
         mLayerClient = layerClient;

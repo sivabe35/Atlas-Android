@@ -47,14 +47,16 @@ public class ConversationItemTestActivity extends Activity {
         DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(getApplicationContext());
         mConversationItemFormatter = new ConversationItemFormatter(this, dateFormat, timeFormat, getCellFactories(layerClient));
 
-        IdentityFormatter identityFormatter = new IdentityFormatterImpl();
+        IdentityFormatter identityFormatter = new IdentityFormatterImpl(getApplicationContext());
         Identity authenticatedUser = layerClient.getAuthenticatedUser();
         Conversation conversation = new MockConversation(authenticatedUser, 3);
 
         TestActivityFourPartItemBinding binding = DataBindingUtil.setContentView(this, R.layout.test_activity_four_part_item);
         FourPartItemStyle style = new FourPartItemStyle(this, null, 0);
 
-        ConversationItemViewModel viewModel = new ConversationItemViewModel(mConversationItemFormatter, null, authenticatedUser);
+        ConversationItemViewModel viewModel = new ConversationItemViewModel();
+        viewModel.setConversationItemFormatter(mConversationItemFormatter);
+        viewModel.setAuthenticatedUser(layerClient.getAuthenticatedUser());
         viewModel.setItem(conversation);
 
         AvatarViewModel avatarViewModel = new AvatarViewModelImpl(imageCacheWrapper);

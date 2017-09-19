@@ -13,17 +13,15 @@ import com.layer.ui.fourpartitem.FourPartItemViewModel;
 
 public class ConversationItemViewModel extends FourPartItemViewModel<Conversation> {
     //View Logic
-    protected final ConversationItemFormatter mConversationItemFormatter;
+    protected ConversationItemFormatter mConversationItemFormatter;
     protected Identity mAuthenticatedUser;
 
     // View Data
     protected Set<Identity> mParticipantsMinusAuthenticatedUser;
 
-    public ConversationItemViewModel(ConversationItemFormatter conversationItemFormatter, OnItemClickListener<Conversation> onItemClickListener, Identity authenticatedUser) {
-        super(onItemClickListener);
-        mConversationItemFormatter = conversationItemFormatter;
+    public ConversationItemViewModel() {
+        super();
         mParticipantsMinusAuthenticatedUser = new HashSet<>();
-        mAuthenticatedUser = authenticatedUser;
     }
 
     @Override
@@ -36,6 +34,14 @@ public class ConversationItemViewModel extends FourPartItemViewModel<Conversatio
         mParticipantsMinusAuthenticatedUser.remove(mAuthenticatedUser);
 
         notifyChange();
+    }
+
+    public void setAuthenticatedUser(Identity authenticatedUser) {
+        mAuthenticatedUser = authenticatedUser;
+    }
+
+    public void setConversationItemFormatter(ConversationItemFormatter conversationItemFormatter) {
+        mConversationItemFormatter = conversationItemFormatter;
     }
 
     @Bindable

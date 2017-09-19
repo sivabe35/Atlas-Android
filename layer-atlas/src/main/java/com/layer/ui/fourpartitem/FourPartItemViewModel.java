@@ -10,9 +10,8 @@ import com.layer.ui.viewmodel.ItemViewModel;
 import java.util.Set;
 
 public abstract class FourPartItemViewModel<ITEM extends Queryable> extends ItemViewModel<ITEM> {
-
-    public FourPartItemViewModel(OnItemClickListener<ITEM> itemClickListener) {
-        super(itemClickListener);
+    public FourPartItemViewModel() {
+        super();
     }
 
     @Bindable

@@ -57,7 +57,9 @@ public class ConversationItemViewModelTest {
 
     @Test
     public void testGetTitle() {
-        ConversationItemViewModel viewModel = new ConversationItemViewModel(mConversationItemFormatter, null, layerClient.getAuthenticatedUser());
+        ConversationItemViewModel viewModel = new ConversationItemViewModel();
+        viewModel.setConversationItemFormatter(mConversationItemFormatter);
+        viewModel.setAuthenticatedUser(layerClient.getAuthenticatedUser());
         viewModel.setItem(conversation);
 
         assertThat(viewModel.getSubtitle(), is(CONVERSATION_SUBTITLE));
@@ -65,7 +67,9 @@ public class ConversationItemViewModelTest {
 
     @Test
     public void testGetSubtitle() {
-        ConversationItemViewModel viewModel = new ConversationItemViewModel(mConversationItemFormatter, null, layerClient.getAuthenticatedUser());
+        ConversationItemViewModel viewModel = new ConversationItemViewModel();
+        viewModel.setConversationItemFormatter(mConversationItemFormatter);
+        viewModel.setAuthenticatedUser(layerClient.getAuthenticatedUser());
         viewModel.setItem(conversation);
 
         assertThat(viewModel.getSubtitle(), is(CONVERSATION_SUBTITLE));
@@ -73,7 +77,9 @@ public class ConversationItemViewModelTest {
 
     @Test
     public void testAccessoryText() {
-        ConversationItemViewModel viewModel = new ConversationItemViewModel(mConversationItemFormatter, null, layerClient.getAuthenticatedUser());
+        ConversationItemViewModel viewModel = new ConversationItemViewModel();
+        viewModel.setConversationItemFormatter(mConversationItemFormatter);
+        viewModel.setAuthenticatedUser(layerClient.getAuthenticatedUser());
         viewModel.setItem(conversation);
 
         assertThat(viewModel.getAccessoryText(), is(CONVERSATION_TIMESTAMP));
@@ -81,7 +87,9 @@ public class ConversationItemViewModelTest {
 
     @Test
     public void testIsUnread() {
-        ConversationItemViewModel viewModel = new ConversationItemViewModel(mConversationItemFormatter, null, layerClient.getAuthenticatedUser());
+        ConversationItemViewModel viewModel = new ConversationItemViewModel();
+        viewModel.setConversationItemFormatter(mConversationItemFormatter);
+        viewModel.setAuthenticatedUser(layerClient.getAuthenticatedUser());
         viewModel.setItem(conversation);
 
         assertThat(viewModel.isSecondaryState(), is(true));
@@ -89,7 +97,9 @@ public class ConversationItemViewModelTest {
 
     @Test
     public void testGetParticipantsDoesNotContainAuthenticatedUser() {
-        ConversationItemViewModel viewModel = new ConversationItemViewModel(mConversationItemFormatter, null, layerClient.getAuthenticatedUser());
+        ConversationItemViewModel viewModel = new ConversationItemViewModel();
+        viewModel.setConversationItemFormatter(mConversationItemFormatter);
+        viewModel.setAuthenticatedUser(layerClient.getAuthenticatedUser());
         viewModel.setItem(conversation);
 
         assertThat(viewModel.getIdentities().contains(participant1), is(false));

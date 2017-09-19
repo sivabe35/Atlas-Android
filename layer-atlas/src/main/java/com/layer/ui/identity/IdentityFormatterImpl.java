@@ -1,10 +1,18 @@
 package com.layer.ui.identity;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.layer.sdk.messaging.Identity;
+import com.layer.ui.R;
 
 public class IdentityFormatterImpl implements IdentityFormatter {
+
+    private Context mContext;
+
+    public IdentityFormatterImpl(Context context) {
+        mContext = context;
+    }
 
     @Override
     public String getInitials(Identity identity) {
@@ -60,5 +68,8 @@ public class IdentityFormatterImpl implements IdentityFormatter {
         }
     }
 
-
+    @Override
+    public String getUnknownNameString() {
+        return mContext.getString(R.string.layer_ui_message_item_unknown_user);
+    }
 }

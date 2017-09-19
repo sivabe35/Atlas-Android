@@ -135,11 +135,13 @@ public abstract class ItemRecyclerViewAdapter<ITEM extends Queryable,
 
     @Override
     public int getItemCount() {
+        int itemCount;
         if (mQueryController != null) {
-            return mQueryController.getItemCount();
+            itemCount = mQueryController.getItemCount();
         } else {
-            return mItems.size();
+            itemCount = mItems.size();
         }
+        return itemCount;
     }
 
     public Integer getPosition(ITEM item) {
@@ -193,7 +195,6 @@ public abstract class ItemRecyclerViewAdapter<ITEM extends Queryable,
             ITEM item = getItem(position);
             if (item != null) {
                 holder.setItem(item);
-
             } else {
                 onBindEmpty(holder);
             }

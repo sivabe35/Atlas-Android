@@ -12,8 +12,7 @@ public abstract class ItemViewModel<ITEM extends Queryable> extends BaseObservab
     protected ITEM mItem;
     protected OnItemClickListener<ITEM> mItemClickListener;
 
-    public ItemViewModel(OnItemClickListener<ITEM> itemClickListener) {
-        mItemClickListener = itemClickListener;
+    public ItemViewModel() {
     }
 
     @Bindable
@@ -27,6 +26,10 @@ public abstract class ItemViewModel<ITEM extends Queryable> extends BaseObservab
 
     public void setEmpty() {
         mItem = null;
+    }
+
+    public void setItemClickListener(OnItemClickListener<ITEM> itemClickListener) {
+        mItemClickListener = itemClickListener;
     }
 
     public OnItemClickListener<ITEM> getItemClickListener() {

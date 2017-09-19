@@ -27,7 +27,6 @@ public class ConversationView extends ConstraintLayout {
     protected ComposeBar mComposeBar;
     protected TypingIndicatorLayout mTypingIndicator;
 
-    protected Conversation mConversation;
     protected UiConversationViewBinding mBinding;
 
     public ConversationView(Context context) {
@@ -50,7 +49,7 @@ public class ConversationView extends ConstraintLayout {
         mTypingIndicator.setTypingActivityListener(new TypingIndicatorLayout.TypingActivityListener() {
             @Override
             public void onTypingActivityChange(TypingIndicatorLayout typingIndicator, boolean active, Set<Identity> users) {
-                mMessageItemListView.setFooterView(active ? typingIndicator : null, users);
+              mMessageItemListView.setFooterView(active ? typingIndicator : null, users);
             }
         });
     }
