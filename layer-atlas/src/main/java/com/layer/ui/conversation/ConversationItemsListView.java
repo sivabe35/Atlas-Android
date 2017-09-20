@@ -6,12 +6,17 @@ import android.util.AttributeSet;
 import com.layer.sdk.messaging.Conversation;
 import com.layer.ui.adapters.ConversationItemsAdapter;
 
+import com.layer.ui.adapters.ItemRecyclerViewAdapter;
 import com.layer.ui.fourpartitem.FourPartItemsListView;
+import com.layer.ui.util.views.SwipeableItem;
 
 /**
- * ConversationItemsListView list Conversations, the adapter, itemHeight and adapter are set from the
- * {@link ConversationItemsListViewModel}. ConversationItemsListView adjusts itself to the
- * item height specified.
+ * ConversationItemsListView list Conversations, to use ConversationItemsListView, an object of the
+ * {@link ConversationItemsAdapter} must be set on {@link ConversationItemsListView#setAdapter(ItemRecyclerViewAdapter)}.
+ * To register a swipe Listener, set {@link com.layer.ui.util.views.SwipeableItem.OnItemSwipeListener}
+ * on {@link ConversationItemsListView#setItemSwipeListener(SwipeableItem.OnItemSwipeListener)}
+ * We set these values in the xml by binding an object of {@link ConversationItemsListViewModel} to
+ * the view
  */
 
 public class ConversationItemsListView extends FourPartItemsListView<Conversation, ConversationItemsAdapter> {

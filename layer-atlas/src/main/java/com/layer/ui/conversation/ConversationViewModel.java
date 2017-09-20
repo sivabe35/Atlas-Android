@@ -16,6 +16,14 @@ import com.layer.ui.util.views.SwipeableItem;
 
 import java.util.List;
 
+/**
+ *  ConversationViewModel is used in {@link ConversationView}, the ConversationView encloses
+ *  the {@link com.layer.ui.message.MessageItemsListView}and {@link com.layer.ui.composebar.ComposeBar},
+ *  the ConversationViewModel passes on the {@link MessageItemsListViewModel} to the
+ *  {@link ConversationView} and then sets on the {@link com.layer.ui.message.MessageItemsListView}
+ *  via {@link ConversationView#setConversation(ConversationView, Conversation, LayerClient, MessageItemsListViewModel, Query)}
+ */
+
 public class ConversationViewModel extends BaseObservable {
     protected Conversation mConversation;
     protected MessageItemsListViewModel mMessageItemsListViewModel;

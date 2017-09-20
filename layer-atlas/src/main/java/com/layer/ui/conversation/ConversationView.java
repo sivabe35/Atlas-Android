@@ -21,8 +21,11 @@ import com.layer.ui.typingindicators.BubbleTypingIndicatorFactory;
 import java.util.Set;
 
 /**
- * ConversationView displays the Messages in a Conversation and also allow user to reply
- * to messages {@link MessageItemsListView} and {@link ComposeBar}
+ * ConversationView displays the Messages in a Conversation and also allows user to reply, ConversationView
+ * uses the  {@link MessageItemsListView} and {@link ComposeBar}
+ * To use ConversationView, create an Object of {@link ConversationViewModel} and bind it to the view
+ * The {@link Conversation}, {@link LayerClient} and {@link MessageItemsListViewModel} must be set
+ * on ConversationView.
  */
 public class ConversationView extends ConstraintLayout {
 
@@ -59,6 +62,14 @@ public class ConversationView extends ConstraintLayout {
         });
     }
 
+    /**
+     *
+     * @param view
+     * @param conversation Set the conversation on {@link MessageItemsListView}
+     * @param layerClient
+     * @param viewModel Sets the view model which contains the adapter on the {@link MessageItemsListView}
+     * @param query
+     */
     @BindingAdapter(value = {"app:conversation", "app:layerClient", "app:messageItemsListViewModel", "app:query"}, requireAll = false)
     public static void setConversation(ConversationView view, Conversation conversation,
                                        LayerClient layerClient, MessageItemsListViewModel viewModel,

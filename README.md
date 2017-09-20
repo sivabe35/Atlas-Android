@@ -14,7 +14,7 @@ With Layer UI, Messages have types.  One type might be rich text, and another mi
 Under the hood, <a href="layer-atlas/src/main/java/com/layer/ui/message/messagetypes/MessageSender.java">MessageSenders</a> send individual Message types, and <a href="llayer-atlas/src/main/java/com/layer/ui/message/messagetypes/CellFactory.java">CellFactories</a> render them.  Additional Message types can be added to your app by extending these classes.  For a list of default types, see the <a href="layer-atlas/src/main/java/com/layer/ui/message/messagetypes">messagetypes</a> subpackage.
 
 ## <a name="api_quickstart"></a>API Quickstart
-The Layer UI library is located in the `layer-atlas` directory.  The table below details the most important classes in Atlas and is hyperlinked directly to the current java file.
+The Layer UI library is located in the `layer-atlas` directory.  The table below details the most important classes in Layer UI and is hyperlinked directly to the current java file.
 
 <table>
     <tr><th colspan="2" style="text-align:center;">Views</th></tr>
