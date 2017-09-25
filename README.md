@@ -116,19 +116,12 @@ It uses databinding which takes an object of <a href="layer-atlas/src/main/java/
 Creates an Object of ConversationItemsListViewModel and binds it to the view.
 
 ```java
-    mConversationsList = binding.conversationsList;
 
-        mConversationItemsListViewModel = new ConversationItemsListViewModel(this, App.getLayerClient(), Util.getConversationItemFormatter(), Util.getImageCacheWrapper(),new IdentityFormatterImpl());
-
+        ConversationItemsListViewModel mConversationItemsListViewModel = new ConversationItemsListViewModel(this, App.getLayerClient(), Util.getConversationItemFormatter(), Util.getImageCacheWrapper(),new IdentityFormatterImpl());
         mConversationItemsListViewModel.setItemClickListener(new OnItemClickListener<Conversation>() {
             @Override
             public void onItemClick(Conversation item) {
-                Intent intent = new Intent(ConversationsListActivity.this, MessagesListActivity.class);
-                if (Log.isLoggable(Log.VERBOSE)) {
-                    Log.v("Launching MessagesListActivity with existing conversation ID: " + item.getId());
-                }
-                intent.putExtra(PushNotificationReceiver.LAYER_CONVERSATION_KEY, item.getId());
-                startActivity(intent);
+			    launchMessagesList(conversation);
             }
 
             @Override
@@ -140,60 +133,19 @@ Creates an Object of ConversationItemsListViewModel and binds it to the view.
         mConversationItemsListViewModel.setItemSwipeListener(new SwipeableItem.OnItemSwipeListener<Conversation>() {
             @Override
             public void onSwipe(final Conversation conversation, int direction) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ConversationsListActivity.this)
-                        .setMessage(R.string.alert_message_delete_conversation)
-                        .setNegativeButton(R.string.alert_button_cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                ConversationItemsAdapter adapter = mConversationItemsListViewModel.getConversationItemsAdapter();
-                                // TODO: simply update this one message
-                                adapter.notifyDataSetChanged();
-                                dialog.dismiss();
-                            }
-                        })
-                        .setPositiveButton(R.string.alert_button_delete_all_participants, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                conversation.delete(LayerClient.DeletionMode.ALL_PARTICIPANTS);
-                            }
-                        });
-                // User delete is only available if read receipts are enabled
-                if (conversation.isReadReceiptsEnabled()) {
-                    builder.setNeutralButton(R.string.alert_button_delete_my_devices, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            conversation.delete(LayerClient.DeletionMode.ALL_MY_DEVICES);
-                        }
-                    });
-                }
-                builder.show();
+                //Perform swipe action here
             }
         });
 
-        binding.setViewModel(mConversationItemsListViewModel);
-        binding.floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                startActivity(new Intent(ConversationsListActivity.this, MessagesListActivity.class));
-            }
-        });
-
-        binding.executePendingBindings();
 ```
 
 ### <a name="messages"></a>Messages
 
 #### ConversationView
 
-<a href="layer-atlas/src/main/java/com/layer/ui/conversation/ConversationView.java">ConversationView</a> Comprises of <a href="layer-atlas/src/main/java/com/layer/ui/message/MessageItemsListView.java">MessageItemsListView</a>  and <a href="layer-atlas/src/main/java/com/layer/ui/composebar/ComposeBar.java">ComposeBar</a>. The conversationView has a BindingAdapter
-
-```
-     @BindingAdapter(value = {"app:conversation", "app:layerClient", "app:messageItemsListViewModel", "app:query"}, requireAll = false)
-    public static void setConversation(ConversationView view, Conversation conversation, LayerClient layerClient, MessageItemsListViewModel viewModel, Query<Message> query) {
-    }
-```
-
-Which sets the required object needed on MessageItemsListView
-
+The <a href="layer-atlas/src/main/java/com/layer/ui/conversation/ConversationView.java">ConversationView</a>
+Comprises of <a href="layer-atlas/src/main/java/com/layer/ui/message/MessageItemsListView.java">MessageItemsListView</a>
+and <a href="layer-atlas/src/main/java/com/layer/ui/composebar/ComposeBar.java">ComposeBar</a>.
 
 ```xml
     <layout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -237,33 +189,7 @@ mConversationView = mActivityMessagesListBinding.conversation;
                 new SwipeableItem.OnItemSwipeListener<Message>() {
                     @Override
                     public void onSwipe(final Message message, int direction) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MessagesListActivity.this)
-                                .setMessage(R.string.alert_message_delete_message)
-                                .setNegativeButton(R.string.alert_button_cancel, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        // TODO: simply update this one message
-                                        mMessageItemsListViewModel.getAdapter().notifyDataSetChanged();
-                                        dialog.dismiss();
-                                    }
-                                })
-
-                                .setPositiveButton(R.string.alert_button_delete_all_participants, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        message.delete(LayerClient.DeletionMode.ALL_PARTICIPANTS);
-                                    }
-                                });
-                        // User delete is only available if read receipts are enabled
-                        if (message.getConversation().isReadReceiptsEnabled()) {
-                            builder.setNeutralButton(R.string.alert_button_delete_my_devices, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    message.delete(LayerClient.DeletionMode.ALL_MY_DEVICES);
-                                }
-                            });
-                        }
-                        builder.show();
+                        ...
                     }
                 });
 
@@ -274,10 +200,11 @@ mConversationView = mActivityMessagesListBinding.conversation;
 ```
 
 
+### MessageItemsListView
 
-###MessageItemsListView
-
-The <a href="layer-atlas/src/main/java/com/layer/ui/message/MessageItemsListView.java">MessageItemsListView</a> is list of Messages, rendered by <a href="layer-atlas/src/main/java/com/layer/ui/message/messagetypes/CellFactory.java">CellFactories</a>. MessageItemsListView is used in <a href="layer-atlas/src/main/java/com/layer/ui/conversation/ConversationView.java">ConversationView</a>
+The <a href="layer-atlas/src/main/java/com/layer/ui/message/MessageItemsListView.java">MessageItemsListView</a>
+is list of Messages, rendered by <a href="layer-atlas/src/main/java/com/layer/ui/message/messagetypes/CellFactory.java">CellFactories</a>. MessageItemsListView
+is used in <a href="layer-atlas/src/main/java/com/layer/ui/conversation/ConversationView.java">ConversationView</a>
 
 ##### XML
 
@@ -315,11 +242,9 @@ The <a href="layer-atlas/src/main/java/com/layer/ui/message/MessageItemsListView
 </layout>
 ```
 
-MessageItemsListView is use in <a href="layer-atlas/src/main/java/com/layer/ui/conversation/ConversationView.java">ConversationView</a>
-
 #### ComposeBar
 
-The <a href="layer-atlas/src/main/java/com/layer/ui/composebar/ComposeBar.java">ComposeBar</a> is a text entry area for composing messages and a menu of <a href="layer-atlas/src/main/java/com/layer/ui/message/messagetypes/AttachmentSender.java">AttachmentSenders</a>. It is used in <a href="layer-atlas/src/main/java/com/layer/ui/conversation/ConversationView.java">ConversationView</a>
+The <a href="layer-atlas/src/main/java/com/layer/ui/composebar/ComposeBar.java">ComposeBar</a> is a text entry area for composing messages and a menu of <a href="layer-atlas/src/main/java/com/layer/ui/message/messagetypes/AttachmentSender.java">AttachmentSenders</a>.
 
 ##### XML
 
@@ -400,51 +325,20 @@ mAddressBar = mActivityMessagesListBinding.conversationLauncher
                 .setOnConversationClickListener(new AddressBar.OnConversationClickListener() {
                     @Override
                     public void onConversationClick(AddressBar addressBar, Conversation conversation) {
-                        setConversation(conversation, true);
-                        setTitleFromConversationTitle(true);
+
                     }
                 })
                 .setOnParticipantSelectionChangeListener(new AddressBar.OnParticipantSelectionChangeListener() {
                     @Override
                     public void onParticipantSelectionChanged(AddressBar addressBar, final List<Identity> participants) {
-                        if (participants.isEmpty()) {
-                            setConversation(null, false);
-                            return;
-                        }
-                        try {
-                            setConversation(App.getLayerClient().newConversation(new ConversationOptions().distinct(true), new HashSet<>(participants)), false);
-                        } catch (LayerConversationException e) {
-                            setConversation(e.getConversation(), false);
-                        }
+
                     }
                 })
-                .addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        if (mState == UiState.ADDRESS_CONVERSATION_COMPOSER) {
-                            mAddressBar.setSuggestionsVisibility(s.toString().isEmpty() ? View.GONE : View.VISIBLE);
-                        }
-                    }
-                })
+                .addTextChangedListener()
                 .setOnEditorActionListener(new TextView.OnEditorActionListener() {
                     @Override
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if (actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-                            setUiState(UiState.CONVERSATION_COMPOSER);
-                            setTitleFromConversationTitle(true);
-                            return true;
-                        }
-                        return false;
+                       ...
                     }
                 });
 ```
