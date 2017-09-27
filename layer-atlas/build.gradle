@@ -10,12 +10,12 @@ ext.artifactIdName = 'layer-atlas'
 group 'com.layer.ui'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 24
+        minSdkVersion 15
+        targetSdkVersion 26
         versionName = "${version}"
 
         testInstrumentationRunner "com.layer.ui.TestButlerRunner"
@@ -53,23 +53,22 @@ ext {
 
 dependencies {
     // Layer SDK
-    compile ('com.layer.sdk:layer-sdk:0.23.16') {
-        exclude group: 'com.google.firebase', module: 'firebase-messaging'
-        exclude group: 'com.google.firebase', module: 'firebase-core'
-    }
-    compile 'org.slf4j:slf4j-nop:1.7.2'
+    compile project(':sdk')
+
     // Google Location
-    compile 'com.google.android.gms:play-services-location:10.2.0'
+    compile 'com.google.android.gms:play-services-location:11.2.0'
     // Image cache and loading
     compile 'com.squareup.picasso:picasso:2.5.2'
     // Image popup
     compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.4.1'
 
     // Android UI
-    compile 'com.android.support:recyclerview-v7:24.2.1'
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:recyclerview-v7:26.1.0'
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:design:26.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile "android.arch.lifecycle:runtime:1.0.0"
+    compile "android.arch.lifecycle:extensions:1.0.0-beta1"
 
     // Testing
     testCompile 'junit:junit:4.12'

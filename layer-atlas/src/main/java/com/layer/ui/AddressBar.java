@@ -492,7 +492,8 @@ public class AddressBar extends LinearLayout {
         }
 
         private void fetchIdentities(final IdentityFetcherCallback callback) {
-            Identity currentUser = mLayerClient.getAuthenticatedUser();
+            // TODO this is not correct, handle updates!
+            Identity currentUser = mLayerClient.getAuthenticatedUserLive().getValue();
             Query.Builder<Identity> builder = Query.builder(Identity.class);
             if (currentUser != null) {
                 builder.predicate(new Predicate(Identity.Property.USER_ID, Predicate.Operator.NOT_EQUAL_TO, currentUser.getUserId()));
@@ -644,7 +645,8 @@ public class AddressBar extends LinearLayout {
                     case CONVERSATION: {
                         position = adapterPositionToConversationPosition(position);
                         Conversation conversation = mQueryController.getItem(position);
-                        Identity user = mLayerClient.getAuthenticatedUser();
+                        // TODO this is not correct, handle updates!
+                        Identity user = mLayerClient.getAuthenticatedUserLive().getValue();
                         List<String> names = new ArrayList<>();
                         Set<Identity> participants = conversation.getParticipants();
                         participants.remove(user);

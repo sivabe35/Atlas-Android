@@ -6,10 +6,10 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 
 import com.davemorrissey.labs.subscaleview.decoder.ImageDecoder;
-import com.layer.ui.util.Log;
-import com.layer.ui.util.Util;
 import com.layer.sdk.LayerClient;
 import com.layer.sdk.messaging.MessagePart;
+import com.layer.ui.util.Log;
+import com.layer.ui.util.Util;
 
 import java.util.concurrent.TimeUnit;
 
@@ -22,7 +22,7 @@ public class MessagePartDecoder implements ImageDecoder {
 
     @Override
     public Bitmap decode(Context context, Uri messagePartId) throws Exception {
-        MessagePart part = (MessagePart) sLayerClient.get(messagePartId);
+        MessagePart part = Util.getMessagePartBlocking(sLayerClient, messagePartId);
         if (part == null) {
             if (Log.isLoggable(Log.ERROR)) {
                 Log.e("No message part with ID: " + messagePartId);

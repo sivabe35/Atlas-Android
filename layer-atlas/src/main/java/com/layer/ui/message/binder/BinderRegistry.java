@@ -1,5 +1,6 @@
 package com.layer.ui.message.binder;
 
+import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
 import com.layer.sdk.LayerClient;
@@ -41,6 +42,8 @@ public class BinderRegistry {
     protected final Map<CellFactory, Integer> mMyViewTypesByCell;
     protected final Map<CellFactory, Integer> mTheirViewTypesByCell;
 
+    private LiveData<Identity> mAuthenticatedUser;
+
     public BinderRegistry(LayerClient layerClient) {
         this(layerClient, 0, 1, -1);
     }
@@ -68,6 +71,8 @@ public class BinderRegistry {
         VIEW_TYPE_LEGACY_START = Math.max(headerViewType, footerViewType) + 1;
         VIEW_TYPE_LEGACY_END = VIEW_TYPE_LEGACY_START + NUMBER_OF_LEGACY_VIEW_TYPES;
         VIEW_TYPE_CARD = VIEW_TYPE_LEGACY_END + 1;
+
+        mAuthenticatedUser = mLayerClient.getAuthenticatedUserLive();
     }
 
     public boolean isLegacyMessageType(Message message) {
@@ -88,8 +93,9 @@ public class BinderRegistry {
 
     public int getViewType(Message message) {
         if (isLegacyMessageType(message)) {
-            Identity authenticatedUser = mLayerClient.getAuthenticatedUser();
-            boolean isMe = authenticatedUser != null && authenticatedUser.equals(message.getSender());
+            Identity currentAuthenticatedUser = mAuthenticatedUser.getValue();
+            boolean isMe = currentAuthenticatedUser != null
+                    && currentAuthenticatedUser.equals(message.getSender());
             for (CellFactory factory : mCellFactories) {
                 if (!factory.isBindable(message)) continue;
                 return isMe ? mMyViewTypesByCell.get(factory) : mTheirViewTypesByCell.get(factory);

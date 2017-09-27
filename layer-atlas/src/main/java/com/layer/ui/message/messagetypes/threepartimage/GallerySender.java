@@ -93,7 +93,8 @@ public class GallerySender extends AttachmentSender {
             if (Log.isPerfLoggable()) {
                 Log.perf("GallerySender is attempting to send a message");
             }
-            Identity me = getLayerClient().getAuthenticatedUser();
+            // TODO There is a SLIGHT possibility that the user is not cached here. How do we handle?
+            Identity me = getLayerClient().getAuthenticatedUserLive().getValue();
             String myName = me == null ? "" : Util.getDisplayName(me);
             Uri uri = data.getData();
             Message message = ThreePartImageUtils.newThreePartImageMessage(activity, getLayerClient(), uri);

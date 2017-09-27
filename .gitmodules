@@ -1,0 +1,3 @@
+[submodule "layer-recon-android-sdk"]
+	path = layer-recon-android-sdk
+	url = git@github.com:layerhq/layer-recon-android-sdk.git

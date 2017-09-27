@@ -1,5 +1,6 @@
 package com.layer.ui.message;
 
+import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.databinding.ViewDataBinding;
 import android.net.Uri;
@@ -103,7 +104,8 @@ public abstract class MessagesAdapter<VIEW_MODEL extends ItemViewModel<Message>,
         mBinderRegistry = new BinderRegistry(layerClient);
 
         mIdentityEventListener = new IdentityRecyclerViewEventListener(this);
-        getLayerClient().registerEventListener(mIdentityEventListener);
+
+        getLayerClient().registerDataObserver(mIdentityEventListener);
 
         mOnScrollListener = new RecyclerView.OnScrollListener() {
             @Override
@@ -141,7 +143,7 @@ public abstract class MessagesAdapter<VIEW_MODEL extends ItemViewModel<Message>,
      * Performs cleanup when the Activity/Fragment using the adapter is destroyed.
      */
     public void onDestroy() {
-        getLayerClient().unregisterEventListener(mIdentityEventListener);
+        getLayerClient().unregisterDataObserver(mIdentityEventListener);
     }
 
     protected BinderRegistry getBinderRegistry() {

@@ -1,5 +1,6 @@
 package com.layer.ui.message;
 
+import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.databinding.Bindable;
 
@@ -41,6 +42,8 @@ public class MessageItemCardViewModel extends ItemViewModel<Message> {
     private boolean mIsAvatarViewVisible;
     private boolean mIsPresenceVisible;
 
+    private LiveData<Identity> mAuthenticatedUser;
+    
     public MessageItemCardViewModel(Context context, LayerClient layerClient,
                                     ImageCacheWrapper imageCacheWrapper,
                                     IdentityRecyclerViewEventListener identityEventListener) {
@@ -50,12 +53,15 @@ public class MessageItemCardViewModel extends ItemViewModel<Message> {
         mShowPresence = true;
         mIdentityEventListener = identityEventListener;
         mImageCacheWrapper = imageCacheWrapper;
+
+        // TODO Handle updates
+        mAuthenticatedUser = layerClient.getAuthenticatedUserLive();
     }
 
     public void update(MessageCluster cluster, int position, Integer recipientStatusPosition) {
         Message message = getItem();
         mParticipants = Collections.singleton(message.getSender());
-        mIsMyMessage = getItem().getSender().equals(getLayerClient().getAuthenticatedUser());
+        mIsMyMessage = getItem().getSender().equals(mAuthenticatedUser.getValue());
 
         // Clustering and dates
         updateClusteringAndDates(message, cluster);
@@ -160,7 +166,7 @@ public class MessageItemCardViewModel extends ItemViewModel<Message> {
             Map<Identity, Message.RecipientStatus> statuses = message.getRecipientStatus();
             for (Map.Entry<Identity, Message.RecipientStatus> entry : statuses.entrySet()) {
                 // Only show receipts for other members
-                if (entry.getKey().equals(getLayerClient().getAuthenticatedUser())) continue;
+                if (entry.getKey().equals(mAuthenticatedUser.getValue())) continue;
                 // Skip receipts for members no longer in the conversation
                 if (entry.getValue() == null) continue;
 

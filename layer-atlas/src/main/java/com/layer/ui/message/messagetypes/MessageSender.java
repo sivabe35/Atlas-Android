@@ -86,7 +86,7 @@ public abstract class MessageSender {
          * @param message             The new Message created.
          * @return `true` to continue sending, or `false` to prevent sending
          * @see com.layer.sdk.messaging.Message
-         * @see com.layer.sdk.listeners.LayerChangeEventListener
+         * @see com.layer.sdk.LayerDataObserver
          */
         boolean beforeSend(MessageSender sender, LayerClient layerClient, Conversation conversation, Message message);
     }

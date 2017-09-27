@@ -15,16 +15,18 @@
  */
 package com.layer.ui.util;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.layer.sdk.LayerClient;
-import com.layer.sdk.exceptions.LayerException;
-import com.layer.sdk.listeners.LayerAuthenticationListener;
+import com.layer.sdk.authentication.AuthenticationListener;
 import com.layer.sdk.listeners.LayerProgressListener;
 import com.layer.sdk.messaging.Identity;
 import com.layer.sdk.messaging.MessagePart;
@@ -192,6 +194,37 @@ public class Util {
         return part.isContentReady();
     }
 
+    // TODO Is this the appropriate paradigm?
+    public static MessagePart getMessagePartBlocking(LayerClient layerClient, Uri partUri) {
+        final LiveData<MessagePart> liveData = layerClient.getLive(partUri, MessagePart.class);
+        if (liveData.getValue() == null) {
+            // Wait for the data to be loaded. This is okay since we're not on the main thread.
+            final CountDownLatch latch = new CountDownLatch(1);
+
+            liveData.observeForever(new Observer<MessagePart>() {
+                @Override
+                public void onChanged(@Nullable MessagePart layerObject) {
+                    if (layerObject != null) {
+                        // TODO this has to be done on the main thread
+                        liveData.removeObserver(this);
+                        latch.countDown();
+                    }
+                }
+            });
+
+            try {
+                latch.await(3, TimeUnit.MINUTES);
+            } catch (InterruptedException e) {
+                if (Log.isLoggable(Log.ERROR)) {
+                    Log.d("Failed to find message part: " + partUri, e);
+                }
+                return null;
+            }
+        }
+
+        return liveData.getValue();
+    }
+
     /**
      * Asynchronously deauthenticates with Layer.
      *
@@ -200,28 +233,24 @@ public class Util {
      */
     public static void deauthenticate(LayerClient layerClient, final DeauthenticationCallback callback) {
         final AtomicBoolean alerted = new AtomicBoolean(false);
-        final LayerAuthenticationListener listener = new LayerAuthenticationListener.BackgroundThread() {
+
+        AuthenticationListener listener = new AuthenticationListener() {
             @Override
-            public void onAuthenticated(LayerClient layerClient, String s) {
+            public void onAuthenticated(LayerClient client, String userId) {
 
             }
 
             @Override
-            public void onDeauthenticated(LayerClient layerClient) {
+            public void onDeauthenticated(LayerClient client, String userId) {
                 if (alerted.compareAndSet(false, true)) {
-                    callback.onDeauthenticationSuccess(layerClient);
+                    callback.onDeauthenticationSuccess(client);
                 }
             }
 
             @Override
-            public void onAuthenticationChallenge(LayerClient layerClient, String s) {
-
-            }
-
-            @Override
-            public void onAuthenticationError(LayerClient layerClient, LayerException e) {
+            public void onAuthenticationError(LayerClient client, Exception exception) {
                 if (alerted.compareAndSet(false, true)) {
-                    callback.onDeauthenticationFailed(layerClient, e.getMessage());
+                    callback.onDeauthenticationFailed(client, exception.getMessage());
                 }
             }
         };

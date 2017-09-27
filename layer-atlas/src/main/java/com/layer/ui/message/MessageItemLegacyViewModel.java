@@ -1,5 +1,6 @@
 package com.layer.ui.message;
 
+import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.databinding.Bindable;
 
@@ -44,6 +45,8 @@ public class MessageItemLegacyViewModel extends ItemViewModel<Message> {
     private boolean mIsTypingIndicatorVisible;
     private boolean mShouldDisplayAvatarSpace;
 
+    private LiveData<Identity> mAuthenticatedUser;
+
     public MessageItemLegacyViewModel(Context context, LayerClient layerClient,
                                       ImageCacheWrapper imageCacheWrapper,
                                       IdentityRecyclerViewEventListener identityEventListener) {
@@ -53,6 +56,9 @@ public class MessageItemLegacyViewModel extends ItemViewModel<Message> {
         mShowPresence = true;
         mIdentityEventListener = identityEventListener;
         mImageCacheWrapper = imageCacheWrapper;
+
+        // TODO Handle updates
+        mAuthenticatedUser = layerClient.getAuthenticatedUserLive();
     }
 
     public void update(MessageCluster cluster, MessageCell messageCell, int position,
@@ -155,7 +161,7 @@ public class MessageItemLegacyViewModel extends ItemViewModel<Message> {
             Map<Identity, Message.RecipientStatus> statuses = message.getRecipientStatus();
             for (Map.Entry<Identity, Message.RecipientStatus> entry : statuses.entrySet()) {
                 // Only show receipts for other members
-                if (entry.getKey().equals(getLayerClient().getAuthenticatedUser())) continue;
+                if (entry.getKey().equals(mAuthenticatedUser.getValue())) continue;
                 // Skip receipts for members no longer in the conversation
                 if (entry.getValue() == null) continue;
 

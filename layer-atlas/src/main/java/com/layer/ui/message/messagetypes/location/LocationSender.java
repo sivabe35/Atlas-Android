@@ -1,5 +1,7 @@
 package com.layer.ui.message.messagetypes.location;
 
+import static android.support.v4.content.ContextCompat.checkSelfPermission;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -16,23 +18,21 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.layer.ui.R;
-import com.layer.ui.message.messagetypes.AttachmentSender;
-import com.layer.ui.util.Log;
-import com.layer.ui.util.Util;
 import com.layer.sdk.LayerClient;
 import com.layer.sdk.messaging.Identity;
 import com.layer.sdk.messaging.Message;
 import com.layer.sdk.messaging.MessageOptions;
 import com.layer.sdk.messaging.MessagePart;
 import com.layer.sdk.messaging.PushNotificationPayload;
+import com.layer.ui.R;
+import com.layer.ui.message.messagetypes.AttachmentSender;
+import com.layer.ui.util.Log;
+import com.layer.ui.util.Util;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
-
-import static android.support.v4.content.ContextCompat.checkSelfPermission;
 
 /**
  * LocationSender creates JSON MessagePart with latitude, longitude, and label.  Google's fused
@@ -167,7 +167,8 @@ public class LocationSender extends AttachmentSender {
             Context context = sender.getContext();
             LayerClient client = sender.getLayerClient();
             try {
-                Identity me = client.getAuthenticatedUser();
+                // TODO There is a SLIGHT possibility that the user is not cached here. How do we handle?
+                Identity me = client.getAuthenticatedUserLive().getValue();
                 String myName = me == null ? "" : Util.getDisplayName(me);
                 JSONObject o = new JSONObject()
                         .put(LocationCellFactory.KEY_LATITUDE, location.getLatitude())

@@ -156,6 +156,7 @@ public class ThreePartImageCellFactory extends
 
     @Override
     public void onClick(View v) {
+        // TODO This is a very poor way to pass variables. We shouldn't have to use a static layer client instance here
         ImagePopupActivity.init(mLayerClient);
         Context context = v.getContext();
         if (context == null) return;

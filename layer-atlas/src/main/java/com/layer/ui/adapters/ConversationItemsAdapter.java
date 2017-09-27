@@ -1,10 +1,12 @@
 package com.layer.ui.adapters;
 
+import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.view.ViewGroup;
 
 import com.layer.sdk.LayerClient;
 import com.layer.sdk.messaging.Conversation;
+import com.layer.sdk.messaging.Identity;
 import com.layer.sdk.messaging.Message;
 import com.layer.sdk.query.Predicate;
 import com.layer.sdk.query.Query;
@@ -37,6 +39,7 @@ public class ConversationItemsAdapter extends ItemRecyclerViewAdapter<Conversati
 
     private IdentityFormatter mIdentityFormatter;
     private DateFormatter mDateFormatter;
+    private LiveData<Identity> mAuthenticatedUser;
 
     public ConversationItemsAdapter(Context context, LayerClient layerClient,
                                     Query<Conversation> query,
@@ -49,10 +52,11 @@ public class ConversationItemsAdapter extends ItemRecyclerViewAdapter<Conversati
         mImageCacheWrapper = imageCacheWrapper;
         mIdentityEventListener = new IdentityRecyclerViewEventListener(this);
 
-        layerClient.registerEventListener(mIdentityEventListener);
+        layerClient.registerDataObserver(mIdentityEventListener);
 
         mIdentityFormatter = new IdentityFormatterImpl(context);
         mDateFormatter = new DateFormatterImpl(context);
+        mAuthenticatedUser = layerClient.getAuthenticatedUserLive();
     }
 
     //==============================================================================================
@@ -68,7 +72,7 @@ public class ConversationItemsAdapter extends ItemRecyclerViewAdapter<Conversati
 
         viewModel.setItemClickListener(getItemClickListener());
         viewModel.setConversationItemFormatter(mConversationItemFormatter);
-        viewModel.setAuthenticatedUser(getLayerClient().getAuthenticatedUser());
+        viewModel.setAuthenticatedUser(mAuthenticatedUser);
 
         FourPartItemViewHolder itemViewHolder = new FourPartItemViewHolder<>(binding, viewModel, getStyle(), mImageCacheWrapper);
 
@@ -97,7 +101,7 @@ public class ConversationItemsAdapter extends ItemRecyclerViewAdapter<Conversati
 
     @Override
     public void onDestroy() {
-        getLayerClient().unregisterEventListener(mIdentityEventListener);
+        getLayerClient().unregisterDataObserver(mIdentityEventListener);
     }
 
     //==============================================================================================

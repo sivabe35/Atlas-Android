@@ -1,5 +1,6 @@
 package com.layer.ui.conversationitem;
 
+import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.databinding.Bindable;
 
@@ -14,7 +15,7 @@ import java.util.Set;
 public class ConversationItemViewModel extends FourPartItemViewModel<Conversation> {
     //View Logic
     protected ConversationItemFormatter mConversationItemFormatter;
-    protected Identity mAuthenticatedUser;
+    protected LiveData<Identity> mAuthenticatedUser;
 
     // View Data
     protected Set<Identity> mParticipantsMinusAuthenticatedUser;
@@ -31,12 +32,12 @@ public class ConversationItemViewModel extends FourPartItemViewModel<Conversatio
         mParticipantsMinusAuthenticatedUser.clear();
 
         mParticipantsMinusAuthenticatedUser.addAll(conversation.getParticipants());
-        mParticipantsMinusAuthenticatedUser.remove(mAuthenticatedUser);
+        mParticipantsMinusAuthenticatedUser.remove(mAuthenticatedUser.getValue());
 
         notifyChange();
     }
 
-    public void setAuthenticatedUser(Identity authenticatedUser) {
+    public void setAuthenticatedUser(LiveData<Identity> authenticatedUser) {
         mAuthenticatedUser = authenticatedUser;
     }
 
@@ -46,7 +47,7 @@ public class ConversationItemViewModel extends FourPartItemViewModel<Conversatio
 
     @Bindable
     public String getTitle() {
-        return mConversationItemFormatter.getConversationTitle(mAuthenticatedUser, getItem(), getItem().getParticipants());
+        return mConversationItemFormatter.getConversationTitle(mAuthenticatedUser.getValue(), getItem(), getItem().getParticipants());
     }
 
     @Bindable

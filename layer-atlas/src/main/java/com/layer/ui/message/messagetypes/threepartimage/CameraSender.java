@@ -120,7 +120,8 @@ public class CameraSender extends AttachmentSender {
             if (Log.isPerfLoggable()) {
                 Log.perf("CameraSender is attempting to send a message");
             }
-            Identity me = getLayerClient().getAuthenticatedUser();
+            // TODO There is a SLIGHT possibility that the user is not cached here. How do we handle?
+            Identity me = getLayerClient().getAuthenticatedUserLive().getValue();
             String myName = me == null ? "" : Util.getDisplayName(me);
             Message message = ThreePartImageUtils.newThreePartImageMessage(activity, getLayerClient(), new File(mPhotoFilePath.get()));
 

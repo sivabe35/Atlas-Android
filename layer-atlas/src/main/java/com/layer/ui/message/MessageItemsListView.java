@@ -12,11 +12,13 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.layer.sdk.LayerClient;
+import com.layer.sdk.LayerDataObserver;
+import com.layer.sdk.LayerDataRequest;
 import com.layer.sdk.changes.LayerChange;
 import com.layer.sdk.changes.LayerChangeEvent;
-import com.layer.sdk.listeners.LayerChangeEventListener;
 import com.layer.sdk.messaging.Conversation;
 import com.layer.sdk.messaging.Identity;
+import com.layer.sdk.messaging.LayerObject;
 import com.layer.sdk.messaging.Message;
 import com.layer.sdk.query.Predicate;
 import com.layer.sdk.query.Query;
@@ -32,7 +34,7 @@ import com.layer.ui.util.views.SwipeableItem;
 import java.util.List;
 import java.util.Set;
 
-public class MessageItemsListView extends SwipeRefreshLayout implements LayerChangeEventListener.BackgroundThread.Weak {
+public class MessageItemsListView extends SwipeRefreshLayout implements LayerDataObserver.BackgroundThread.Weak {
 
     protected boolean mShouldShowAvatarsInOneOnOneConversations;
     protected MessageStyle mMessageStyle;
@@ -85,10 +87,14 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerCha
 
     public void onDestroy() {
         mMessagesRecyclerView.onDestroy();
-        mLayerClient.unregisterEventListener(this);
+        mLayerClient.unregisterDataObserver(this);
     }
 
     public void setAdapter(final MessagesAdapter adapter) {
+        if (adapter == null) {
+            return;
+        }
+
         adapter.setStyle(mMessageStyle);
         mAdapter = adapter;
         mMessagesRecyclerView.setAdapter(adapter);
@@ -104,17 +110,21 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerCha
     }
 
     //============================================================================================
-    // LayerChangeEventListener.BackgroundThread.Weak Methods
+    // LayerDataObserver.BackgroundThread.Weak Methods
     //============================================================================================
 
     @Override
-    public void onChangeEvent(LayerChangeEvent layerChangeEvent) {
-        for (LayerChange change : layerChangeEvent.getChanges()) {
+    public void onDataChanged(LayerChangeEvent event) {
+        for (LayerChange change : event.getChanges()) {
             if (change.getObject() != mConversation) continue;
             if (change.getChangeType() != LayerChange.Type.UPDATE) continue;
             if (!change.getAttributeName().equals("historicSyncStatus")) continue;
             refresh();
         }
+    }
+
+    @Override
+    public void onDataRequestCompleted(LayerDataRequest request, LayerObject object) {
     }
 
     //============================================================================================
@@ -255,7 +265,7 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerCha
 
         mConversation = conversation;
         mLayerClient = layerClient;
-        mLayerClient.registerEventListener(this);
+        mLayerClient.registerDataObserver(this);
 
         mAdapter.setQuery(query, null);
         Set<Identity> participants = conversation.getParticipants();

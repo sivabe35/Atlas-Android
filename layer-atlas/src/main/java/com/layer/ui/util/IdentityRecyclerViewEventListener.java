@@ -4,9 +4,10 @@ package com.layer.ui.util;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 
+import com.layer.sdk.LayerDataObserver;
+import com.layer.sdk.LayerDataRequest;
 import com.layer.sdk.changes.LayerChange;
 import com.layer.sdk.changes.LayerChangeEvent;
-import com.layer.sdk.listeners.LayerChangeEventListener;
 import com.layer.sdk.messaging.Identity;
 import com.layer.sdk.messaging.LayerObject;
 
@@ -16,10 +17,10 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * A {@link LayerChangeEventListener} that looks for changes to identities that are bound to
+ * A {@link LayerDataObserver} that looks for changes to identities that are bound to
  * view holders in a {@link RecyclerView.Adapter}, and trigger updates in the adapter accordingly.
  */
-public class IdentityRecyclerViewEventListener implements LayerChangeEventListener.Weak {
+public class IdentityRecyclerViewEventListener implements LayerDataObserver.Weak {
     private final RecyclerView.Adapter mAdapter;
     private final Map<Uri, Set<Integer>> identityPositions = new HashMap<>();
 
@@ -46,8 +47,8 @@ public class IdentityRecyclerViewEventListener implements LayerChangeEventListen
     }
 
     @Override
-    public void onChangeEvent(LayerChangeEvent layerChangeEvent) {
-        for (LayerChange change : layerChangeEvent.getChanges()) {
+    public void onDataChanged(LayerChangeEvent event) {
+        for (LayerChange change : event.getChanges()) {
             if (change.getObjectType().equals(LayerObject.Type.IDENTITY)) {
                 Uri id = ((Identity) change.getObject()).getId();
                 Set<Integer> positions = identityPositions.get(id);
@@ -58,5 +59,10 @@ public class IdentityRecyclerViewEventListener implements LayerChangeEventListen
                 }
             }
         }
+    }
+
+    @Override
+    public void onDataRequestCompleted(LayerDataRequest request, LayerObject object) {
+
     }
 }
