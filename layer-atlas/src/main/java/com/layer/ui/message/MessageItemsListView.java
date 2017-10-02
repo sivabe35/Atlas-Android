@@ -37,7 +37,7 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerCha
     protected MessageStyle mMessageStyle;
     protected ItemsRecyclerView<Message> mMessagesRecyclerView;
     protected LinearLayoutManager mLinearLayoutManager;
-    protected MessageItemsAdapter mAdapter;
+    protected MessagesAdapter mAdapter;
 
     protected LayerClient mLayerClient;
     protected Conversation mConversation;
@@ -87,7 +87,7 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerCha
         mLayerClient.unregisterEventListener(this);
     }
 
-    public void setAdapter(final MessageItemsAdapter adapter) {
+    public void setAdapter(final MessagesAdapter adapter) {
         adapter.setStyle(mMessageStyle);
         mAdapter = adapter;
         mMessagesRecyclerView.setAdapter(adapter);

@@ -71,11 +71,13 @@ public class MessageItemsAdapter extends MessagesAdapter {
         MessageItemFooterViewHolder viewHolder = (MessageItemFooterViewHolder) holder;
         viewHolder.clear();
 
-        if (mFooterView.getParent() != null) {
-            ((ViewGroup) mFooterView.getParent()).removeView(mFooterView);
+        View footerView = getFooterView();
+
+        if (footerView.getParent() != null) {
+            ((ViewGroup) footerView.getParent()).removeView(footerView);
         }
 
         boolean shouldAvatarViewBeVisible = !(isOneOnOneConversation() & !getShouldShowAvatarInOneOnOneConversations());
-        viewHolder.bind(mUsersTyping, mFooterView, shouldAvatarViewBeVisible);
+        viewHolder.bind(mUsersTyping, footerView, shouldAvatarViewBeVisible);
     }
 }

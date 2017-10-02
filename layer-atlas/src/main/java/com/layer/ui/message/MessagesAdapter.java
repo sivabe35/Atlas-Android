@@ -75,6 +75,7 @@ public abstract class MessagesAdapter<VIEW_HOLDER extends ItemViewHolder<Message
     // Dates and Clustering
     protected final Map<Uri, MessageCluster> mClusterCache = new HashMap<>();
     protected OnMessageAppendListener mAppendListener;
+
     // Cells
     protected int mViewTypeCount = VIEW_TYPE_MESSAGE_ITEM;
     protected boolean mIsOneOnOneConversation;
