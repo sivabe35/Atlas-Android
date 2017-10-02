@@ -25,7 +25,7 @@ public class MessageItemsAdapter extends MessagesAdapter {
                 getLayerClient(), getImageCacheWrapper(), getDateFormatter(), getIdentityFormatter(),
                 getIdentityEventListener(), false, false, false);
 
-        return new MessageItemHeaderViewHolder(parent, R.layout.ui_message_item_header, messageItemViewModel);
+        return new MessageItemHeaderViewHolder(parent, messageItemViewModel);
     }
 
     @Override
