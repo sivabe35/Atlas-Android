@@ -228,11 +228,11 @@ public abstract class MessagesAdapter<VIEW_HOLDER extends ItemViewHolder<Message
             itemCount = mItems.size();
         }
 
-        return itemCount + ((mFooterView == null) ? 0 : 1);
+        return itemCount + ((mFooterView == null) ? 0 : 1) + (mHeaderView == null ? 0 : 1);
     }
 
     public int getHeaderPosition() {
-        if (mShouldShowHeader) return 0;
+        if (mShouldShowHeader && mHeaderView != null) return 0;
         return -1;
     }
 
