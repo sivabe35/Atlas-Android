@@ -1,8 +1,6 @@
 package com.layer.ui.message;
 
 import android.content.res.Resources;
-import android.databinding.DataBindingUtil;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -19,9 +17,9 @@ import com.layer.ui.util.imagecache.ImageCacheWrapper;
 import java.util.Set;
 
 public class MessageItemFooterViewHolder extends
-        ItemViewHolder<Message, MessageItemViewModel, UiMessageItemFooterBinding, MessageStyle> {
+        ItemViewHolder<Message, MessageItemLegacyViewModel, UiMessageItemFooterBinding, MessageStyle> {
 
-    public MessageItemFooterViewHolder(ViewGroup parent, MessageItemViewModel messageItemViewModel,
+    public MessageItemFooterViewHolder(ViewGroup parent, MessageItemLegacyViewModel messageItemViewModel,
                                        ImageCacheWrapper imageCacheWrapper) {
         super(parent, R.layout.ui_message_item_footer, messageItemViewModel);
         getBinding().avatar.init(new AvatarViewModelImpl(imageCacheWrapper), new IdentityFormatterImpl(parent.getContext()));

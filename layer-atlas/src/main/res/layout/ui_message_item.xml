@@ -23,7 +23,7 @@
 
         <variable
             name="viewModel"
-            type="com.layer.ui.message.MessageItemViewModel"/>
+            type="com.layer.ui.message.MessageItemLegacyViewModel"/>
     </data>
 
     <com.layer.ui.util.views.SwipeableItem

@@ -5,6 +5,7 @@ import android.databinding.ViewDataBinding;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,8 +55,8 @@ import java.util.Set;
  *
  * @see CellFactory
  */
-public abstract class MessagesAdapter<VIEW_HOLDER extends ItemViewHolder<Message, MessageItemViewModel,
-        ViewDataBinding, MessageStyle>> extends ItemRecyclerViewAdapter<Message, MessageItemViewModel,
+public abstract class MessagesAdapter<VIEW_HOLDER extends ItemViewHolder<Message, MessageItemLegacyViewModel,
+        ViewDataBinding, MessageStyle>> extends ItemRecyclerViewAdapter<Message, MessageItemLegacyViewModel,
         ViewDataBinding, MessageStyle, VIEW_HOLDER> {
 
     protected static final String TAG = MessagesAdapter.class.getSimpleName();
@@ -67,17 +68,14 @@ public abstract class MessagesAdapter<VIEW_HOLDER extends ItemViewHolder<Message
     protected final DisplayMetrics mDisplayMetrics;
     protected final List<CellFactory> mCellFactories = new ArrayList<>();
     protected final Map<Integer, MessageCell> mCellTypesByViewType;
-    protected final Map<CellFactory, Integer> mMyViewTypesByCell =
-            new HashMap<CellFactory, Integer>();
-    protected final Map<CellFactory, Integer> mTheirViewTypesByCell =
-            new HashMap<CellFactory, Integer>();
     protected final IdentityRecyclerViewEventListener mIdentityEventListener;
+    protected final RecyclerView.OnScrollListener mOnScrollListener;
     // Dates and Clustering
     protected final Map<Uri, MessageCluster> mClusterCache = new HashMap<>();
     protected OnMessageAppendListener mAppendListener;
 
     // Cells
-    protected int mViewTypeCount = VIEW_TYPE_MESSAGE_ITEM;
+    protected BindingRegistry mBindingRegistry;
     protected boolean mIsOneOnOneConversation;
     protected boolean mShouldShowAvatarInOneOnOneConversations;
     protected boolean mShouldShowAvatarPresence = true;
@@ -105,60 +103,43 @@ public abstract class MessagesAdapter<VIEW_HOLDER extends ItemViewHolder<Message
         mIdentityFormatter = identityFormatter;
         mUiThreadHandler = new Handler(Looper.getMainLooper());
         mDisplayMetrics = context.getResources().getDisplayMetrics();
+        mBindingRegistry = new BindingRegistry(layerClient);
         mCellTypesByViewType = new HashMap<>();
 
         mQueryController = layerClient.newRecyclerViewController(null, null, this);
-        mQueryController.setPreProcessCallback(
-                new ListViewController.PreProcessCallback<Message>() {
-                    @Override
-                    public void onCache(ListViewController listViewController, Message message) {
-                        for (CellFactory factory : mCellFactories) {
-                            if (factory.isBindable(message)) {
-                                factory.getParsedContent(mLayerClient, message);
-                                break;
-                            }
-                        }
-                    }
-                });
+        mQueryController.setPreProcessCallback(new RecyclerViewController.PreProcessCallback<Message>() {
+            @Override
+            public void onCache(ListViewController listViewController, Message message) {
+                mBindingRegistry.cacheContent(message);
+            }
+        });
+
         mIdentityEventListener = new IdentityRecyclerViewEventListener(this);
         mLayerClient.registerEventListener(mIdentityEventListener);
-    }
 
-    /**
-     * Registers one or more CellFactories for the MessagesAdapter to manage.  CellFactories
-     * know which Messages they can render, and handle View caching, creation, and mBinding.
-     *
-     * @param cellFactories Cells to register.
-     */
-    public void addCellFactories(List<CellFactory> cellFactories) {
-        for (CellFactory cellFactory : cellFactories) {
-            cellFactory.setStyle(getStyle());
-            mCellFactories.add(cellFactory);
-
-            mViewTypeCount++;
-            MessageCell me = new MessageCell(true, cellFactory);
-            mCellTypesByViewType.put(mViewTypeCount, me);
-            mMyViewTypesByCell.put(cellFactory, mViewTypeCount);
-
-            mViewTypeCount++;
-            MessageCell notMe = new MessageCell(false, cellFactory);
-            mCellTypesByViewType.put(mViewTypeCount, notMe);
-            mTheirViewTypesByCell.put(cellFactory, mViewTypeCount);
-        }
+        mOnScrollListener = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                mBindingRegistry.notifyScrollStateChange(newState);
+            }
+        };
     }
 
     public List<CellFactory> getCellFactories() {
         return mCellFactories;
     }
 
-    protected Map<Integer, MessageCell> getCellTypesByViewType() {
-        return mCellTypesByViewType;
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        recyclerView.addOnScrollListener(mOnScrollListener);
     }
 
-    private static boolean isDateBoundary(Date d1, Date d2) {
-        if (d1 == null || d2 == null) return false;
-        return (d1.getYear() != d2.getYear()) || (d1.getMonth() != d2.getMonth()) || (d1.getDay()
-                != d2.getDay());
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        recyclerView.removeOnScrollListener(mOnScrollListener);
     }
 
     /**
@@ -318,32 +299,28 @@ public abstract class MessagesAdapter<VIEW_HOLDER extends ItemViewHolder<Message
     @Override
     public int getItemViewType(int position) {
         if (mShouldShowHeader && mHeaderView != null && position == getHeaderPosition()) {
-            return VIEW_TYPE_HEADER;
+            return mBindingRegistry.VIEW_TYPE_HEADER;
         }
 
         if (mShouldShowFooter && mFooterView != null && position == getFooterPosition()) {
-            return VIEW_TYPE_FOOTER;
+            return mBindingRegistry.VIEW_TYPE_FOOTER;
         }
 
-        Message message = getItem(position);
-        Identity authenticatedUser = mLayerClient.getAuthenticatedUser();
-        boolean isMe = authenticatedUser != null && authenticatedUser.equals(message.getSender());
-        for (CellFactory factory : mCellFactories) {
-            if (!factory.isBindable(message)) continue;
-            return isMe ? mMyViewTypesByCell.get(factory) : mTheirViewTypesByCell.get(factory);
-        }
-        return -1;
+        return mBindingRegistry.getViewType(getItem(position));
     }
 
     @Override
     public VIEW_HOLDER onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == VIEW_TYPE_HEADER) {
+        if (viewType == mBindingRegistry.VIEW_TYPE_HEADER) {
             return createHeaderViewHolder(parent);
-        } else if (viewType == VIEW_TYPE_FOOTER) {
+        } else if (viewType == mBindingRegistry.VIEW_TYPE_FOOTER) {
             return createFooterViewHolder(parent);
-        } else {
+        } else if (viewType == mBindingRegistry.VIEW_TYPE_CARD) {
+            return createCardMessageItemViewHolder(parent);
+        } else { // Is a legacy view type
             MessageCell messageCell = mCellTypesByViewType.get(viewType);
-            return createMessageItemViewHolder(parent, messageCell);
+            messageCell.mCellFactory.setStyle(getStyle());
+            return createLegacyMessageItemViewHolder(parent, messageCell);
         }
     }
 
@@ -351,21 +328,23 @@ public abstract class MessagesAdapter<VIEW_HOLDER extends ItemViewHolder<Message
 
     protected abstract VIEW_HOLDER createFooterViewHolder(ViewGroup parent);
 
-    protected abstract VIEW_HOLDER createMessageItemViewHolder(ViewGroup parent, MessageCell messageCell);
+    protected abstract VIEW_HOLDER createCardMessageItemViewHolder(ViewGroup parent);
+
+    protected abstract VIEW_HOLDER createLegacyMessageItemViewHolder(ViewGroup parent, MessageCell messageCell);
 
     @Override
     public void onBindViewHolder(VIEW_HOLDER viewHolder, int position, List<Object> payloads) {
-        switch (getItemViewType(position)) {
-            case VIEW_TYPE_HEADER:
-                bindHeader(viewHolder);
-                break;
-            case VIEW_TYPE_FOOTER:
-                bindFooter(viewHolder);
-                break;
-            case VIEW_TYPE_MESSAGE_ITEM:
-            default:
-                prepareAndBindMessageItem(viewHolder, position);
+        int viewType = getItemViewType(position);
+        if (viewType == mBindingRegistry.VIEW_TYPE_HEADER) {
+            bindHeader(viewHolder);
+        } else if (viewType == mBindingRegistry.VIEW_TYPE_FOOTER) {
+            bindFooter(viewHolder);
+        } else if (viewType == mBindingRegistry.VIEW_TYPE_CARD) {
+
+        } else {
+            prepareAndBindMessageItem(viewHolder, position);
         }
+
         super.onBindViewHolder(viewHolder, position, payloads);
     }
 
@@ -373,15 +352,25 @@ public abstract class MessagesAdapter<VIEW_HOLDER extends ItemViewHolder<Message
 
     public abstract void bindFooter(VIEW_HOLDER viewHolder);
 
+    protected void prepareAndBindCard(VIEW_HOLDER viewHolder, int position) {
+        Message message = getItem(position);
+        viewHolder.setItem(message);
+
+        MessageCluster messageCluster = getClustering(message, position);
+        bindCardMessageItem(viewHolder, messageCluster, position);
+    }
+
+    public abstract void bindCardMessageItem(VIEW_HOLDER viewHolder, MessageCluster messageCluster, int position);
+
     protected void prepareAndBindMessageItem(VIEW_HOLDER viewHolder, int position) {
         Message message = getItem(position);
         viewHolder.setItem(message);
 
         MessageCluster messageCluster = getClustering(message, position);
-        bindMessageItem(viewHolder, messageCluster, position);
+        bindLegacyMessageItem(viewHolder, messageCluster, position);
     }
 
-    public abstract void bindMessageItem(VIEW_HOLDER viewHolder, MessageCluster cluster, int position);
+    public abstract void bindLegacyMessageItem(VIEW_HOLDER viewHolder, MessageCluster cluster, int position);
 
     protected Integer getRecipientStatusPosition() {
         return mRecipientStatusPosition;
@@ -441,6 +430,12 @@ public abstract class MessagesAdapter<VIEW_HOLDER extends ItemViewHolder<Message
     //==============================================================================================
     // Clustering
     //==============================================================================================
+
+    private static boolean isDateBoundary(Date d1, Date d2) {
+        if (d1 == null || d2 == null) return false;
+        return (d1.getYear() != d2.getYear()) || (d1.getMonth() != d2.getMonth()) || (d1.getDay()
+                != d2.getDay());
+    }
 
     // TODO: optimize by limiting search to positions in- and around- visible range
     protected MessageCluster getClustering(Message message, int position) {

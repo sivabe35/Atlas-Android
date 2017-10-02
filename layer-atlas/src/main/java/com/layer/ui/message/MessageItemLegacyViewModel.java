@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
-public class MessageItemViewModel extends ItemViewModel<Message> {
+public class MessageItemLegacyViewModel extends ItemViewModel<Message> {
 
     // Config
     private boolean mEnableReadReceipts;
@@ -50,11 +50,11 @@ public class MessageItemViewModel extends ItemViewModel<Message> {
     private boolean mIsTypingIndicatorVisible;
     private boolean mShouldDisplayAvatarSpace;
 
-    public MessageItemViewModel(Context context, LayerClient layerClient,
-                                ImageCacheWrapper imageCacheWrapper,
-                                DateFormatter dateFormatter, IdentityFormatter identityFormatter,
-                                IdentityRecyclerViewEventListener identityEventListener,
-                                boolean enableReadReceipts, boolean showAvatars, boolean showPresence) {
+    public MessageItemLegacyViewModel(Context context, LayerClient layerClient,
+                                      ImageCacheWrapper imageCacheWrapper,
+                                      DateFormatter dateFormatter, IdentityFormatter identityFormatter,
+                                      IdentityRecyclerViewEventListener identityEventListener,
+                                      boolean enableReadReceipts, boolean showAvatars, boolean showPresence) {
         mDateFormatter = dateFormatter;
         mEnableReadReceipts = enableReadReceipts;
         mShowAvatars = showAvatars;

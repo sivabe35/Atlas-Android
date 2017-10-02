@@ -93,15 +93,6 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerCha
         mMessagesRecyclerView.setAdapter(adapter);
         setShouldShowAvatarInOneOnOneConversations(mShouldShowAvatarsInOneOnOneConversations);
 
-        mMessagesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                for (CellFactory factory : (List<CellFactory>) adapter.getCellFactories()) {
-                    factory.onScrollStateChanged(newState);
-                }
-            }
-        });
-
         // Create an adapter that auto-scrolls if we're already at the bottom
         adapter.setOnMessageAppendListener(new MessagesAdapter.OnMessageAppendListener() {
             @Override
@@ -195,7 +186,7 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerCha
      * @see MessageItemsAdapter#addCellFactories(List)
      */
     public void setCellFactories(List<CellFactory> cellFactories) {
-        mAdapter.addCellFactories(cellFactories);
+        //mAdapter.addCellFactories(cellFactories);
     }
 
     public void setTextTypeface(Typeface myTypeface, Typeface otherTypeface) {

@@ -22,7 +22,7 @@
 
         <variable
             name="viewModel"
-            type="com.layer.ui.message.MessageItemViewModel"/>
+            type="com.layer.ui.message.MessageItemLegacyViewModel"/>
     </data>
 
     <android.support.constraint.ConstraintLayout

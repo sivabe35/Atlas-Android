@@ -9,8 +9,8 @@ import com.layer.ui.adapters.ItemViewHolder;
 import com.layer.ui.databinding.UiMessageItemHeaderBinding;
 import com.layer.ui.message.messagetypes.MessageStyle;
 
-public class MessageItemHeaderViewHolder extends ItemViewHolder<Message, MessageItemViewModel, UiMessageItemHeaderBinding, MessageStyle> {
-    public MessageItemHeaderViewHolder(ViewGroup parent, MessageItemViewModel viewModel) {
+public class MessageItemHeaderViewHolder extends ItemViewHolder<Message, MessageItemLegacyViewModel, UiMessageItemHeaderBinding, MessageStyle> {
+    public MessageItemHeaderViewHolder(ViewGroup parent, MessageItemLegacyViewModel viewModel) {
         super(parent, R.layout.ui_message_item_header, viewModel);
     }
 

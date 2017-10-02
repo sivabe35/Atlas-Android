@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.layer.sdk.LayerClient;
-import com.layer.ui.R;
 import com.layer.ui.adapters.ItemViewHolder;
 import com.layer.ui.identity.IdentityFormatter;
 import com.layer.ui.util.DateFormatter;
@@ -21,11 +20,11 @@ public class MessageItemsAdapter extends MessagesAdapter {
 
     @Override
     protected MessageItemHeaderViewHolder createHeaderViewHolder(ViewGroup parent) {
-        MessageItemViewModel messageItemViewModel = new MessageItemViewModel(parent.getContext(),
+        MessageItemLegacyViewModel viewModel = new MessageItemLegacyViewModel(parent.getContext(),
                 getLayerClient(), getImageCacheWrapper(), getDateFormatter(), getIdentityFormatter(),
                 getIdentityEventListener(), false, false, false);
 
-        return new MessageItemHeaderViewHolder(parent, messageItemViewModel);
+        return new MessageItemHeaderViewHolder(parent, viewModel);
     }
 
     @Override
@@ -40,18 +39,29 @@ public class MessageItemsAdapter extends MessagesAdapter {
     }
 
     @Override
-    protected MessageItemViewHolder createMessageItemViewHolder(ViewGroup parent, MessageCell messageCell) {
-        MessageItemViewModel messageItemViewModel = new MessageItemViewModel(parent.getContext(),
+    protected MessageItemCardViewHolder createCardMessageItemViewHolder(ViewGroup parent) {
+        return null;
+    }
+
+    @Override
+    public void bindCardMessageItem(ItemViewHolder viewHolder, MessageCluster messageCluster, int position) {
+        MessageItemCardViewHolder holder = (MessageItemCardViewHolder) viewHolder;
+
+    }
+
+    @Override
+    protected MessageItemLegacyViewHolder createLegacyMessageItemViewHolder(ViewGroup parent, MessageCell messageCell) {
+        MessageItemLegacyViewModel viewModel = new MessageItemLegacyViewModel(parent.getContext(),
                 getLayerClient(), getImageCacheWrapper(), getDateFormatter(), getIdentityFormatter(),
                 getIdentityEventListener(), super.mReadReceiptsEnabled,
                 getShouldShowAvatarInOneOnOneConversations(), getShouldShowAvatarPresence());
 
-        return new MessageItemViewHolder(parent, messageItemViewModel, messageCell);
+        return new MessageItemLegacyViewHolder(parent, viewModel, messageCell);
     }
 
     @Override
-    public void bindMessageItem(ItemViewHolder holder, MessageCluster messageCluster, int position) {
-        MessageItemViewHolder viewHolder = (MessageItemViewHolder) holder;
+    public void bindLegacyMessageItem(ItemViewHolder holder, MessageCluster messageCluster, int position) {
+        MessageItemLegacyViewHolder viewHolder = (MessageItemLegacyViewHolder) holder;
 
         viewHolder.bind(mLayerClient, messageCluster, position,
                 getRecipientStatusPosition(), mRecyclerView.getWidth());
@@ -59,11 +69,11 @@ public class MessageItemsAdapter extends MessagesAdapter {
 
     @Override
     protected MessageItemFooterViewHolder createFooterViewHolder(ViewGroup parent) {
-        MessageItemViewModel messageItemViewModel = new MessageItemViewModel(parent.getContext(),
+        MessageItemLegacyViewModel viewModel = new MessageItemLegacyViewModel(parent.getContext(),
                 getLayerClient(), getImageCacheWrapper(), getDateFormatter(), getIdentityFormatter(),
                 getIdentityEventListener(), false, false, false);
 
-        return new MessageItemFooterViewHolder(parent, messageItemViewModel, getImageCacheWrapper());
+        return new MessageItemFooterViewHolder(parent, viewModel, getImageCacheWrapper());
     }
 
     @Override
