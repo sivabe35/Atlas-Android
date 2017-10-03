@@ -24,6 +24,6 @@ public class MessageItemCardViewHolder extends ItemViewHolder<Message, MessageIt
     }
 
     public void bind(LayerClient layerClient, MessageCluster messageCluster, int position, int recipientStatusPosition, int parentWidth) {
-        getViewModel().update(messageCluster, mMessageCell, position, recipientStatusPosition);
+        getViewModel().update(messageCluster, null, position, recipientStatusPosition);
     }
 }

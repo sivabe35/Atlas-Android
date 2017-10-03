@@ -66,8 +66,6 @@ public abstract class MessagesAdapter<VIEW_HOLDER extends ItemViewHolder<Message
 
     protected final Handler mUiThreadHandler;
     protected final DisplayMetrics mDisplayMetrics;
-    protected final List<CellFactory> mCellFactories = new ArrayList<>();
-    protected final Map<Integer, MessageCell> mCellTypesByViewType;
     protected final IdentityRecyclerViewEventListener mIdentityEventListener;
     protected final RecyclerView.OnScrollListener mOnScrollListener;
     // Dates and Clustering
@@ -104,7 +102,6 @@ public abstract class MessagesAdapter<VIEW_HOLDER extends ItemViewHolder<Message
         mUiThreadHandler = new Handler(Looper.getMainLooper());
         mDisplayMetrics = context.getResources().getDisplayMetrics();
         mBindingRegistry = new BindingRegistry(layerClient);
-        mCellTypesByViewType = new HashMap<>();
 
         mQueryController = layerClient.newRecyclerViewController(null, null, this);
         mQueryController.setPreProcessCallback(new RecyclerViewController.PreProcessCallback<Message>() {
@@ -126,8 +123,8 @@ public abstract class MessagesAdapter<VIEW_HOLDER extends ItemViewHolder<Message
         };
     }
 
-    public List<CellFactory> getCellFactories() {
-        return mCellFactories;
+    public BindingRegistry getBindingRegistry() {
+        return mBindingRegistry;
     }
 
     @Override
@@ -318,7 +315,7 @@ public abstract class MessagesAdapter<VIEW_HOLDER extends ItemViewHolder<Message
         } else if (viewType == mBindingRegistry.VIEW_TYPE_CARD) {
             return createCardMessageItemViewHolder(parent);
         } else { // Is a legacy view type
-            MessageCell messageCell = mCellTypesByViewType.get(viewType);
+            MessageCell messageCell = mBindingRegistry.getMessageCellForViewType(viewType);
             messageCell.mCellFactory.setStyle(getStyle());
             return createLegacyMessageItemViewHolder(parent, messageCell);
         }

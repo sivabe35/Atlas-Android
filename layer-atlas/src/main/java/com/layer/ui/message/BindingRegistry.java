@@ -142,4 +142,8 @@ public class BindingRegistry {
             mTheirViewTypesByCell.put(cellFactory, viewTypeCounter);
         }
     }
+
+    public MessageCell getMessageCellForViewType(int viewType) {
+        return mCellTypesByViewType.get(viewType);
+    }
 }
