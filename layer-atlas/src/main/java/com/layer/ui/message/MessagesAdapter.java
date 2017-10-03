@@ -306,7 +306,7 @@ public abstract class MessagesAdapter<VIEW_MODEL extends ItemViewModel<Message>,
     }
 
     @Override
-    public MessageItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MessageItemViewHolder<VIEW_MODEL, BINDING> onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == mBindingRegistry.VIEW_TYPE_HEADER) {
             return createHeaderViewHolder(parent);
         } else if (viewType == mBindingRegistry.VIEW_TYPE_FOOTER) {
@@ -382,21 +382,6 @@ public abstract class MessagesAdapter<VIEW_MODEL extends ItemViewModel<Message>,
 
     protected IdentityRecyclerViewEventListener getIdentityEventListener() {
         return mIdentityEventListener;
-    }
-
-    @Override
-    public MessageStyle getStyle() {
-        return super.getStyle();
-    }
-
-    @Override
-    public void setItems(List<Message> messages) {
-        super.setItems(messages);
-    }
-
-    @Override
-    public void setItems(Set<Message> messages) {
-        super.setItems(messages);
     }
 
     public boolean getShouldShowHeader() {
