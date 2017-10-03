@@ -8,7 +8,7 @@ import com.layer.ui.databinding.UiMessageItemCardBinding;
 
 public class MessageItemCardViewHolder extends MessageItemViewHolder<MessageItemCardViewModel, UiMessageItemCardBinding> {
     public MessageItemCardViewHolder(ViewGroup parent, MessageItemCardViewModel viewModel) {
-        super(parent, R.layout.ui_message_item_legacy, viewModel);
+        super(parent, R.layout.ui_message_item_card, viewModel);
 
         getBinding().avatar.init(new AvatarViewModelImpl(viewModel.getImageCacheWrapper()),
                 viewModel.getIdentityFormatter());
