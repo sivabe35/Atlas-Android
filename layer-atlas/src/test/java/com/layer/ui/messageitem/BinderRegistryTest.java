@@ -3,7 +3,7 @@ package com.layer.ui.messageitem;
 import com.layer.sdk.LayerClient;
 import com.layer.sdk.messaging.Message;
 import com.layer.sdk.messaging.MessagePart;
-import com.layer.ui.message.BinderRegistry;
+import com.layer.ui.message.binder.BinderRegistry;
 
 import org.junit.Before;
 import org.junit.Test;

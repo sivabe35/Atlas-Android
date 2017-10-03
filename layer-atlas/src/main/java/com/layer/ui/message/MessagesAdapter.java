@@ -17,6 +17,7 @@ import com.layer.sdk.query.ListViewController;
 import com.layer.sdk.query.RecyclerViewController;
 import com.layer.ui.adapters.ItemRecyclerViewAdapter;
 import com.layer.ui.identity.IdentityFormatter;
+import com.layer.ui.message.binder.BinderRegistry;
 import com.layer.ui.message.messagetypes.CellFactory;
 import com.layer.ui.message.messagetypes.MessageStyle;
 import com.layer.ui.util.DateFormatter;
