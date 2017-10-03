@@ -4,16 +4,11 @@ import android.support.annotation.LayoutRes;
 import android.view.ViewGroup;
 
 import com.layer.sdk.LayerClient;
-import com.layer.sdk.messaging.Message;
 import com.layer.ui.R;
-import com.layer.ui.adapters.ItemViewHolder;
 import com.layer.ui.avatar.AvatarViewModelImpl;
 import com.layer.ui.databinding.UiMessageItemBinding;
-import com.layer.ui.message.MessageCluster;
-import com.layer.ui.message.MessageItemLegacyViewModel;
-import com.layer.ui.message.messagetypes.MessageStyle;
 
-public class MessageItemCardViewHolder extends ItemViewHolder<Message, MessageItemLegacyViewModel, UiMessageItemBinding, MessageStyle> {
+public class MessageItemCardViewHolder extends MessageItemViewHolder<MessageItemLegacyViewModel, UiMessageItemBinding> {
     public MessageItemCardViewHolder(ViewGroup parent, @LayoutRes int layoutId, MessageItemLegacyViewModel viewModel) {
         super(parent, R.layout.ui_message_item, viewModel);
 

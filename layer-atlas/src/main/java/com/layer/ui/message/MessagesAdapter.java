@@ -16,15 +16,14 @@ import com.layer.sdk.messaging.Message;
 import com.layer.sdk.query.ListViewController;
 import com.layer.sdk.query.RecyclerViewController;
 import com.layer.ui.adapters.ItemRecyclerViewAdapter;
-import com.layer.ui.adapters.ItemViewHolder;
 import com.layer.ui.identity.IdentityFormatter;
 import com.layer.ui.message.messagetypes.CellFactory;
 import com.layer.ui.message.messagetypes.MessageStyle;
 import com.layer.ui.util.DateFormatter;
 import com.layer.ui.util.IdentityRecyclerViewEventListener;
 import com.layer.ui.util.imagecache.ImageCacheWrapper;
+import com.layer.ui.viewmodel.ItemViewModel;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -55,9 +54,9 @@ import java.util.Set;
  *
  * @see CellFactory
  */
-public abstract class MessagesAdapter<VIEW_HOLDER extends ItemViewHolder<Message, MessageItemLegacyViewModel,
-        ViewDataBinding, MessageStyle>> extends ItemRecyclerViewAdapter<Message, MessageItemLegacyViewModel,
-        ViewDataBinding, MessageStyle, VIEW_HOLDER> {
+public abstract class MessagesAdapter<VIEW_MODEL extends ItemViewModel<Message>, BINDING extends ViewDataBinding>
+        extends ItemRecyclerViewAdapter<Message, VIEW_MODEL,
+        BINDING, MessageStyle, MessageItemViewHolder<VIEW_MODEL, BINDING>> {
 
     protected static final String TAG = MessagesAdapter.class.getSimpleName();
     protected final static int VIEW_TYPE_HEADER = 0;
@@ -307,7 +306,7 @@ public abstract class MessagesAdapter<VIEW_HOLDER extends ItemViewHolder<Message
     }
 
     @Override
-    public VIEW_HOLDER onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MessageItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == mBindingRegistry.VIEW_TYPE_HEADER) {
             return createHeaderViewHolder(parent);
         } else if (viewType == mBindingRegistry.VIEW_TYPE_FOOTER) {
@@ -321,16 +320,16 @@ public abstract class MessagesAdapter<VIEW_HOLDER extends ItemViewHolder<Message
         }
     }
 
-    protected abstract VIEW_HOLDER createHeaderViewHolder(ViewGroup parent);
+    protected abstract MessageItemViewHolder createHeaderViewHolder(ViewGroup parent);
 
-    protected abstract VIEW_HOLDER createFooterViewHolder(ViewGroup parent);
+    protected abstract MessageItemViewHolder createFooterViewHolder(ViewGroup parent);
 
-    protected abstract VIEW_HOLDER createCardMessageItemViewHolder(ViewGroup parent);
+    protected abstract MessageItemViewHolder createCardMessageItemViewHolder(ViewGroup parent);
 
-    protected abstract VIEW_HOLDER createLegacyMessageItemViewHolder(ViewGroup parent, MessageCell messageCell);
+    protected abstract MessageItemViewHolder createLegacyMessageItemViewHolder(ViewGroup parent, MessageCell messageCell);
 
     @Override
-    public void onBindViewHolder(VIEW_HOLDER viewHolder, int position, List<Object> payloads) {
+    public void onBindViewHolder(MessageItemViewHolder<VIEW_MODEL, BINDING> viewHolder, int position, List<Object> payloads) {
         int viewType = getItemViewType(position);
         if (viewType == mBindingRegistry.VIEW_TYPE_HEADER) {
             bindHeader(viewHolder);
@@ -345,11 +344,11 @@ public abstract class MessagesAdapter<VIEW_HOLDER extends ItemViewHolder<Message
         super.onBindViewHolder(viewHolder, position, payloads);
     }
 
-    public abstract void bindHeader(VIEW_HOLDER viewHolder);
+    public abstract void bindHeader(MessageItemViewHolder viewHolder);
 
-    public abstract void bindFooter(VIEW_HOLDER viewHolder);
+    public abstract void bindFooter(MessageItemViewHolder viewHolder);
 
-    protected void prepareAndBindCard(VIEW_HOLDER viewHolder, int position) {
+    protected void prepareAndBindCard(MessageItemViewHolder viewHolder, int position) {
         Message message = getItem(position);
         viewHolder.setItem(message);
 
@@ -357,9 +356,9 @@ public abstract class MessagesAdapter<VIEW_HOLDER extends ItemViewHolder<Message
         bindCardMessageItem(viewHolder, messageCluster, position);
     }
 
-    public abstract void bindCardMessageItem(VIEW_HOLDER viewHolder, MessageCluster messageCluster, int position);
+    public abstract void bindCardMessageItem(MessageItemViewHolder viewHolder, MessageCluster messageCluster, int position);
 
-    protected void prepareAndBindMessageItem(VIEW_HOLDER viewHolder, int position) {
+    protected void prepareAndBindMessageItem(MessageItemViewHolder viewHolder, int position) {
         Message message = getItem(position);
         viewHolder.setItem(message);
 
@@ -367,7 +366,7 @@ public abstract class MessagesAdapter<VIEW_HOLDER extends ItemViewHolder<Message
         bindLegacyMessageItem(viewHolder, messageCluster, position);
     }
 
-    public abstract void bindLegacyMessageItem(VIEW_HOLDER viewHolder, MessageCluster cluster, int position);
+    public abstract void bindLegacyMessageItem(MessageItemViewHolder viewHolder, MessageCluster cluster, int position);
 
     protected Integer getRecipientStatusPosition() {
         return mRecipientStatusPosition;

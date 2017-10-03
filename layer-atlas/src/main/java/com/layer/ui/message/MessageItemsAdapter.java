@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.layer.sdk.LayerClient;
-import com.layer.ui.adapters.ItemViewHolder;
 import com.layer.ui.identity.IdentityFormatter;
 import com.layer.ui.util.DateFormatter;
 import com.layer.ui.util.imagecache.ImageCacheWrapper;
@@ -28,7 +27,7 @@ public class MessageItemsAdapter extends MessagesAdapter {
     }
 
     @Override
-    public void bindHeader(ItemViewHolder viewHolder) {
+    public void bindHeader(MessageItemViewHolder viewHolder) {
         MessageItemHeaderViewHolder holder = (MessageItemHeaderViewHolder) viewHolder;
         View headerView = getHeaderView();
         if (headerView.getParent() != null) {
@@ -44,7 +43,7 @@ public class MessageItemsAdapter extends MessagesAdapter {
     }
 
     @Override
-    public void bindCardMessageItem(ItemViewHolder viewHolder, MessageCluster messageCluster, int position) {
+    public void bindCardMessageItem(MessageItemViewHolder viewHolder, MessageCluster messageCluster, int position) {
         MessageItemCardViewHolder holder = (MessageItemCardViewHolder) viewHolder;
 
     }
@@ -60,7 +59,7 @@ public class MessageItemsAdapter extends MessagesAdapter {
     }
 
     @Override
-    public void bindLegacyMessageItem(ItemViewHolder holder, MessageCluster messageCluster, int position) {
+    public void bindLegacyMessageItem(MessageItemViewHolder holder, MessageCluster messageCluster, int position) {
         MessageItemLegacyViewHolder viewHolder = (MessageItemLegacyViewHolder) holder;
 
         viewHolder.bind(mLayerClient, messageCluster, position,
@@ -77,7 +76,7 @@ public class MessageItemsAdapter extends MessagesAdapter {
     }
 
     @Override
-    public void bindFooter(ItemViewHolder holder) {
+    public void bindFooter(MessageItemViewHolder holder) {
         MessageItemFooterViewHolder viewHolder = (MessageItemFooterViewHolder) holder;
         viewHolder.clear();
 

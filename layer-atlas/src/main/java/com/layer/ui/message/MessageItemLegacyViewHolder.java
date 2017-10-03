@@ -13,7 +13,7 @@ import com.layer.ui.databinding.UiMessageItemBinding;
 import com.layer.ui.message.messagetypes.CellFactory;
 import com.layer.ui.message.messagetypes.MessageStyle;
 
-public class MessageItemLegacyViewHolder extends ItemViewHolder<Message, MessageItemLegacyViewModel, UiMessageItemBinding, MessageStyle> {
+public class MessageItemLegacyViewHolder extends MessageItemViewHolder<MessageItemLegacyViewModel, UiMessageItemBinding> {
 
     // Cell
     protected MessageCell mMessageCell;

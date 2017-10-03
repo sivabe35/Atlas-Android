@@ -5,19 +5,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.layer.sdk.messaging.Identity;
-import com.layer.sdk.messaging.Message;
 import com.layer.ui.R;
-import com.layer.ui.adapters.ItemViewHolder;
 import com.layer.ui.avatar.AvatarViewModelImpl;
 import com.layer.ui.databinding.UiMessageItemFooterBinding;
 import com.layer.ui.identity.IdentityFormatterImpl;
-import com.layer.ui.message.messagetypes.MessageStyle;
 import com.layer.ui.util.imagecache.ImageCacheWrapper;
 
 import java.util.Set;
 
-public class MessageItemFooterViewHolder extends
-        ItemViewHolder<Message, MessageItemLegacyViewModel, UiMessageItemFooterBinding, MessageStyle> {
+public class MessageItemFooterViewHolder extends MessageItemViewHolder<MessageItemLegacyViewModel, UiMessageItemFooterBinding> {
 
     public MessageItemFooterViewHolder(ViewGroup parent, MessageItemLegacyViewModel messageItemViewModel,
                                        ImageCacheWrapper imageCacheWrapper) {
