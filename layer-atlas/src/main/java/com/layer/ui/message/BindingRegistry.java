@@ -1,7 +1,6 @@
 package com.layer.ui.message;
 
 import android.support.annotation.NonNull;
-import android.util.SparseArray;
 
 import com.layer.sdk.LayerClient;
 import com.layer.sdk.messaging.Identity;
