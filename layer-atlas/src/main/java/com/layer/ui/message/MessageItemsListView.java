@@ -181,12 +181,12 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerCha
     }
 
     /**
-     * Convenience pass-through to this list's MessagesAdapter's BindingRegistry.
+     * Convenience pass-through to this list's MessagesAdapter's BinderRegistry.
      *
-     * @see BindingRegistry#setCellFactories(List)
+     * @see BinderRegistry#setCellFactories(List)
      */
     public void setCellFactories(List<CellFactory> cellFactories) {
-        mAdapter.getBindingRegistry().setCellFactories(cellFactories);
+        mAdapter.getBinderRegistry().setCellFactories(cellFactories);
     }
 
     public void setTextTypeface(Typeface myTypeface, Typeface otherTypeface) {

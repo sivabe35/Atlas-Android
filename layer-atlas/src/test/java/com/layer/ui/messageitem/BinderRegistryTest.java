@@ -3,7 +3,7 @@ package com.layer.ui.messageitem;
 import com.layer.sdk.LayerClient;
 import com.layer.sdk.messaging.Message;
 import com.layer.sdk.messaging.MessagePart;
-import com.layer.ui.message.BindingRegistry;
+import com.layer.ui.message.BinderRegistry;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +19,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 
-public class BindingRegistryTest {
+public class BinderRegistryTest {
 
     @Mock
     LayerClient layerClient;
@@ -57,15 +57,15 @@ public class BindingRegistryTest {
 
     @Test
     public void testMessageIsCardType() {
-        BindingRegistry bindingRegistry = new BindingRegistry(layerClient);
+        BinderRegistry binderRegistry = new BinderRegistry(layerClient);
 
-        assertThat(bindingRegistry.isLegacyMessageType(message1), is(false));
+        assertThat(binderRegistry.isLegacyMessageType(message1), is(false));
     }
 
     @Test
     public void testMessageIsLegacyType() {
-        BindingRegistry bindingRegistry = new BindingRegistry(layerClient);
+        BinderRegistry binderRegistry = new BinderRegistry(layerClient);
 
-        assertThat(bindingRegistry.isLegacyMessageType(message2), is(true));
+        assertThat(binderRegistry.isLegacyMessageType(message2), is(true));
     }
 }

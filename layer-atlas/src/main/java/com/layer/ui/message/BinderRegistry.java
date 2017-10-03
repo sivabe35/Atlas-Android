@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BindingRegistry {
+public class BinderRegistry {
 
     private static final String MIME_TYPE_ARGUMENT_SEPARATOR = ";";
     private static final String MIME_TYPE_PARAMETER_ROLE = "role";
@@ -40,11 +40,11 @@ public class BindingRegistry {
     protected final Map<CellFactory, Integer> mMyViewTypesByCell;
     protected final Map<CellFactory, Integer> mTheirViewTypesByCell;
 
-    public BindingRegistry(LayerClient layerClient) {
+    public BinderRegistry(LayerClient layerClient) {
         this(layerClient, 0, 1, -1);
     }
 
-    public BindingRegistry(@NonNull LayerClient layerClient, final int headerViewType, final int footerViewType, final int unknownViewType) {
+    public BinderRegistry(@NonNull LayerClient layerClient, final int headerViewType, final int footerViewType, final int unknownViewType) {
         mLayerClient = layerClient;
         mCellFactories = new ArrayList<>();
         mCellTypesByViewType = new HashMap<>();

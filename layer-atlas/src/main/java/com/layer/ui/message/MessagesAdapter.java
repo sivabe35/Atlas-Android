@@ -70,7 +70,7 @@ public abstract class MessagesAdapter<VIEW_MODEL extends ItemViewModel<Message>,
     protected OnMessageAppendListener mAppendListener;
 
 
-    protected BindingRegistry mBindingRegistry;
+    protected BinderRegistry mBinderRegistry;
     protected boolean mIsOneOnOneConversation;
     protected boolean mShouldShowAvatarInOneOnOneConversations;
     protected boolean mShouldShowAvatarPresence = true;
@@ -98,13 +98,13 @@ public abstract class MessagesAdapter<VIEW_MODEL extends ItemViewModel<Message>,
         mIdentityFormatter = identityFormatter;
         mUiThreadHandler = new Handler(Looper.getMainLooper());
         mDisplayMetrics = context.getResources().getDisplayMetrics();
-        mBindingRegistry = new BindingRegistry(layerClient);
+        mBinderRegistry = new BinderRegistry(layerClient);
 
         mQueryController = layerClient.newRecyclerViewController(null, null, this);
         mQueryController.setPreProcessCallback(new RecyclerViewController.PreProcessCallback<Message>() {
             @Override
             public void onCache(ListViewController listViewController, Message message) {
-                mBindingRegistry.cacheContent(message);
+                mBinderRegistry.cacheContent(message);
             }
         });
 
@@ -115,13 +115,13 @@ public abstract class MessagesAdapter<VIEW_MODEL extends ItemViewModel<Message>,
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                mBindingRegistry.notifyScrollStateChange(newState);
+                mBinderRegistry.notifyScrollStateChange(newState);
             }
         };
     }
 
-    public BindingRegistry getBindingRegistry() {
-        return mBindingRegistry;
+    public BinderRegistry getBinderRegistry() {
+        return mBinderRegistry;
     }
 
     @Override
@@ -297,26 +297,26 @@ public abstract class MessagesAdapter<VIEW_MODEL extends ItemViewModel<Message>,
     @Override
     public int getItemViewType(int position) {
         if (mShouldShowHeader && mHeaderView != null && position == getHeaderPosition()) {
-            return mBindingRegistry.VIEW_TYPE_HEADER;
+            return mBinderRegistry.VIEW_TYPE_HEADER;
         }
 
         if (mShouldShowFooter && mFooterView != null && position == getFooterPosition()) {
-            return mBindingRegistry.VIEW_TYPE_FOOTER;
+            return mBinderRegistry.VIEW_TYPE_FOOTER;
         }
 
-        return mBindingRegistry.getViewType(getItem(position));
+        return mBinderRegistry.getViewType(getItem(position));
     }
 
     @Override
     public MessageItemViewHolder<VIEW_MODEL, BINDING> onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == mBindingRegistry.VIEW_TYPE_HEADER) {
+        if (viewType == mBinderRegistry.VIEW_TYPE_HEADER) {
             return createHeaderViewHolder(parent);
-        } else if (viewType == mBindingRegistry.VIEW_TYPE_FOOTER) {
+        } else if (viewType == mBinderRegistry.VIEW_TYPE_FOOTER) {
             return createFooterViewHolder(parent);
-        } else if (viewType == mBindingRegistry.VIEW_TYPE_CARD) {
+        } else if (viewType == mBinderRegistry.VIEW_TYPE_CARD) {
             return createCardMessageItemViewHolder(parent);
         } else { // Is a legacy view type
-            MessageCell messageCell = mBindingRegistry.getMessageCellForViewType(viewType);
+            MessageCell messageCell = mBinderRegistry.getMessageCellForViewType(viewType);
             messageCell.mCellFactory.setStyle(getStyle());
             return createLegacyMessageItemViewHolder(parent, messageCell);
         }
@@ -333,11 +333,11 @@ public abstract class MessagesAdapter<VIEW_MODEL extends ItemViewModel<Message>,
     @Override
     public void onBindViewHolder(MessageItemViewHolder<VIEW_MODEL, BINDING> viewHolder, int position, List<Object> payloads) {
         int viewType = getItemViewType(position);
-        if (viewType == mBindingRegistry.VIEW_TYPE_HEADER) {
+        if (viewType == mBinderRegistry.VIEW_TYPE_HEADER) {
             bindHeader(viewHolder);
-        } else if (viewType == mBindingRegistry.VIEW_TYPE_FOOTER) {
+        } else if (viewType == mBinderRegistry.VIEW_TYPE_FOOTER) {
             bindFooter(viewHolder);
-        } else if (viewType == mBindingRegistry.VIEW_TYPE_CARD) {
+        } else if (viewType == mBinderRegistry.VIEW_TYPE_CARD) {
 
         } else {
             prepareAndBindMessageItem(viewHolder, position);
