@@ -6,6 +6,7 @@ import android.util.SparseArray;
 import com.layer.sdk.LayerClient;
 import com.layer.sdk.messaging.Identity;
 import com.layer.sdk.messaging.Message;
+import com.layer.sdk.messaging.MessagePart;
 import com.layer.ui.message.messagetypes.CellFactory;
 
 import java.util.ArrayList;
@@ -15,6 +16,10 @@ import java.util.Map;
 
 public class BindingRegistry {
 
+    private static final String MIME_TYPE_ARGUMENT_SEPARATOR = ";";
+    private static final String MIME_TYPE_PARAMETER_ROLE = "role";
+    private static final String MIME_TYPE_PARAMETER_SEPARATOR = "=";
+    private static final String MIME_TYPE_PARAMETER_ROLE_ROOT = "root";
     /**
      * Number of permissible CellFactory view type cells, including my cell and their cell per type
      */
@@ -32,7 +37,7 @@ public class BindingRegistry {
 
     // Legacy Message binding with CellFactory and MessageCells
     protected final List<CellFactory> mCellFactories;
-    protected final SparseArray<MessageCell> mCellTypesByViewType;
+    protected final Map<Integer, MessageCell> mCellTypesByViewType;
     protected final Map<CellFactory, Integer> mMyViewTypesByCell;
     protected final Map<CellFactory, Integer> mTheirViewTypesByCell;
 
@@ -43,7 +48,7 @@ public class BindingRegistry {
     public BindingRegistry(@NonNull LayerClient layerClient, final int headerViewType, final int footerViewType, final int unknownViewType) {
         mLayerClient = layerClient;
         mCellFactories = new ArrayList<>();
-        mCellTypesByViewType = new SparseArray<>();
+        mCellTypesByViewType = new HashMap<>();
         mMyViewTypesByCell = new HashMap<>();
         mTheirViewTypesByCell = new HashMap<>();
 
@@ -66,6 +71,18 @@ public class BindingRegistry {
     }
 
     protected boolean isLegacyMessageType(Message message) {
+        for (MessagePart messagePart : message.getMessageParts()) {
+            if (messagePart.getMimeType().contains(MIME_TYPE_ARGUMENT_SEPARATOR)) {
+                String arguments[] = messagePart.getMimeType().split(MIME_TYPE_ARGUMENT_SEPARATOR);
+
+                for (String argument : arguments) {
+                    String[] split = argument.split(MIME_TYPE_PARAMETER_SEPARATOR);
+                    if (split[0].equals(MIME_TYPE_PARAMETER_ROLE) && split[1].equals(MIME_TYPE_PARAMETER_ROLE_ROOT)) {
+                        return false;
+                    }
+                }
+            }
+        }
         return true;
     }
 
