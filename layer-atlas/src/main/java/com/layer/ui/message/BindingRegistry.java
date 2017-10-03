@@ -69,7 +69,7 @@ public class BindingRegistry {
         VIEW_TYPE_CARD = VIEW_TYPE_LEGACY_END + 1;
     }
 
-    protected boolean isLegacyMessageType(Message message) {
+    public boolean isLegacyMessageType(Message message) {
         for (MessagePart messagePart : message.getMessageParts()) {
             if (messagePart.getMimeType().contains(MIME_TYPE_ARGUMENT_SEPARATOR)) {
                 String arguments[] = messagePart.getMimeType().split(MIME_TYPE_ARGUMENT_SEPARATOR);

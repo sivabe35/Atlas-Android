@@ -59,19 +59,17 @@ public abstract class MessagesAdapter<VIEW_MODEL extends ItemViewModel<Message>,
         BINDING, MessageStyle, MessageItemViewHolder<VIEW_MODEL, BINDING>> {
 
     protected static final String TAG = MessagesAdapter.class.getSimpleName();
-    protected final static int VIEW_TYPE_HEADER = 0;
-    protected final static int VIEW_TYPE_FOOTER = 1;
-    protected final static int VIEW_TYPE_MESSAGE_ITEM = 2;
 
     protected final Handler mUiThreadHandler;
     protected final DisplayMetrics mDisplayMetrics;
     protected final IdentityRecyclerViewEventListener mIdentityEventListener;
     protected final RecyclerView.OnScrollListener mOnScrollListener;
+
     // Dates and Clustering
     protected final Map<Uri, MessageCluster> mClusterCache = new HashMap<>();
     protected OnMessageAppendListener mAppendListener;
 
-    // Cells
+
     protected BindingRegistry mBindingRegistry;
     protected boolean mIsOneOnOneConversation;
     protected boolean mShouldShowAvatarInOneOnOneConversations;
