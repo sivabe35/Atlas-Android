@@ -18,7 +18,10 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
-public class MessageItemLegacyViewModel extends ItemViewModel<Message> {
+public class MessageItemCardViewModel extends ItemViewModel<Message> {
+    // Basic dependencies
+    private Context mContext;
+    private LayerClient mLayerClient;
 
     // Config
     private boolean mEnableReadReceipts;
@@ -27,8 +30,6 @@ public class MessageItemLegacyViewModel extends ItemViewModel<Message> {
     private IdentityRecyclerViewEventListener mIdentityEventListener;
     private boolean mShowAvatars;
     private boolean mShowPresence;
-    private LayerClient mLayerClient;
-    private Context mContext;
     private ImageCacheWrapper mImageCacheWrapper;
 
     // View related variables
@@ -42,19 +43,16 @@ public class MessageItemLegacyViewModel extends ItemViewModel<Message> {
     private String mReadReceipt;
     private String mGroupTime;
     private boolean mIsReadReceiptVisible;
-    private boolean mIsMyCellType;
+    private boolean mShouldDisplayAvatarSpace;
+    private boolean mIsMyMessage;
     private boolean mIsAvatarViewVisible;
     private boolean mIsPresenceVisible;
-    private boolean mMessageFooterAnimationIsVisible;
-    private String mTypingIndicatorMessage;
-    private boolean mIsTypingIndicatorVisible;
-    private boolean mShouldDisplayAvatarSpace;
 
-    public MessageItemLegacyViewModel(Context context, LayerClient layerClient,
-                                      ImageCacheWrapper imageCacheWrapper,
-                                      DateFormatter dateFormatter, IdentityFormatter identityFormatter,
-                                      IdentityRecyclerViewEventListener identityEventListener,
-                                      boolean enableReadReceipts, boolean showAvatars, boolean showPresence) {
+    public MessageItemCardViewModel(Context context, LayerClient layerClient,
+                                    ImageCacheWrapper imageCacheWrapper,
+                                    DateFormatter dateFormatter, IdentityFormatter identityFormatter,
+                                    IdentityRecyclerViewEventListener identityEventListener,
+                                    boolean enableReadReceipts, boolean showAvatars, boolean showPresence) {
         mDateFormatter = dateFormatter;
         mEnableReadReceipts = enableReadReceipts;
         mShowAvatars = showAvatars;
@@ -66,17 +64,16 @@ public class MessageItemLegacyViewModel extends ItemViewModel<Message> {
         mImageCacheWrapper = imageCacheWrapper;
     }
 
-    public void update(MessageCluster cluster, MessageCell messageCell, int position,
-                       Integer recipientStatusPosition) {
+    public void update(MessageCluster cluster, int position, Integer recipientStatusPosition) {
         Message message = getItem();
         mParticipants = Collections.singleton(message.getSender());
-        mIsMyCellType = messageCell.mMe;
+        mIsMyMessage = getItem().getSender().equals(mLayerClient.getAuthenticatedUser());
 
         // Clustering and dates
         updateClusteringAndDates(message, cluster);
 
         // Sender-dependent elements
-        updateSenderDependentElements(message, messageCell, cluster, position, recipientStatusPosition);
+        updateSenderDependentElements(message, cluster, position, recipientStatusPosition);
         notifyChange();
     }
 
@@ -100,12 +97,21 @@ public class MessageItemLegacyViewModel extends ItemViewModel<Message> {
         }
     }
 
-    protected void updateSenderDependentElements(Message message, MessageCell messageCell,
-                                                 MessageCluster cluster, int position,
+    protected void updateReceivedAtDateAndTime(Message message) {
+        Date receivedAt = message.getReceivedAt();
+        if (receivedAt == null) receivedAt = new Date();
+
+        mTimeGroupDay = mDateFormatter.formatTimeDay(receivedAt);
+        mGroupTime = mDateFormatter.formatTime(receivedAt);
+
+        mShouldShowDateTimeForMessage = true;
+    }
+
+    protected void updateSenderDependentElements(Message message, MessageCluster cluster, int position,
                                                  Integer recipientStatusPosition) {
         Identity sender = message.getSender();
 
-        if (messageCell.mMe) {
+        if (mIsMyMessage) {
             updateWithRecipientStatus(message, position, recipientStatusPosition);
             mMessageCellAlpha = message.isSent() ? 1.0f : 0.5f;
         } else {
@@ -136,7 +142,7 @@ public class MessageItemLegacyViewModel extends ItemViewModel<Message> {
         // Avatars
         if (isInAOneOnOneConversation()) {
             if (mShowAvatars) {
-                mIsAvatarViewVisible = !messageCell.mMe;
+                mIsAvatarViewVisible = !mIsMyMessage;
                 mShouldDisplayAvatarSpace = true;
                 mIsPresenceVisible = mIsAvatarViewVisible && mShowPresence;
             } else {
@@ -146,7 +152,7 @@ public class MessageItemLegacyViewModel extends ItemViewModel<Message> {
             }
         } else if (cluster.mClusterWithNext == null || cluster.mClusterWithNext != MessageCluster.Type.LESS_THAN_MINUTE) {
             // Last message in cluster
-            mIsAvatarViewVisible = !messageCell.mMe;
+            mIsAvatarViewVisible = !mIsMyMessage;
             // Add the position to the positions map for Identity updates
             mIdentityEventListener.addIdentityPosition(position, Collections.singleton(message.getSender()));
             mShouldDisplayAvatarSpace = true;
@@ -201,16 +207,6 @@ public class MessageItemLegacyViewModel extends ItemViewModel<Message> {
         }
     }
 
-    protected void updateReceivedAtDateAndTime(Message message) {
-        Date receivedAt = message.getReceivedAt();
-        if (receivedAt == null) receivedAt = new Date();
-
-        mTimeGroupDay = mDateFormatter.formatTimeDay(receivedAt);
-        mGroupTime = mDateFormatter.formatTime(receivedAt);
-
-        mShouldShowDateTimeForMessage = true;
-    }
-
     protected boolean isInAOneOnOneConversation() {
         return getItem().getConversation().getParticipants().size() == 2;
     }
@@ -225,43 +221,6 @@ public class MessageItemLegacyViewModel extends ItemViewModel<Message> {
 
     public LayerClient getLayerClient() {
         return mLayerClient;
-    }
-
-    // To be eliminated
-
-    public void setParticipants(Set<Identity> identities) {
-        mParticipants = identities;
-    }
-
-    public void setMessageFooterAnimationVisibility(boolean isVisible) {
-        mMessageFooterAnimationIsVisible = isVisible;
-    }
-
-    public void setTypingIndicatorMessageVisibility(boolean isTypingIndicatorVisible) {
-        mIsTypingIndicatorVisible = isTypingIndicatorVisible;
-    }
-
-    public void setTypingIndicatorMessage(String typingIndicatorMessage) {
-        mTypingIndicatorMessage = typingIndicatorMessage;
-    }
-
-    public void setAvatarViewVisibilityType(boolean avatarViewVisibilityType) {
-        mIsAvatarViewVisible = avatarViewVisibilityType;
-    }
-
-    @Bindable
-    public boolean getMessageFooterAnimationVisibility() {
-        return mMessageFooterAnimationIsVisible;
-    }
-
-    @Bindable
-    public String getTypingIndicatorMessage() {
-        return mTypingIndicatorMessage;
-    }
-
-    @Bindable
-    public boolean getTypingIndicatorMessageVisibility() {
-        return mIsTypingIndicatorVisible;
     }
 
     // Bindable properties
@@ -327,8 +286,8 @@ public class MessageItemLegacyViewModel extends ItemViewModel<Message> {
     }
 
     @Bindable
-    public boolean isMyCellType() {
-        return mIsMyCellType;
+    public boolean isMyMessage() {
+        return mIsMyMessage;
     }
 
     @Bindable

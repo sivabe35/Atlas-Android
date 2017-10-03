@@ -4,16 +4,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.layer.sdk.LayerClient;
-import com.layer.sdk.messaging.Message;
 import com.layer.ui.R;
-import com.layer.ui.adapters.ItemViewHolder;
 import com.layer.ui.avatar.AvatarViewModelImpl;
-import com.layer.ui.databinding.UiMessageItemBinding;
+import com.layer.ui.databinding.UiMessageItemLegacyBinding;
 import com.layer.ui.message.messagetypes.CellFactory;
-import com.layer.ui.message.messagetypes.MessageStyle;
 
-public class MessageItemLegacyViewHolder extends MessageItemViewHolder<MessageItemLegacyViewModel, UiMessageItemBinding> {
+public class MessageItemLegacyViewHolder extends MessageItemViewHolder<MessageItemLegacyViewModel, UiMessageItemLegacyBinding> {
 
     // Cell
     protected MessageCell mMessageCell;
@@ -21,7 +17,7 @@ public class MessageItemLegacyViewHolder extends MessageItemViewHolder<MessageIt
     protected CellFactory.CellHolderSpecs mCellHolderSpecs;
 
     public MessageItemLegacyViewHolder(ViewGroup parent, MessageItemLegacyViewModel messageItemViewModel, MessageCell messageCell) {
-        super(parent, R.layout.ui_message_item, messageItemViewModel);
+        super(parent, R.layout.ui_message_item_legacy, messageItemViewModel);
 
         getBinding().avatar.init(new AvatarViewModelImpl(messageItemViewModel.getImageCacheWrapper()),
                 messageItemViewModel.getIdentityFormatter());
@@ -54,15 +50,15 @@ public class MessageItemLegacyViewHolder extends MessageItemViewHolder<MessageIt
         mCellHolderSpecs.maxHeight = maxHeight;
     }
 
-    public void bind(LayerClient layerClient, MessageCluster messageCluster, int position, int recipientStatusPosition, int parentWidth) {
+    public void bind(MessageCluster messageCluster, int position, int recipientStatusPosition, int parentWidth) {
 
         getViewModel().update(messageCluster, mMessageCell, position, recipientStatusPosition);
         updateCellHolderSpecs(parentWidth);
 
         mCellHolder.setMessage(getItem());
+        CellFactory.ParsedContent parsedContent = mMessageCell.mCellFactory
+                .getParsedContent(getViewModel().getLayerClient(), getItem());
 
-        mMessageCell.mCellFactory.bindCellHolder(mCellHolder,
-                mMessageCell.mCellFactory.getParsedContent(layerClient, getItem()),
-                getItem(), mCellHolderSpecs);
+        mMessageCell.mCellFactory.bindCellHolder(mCellHolder, parsedContent, getItem(), mCellHolderSpecs);
     }
 }

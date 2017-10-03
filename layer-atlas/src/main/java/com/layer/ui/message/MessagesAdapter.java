@@ -260,6 +260,10 @@ public abstract class MessagesAdapter<VIEW_MODEL extends ItemViewModel<Message>,
         return mImageCacheWrapper;
     }
 
+    public boolean areReadReceiptsEnabled() {
+        return mReadReceiptsEnabled;
+    }
+
     //==============================================================================================
     // Listeners
     //==============================================================================================
@@ -320,13 +324,13 @@ public abstract class MessagesAdapter<VIEW_MODEL extends ItemViewModel<Message>,
         }
     }
 
-    protected abstract MessageItemViewHolder createHeaderViewHolder(ViewGroup parent);
+    protected abstract MessageItemViewHolder<VIEW_MODEL, BINDING> createHeaderViewHolder(ViewGroup parent);
 
-    protected abstract MessageItemViewHolder createFooterViewHolder(ViewGroup parent);
+    protected abstract MessageItemViewHolder<VIEW_MODEL, BINDING> createFooterViewHolder(ViewGroup parent);
 
-    protected abstract MessageItemViewHolder createCardMessageItemViewHolder(ViewGroup parent);
+    protected abstract MessageItemViewHolder<VIEW_MODEL, BINDING> createCardMessageItemViewHolder(ViewGroup parent);
 
-    protected abstract MessageItemViewHolder createLegacyMessageItemViewHolder(ViewGroup parent, MessageCell messageCell);
+    protected abstract MessageItemViewHolder<VIEW_MODEL, BINDING> createLegacyMessageItemViewHolder(ViewGroup parent, MessageCell messageCell);
 
     @Override
     public void onBindViewHolder(MessageItemViewHolder<VIEW_MODEL, BINDING> viewHolder, int position, List<Object> payloads) {
@@ -344,11 +348,11 @@ public abstract class MessagesAdapter<VIEW_MODEL extends ItemViewModel<Message>,
         super.onBindViewHolder(viewHolder, position, payloads);
     }
 
-    public abstract void bindHeader(MessageItemViewHolder viewHolder);
+    public abstract void bindHeader(MessageItemViewHolder<VIEW_MODEL, BINDING> viewHolder);
 
-    public abstract void bindFooter(MessageItemViewHolder viewHolder);
+    public abstract void bindFooter(MessageItemViewHolder<VIEW_MODEL, BINDING> viewHolder);
 
-    protected void prepareAndBindCard(MessageItemViewHolder viewHolder, int position) {
+    protected void prepareAndBindCard(MessageItemViewHolder<VIEW_MODEL, BINDING> viewHolder, int position) {
         Message message = getItem(position);
         viewHolder.setItem(message);
 
@@ -356,9 +360,9 @@ public abstract class MessagesAdapter<VIEW_MODEL extends ItemViewModel<Message>,
         bindCardMessageItem(viewHolder, messageCluster, position);
     }
 
-    public abstract void bindCardMessageItem(MessageItemViewHolder viewHolder, MessageCluster messageCluster, int position);
+    public abstract void bindCardMessageItem(MessageItemViewHolder<VIEW_MODEL, BINDING> viewHolder, MessageCluster messageCluster, int position);
 
-    protected void prepareAndBindMessageItem(MessageItemViewHolder viewHolder, int position) {
+    protected void prepareAndBindMessageItem(MessageItemViewHolder<VIEW_MODEL, BINDING> viewHolder, int position) {
         Message message = getItem(position);
         viewHolder.setItem(message);
 
@@ -366,7 +370,7 @@ public abstract class MessagesAdapter<VIEW_MODEL extends ItemViewModel<Message>,
         bindLegacyMessageItem(viewHolder, messageCluster, position);
     }
 
-    public abstract void bindLegacyMessageItem(MessageItemViewHolder viewHolder, MessageCluster cluster, int position);
+    public abstract void bindLegacyMessageItem(MessageItemViewHolder<VIEW_MODEL, BINDING> viewHolder, MessageCluster cluster, int position);
 
     protected Integer getRecipientStatusPosition() {
         return mRecipientStatusPosition;

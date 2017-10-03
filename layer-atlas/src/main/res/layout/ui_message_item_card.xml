@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2015 Layer. All rights reserved.
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View"/>
+
+        <variable
+            name="viewModel"
+            type="com.layer.ui.message.MessageItemCardViewModel"/>
+    </data>
+
+    <com.layer.ui.util.views.SwipeableItem
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ui_swipeable_item_background_selector">
+
+        <LinearLayout
+            android:id="@+id/leavebehind"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/layer_ui_item_leavebehind"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="@dimen/layer_ui_primary_icon_size"
+                android:layout_height="@dimen/layer_ui_primary_icon_size"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/layer_ui_padding_normal"
+                android:src="@drawable/ic_delete_white_24dp"
+                android:tint="@color/layer_ui_icon_enabled"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/swipeable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ui_swipeable_item_foreground_selector"
+            android:duplicateParentState="true"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/layer_ui_padding_normal"
+            android:paddingRight="@dimen/layer_ui_padding_normal"
+            android:paddingTop="@dimen/layer_ui_message_cluster_space">
+
+            <LinearLayout
+                android:id="@+id/time_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/layer_ui_message_item_time_group_padding_bottom"
+                android:paddingTop="@dimen/layer_ui_message_item_time_group_padding_top"
+                android:visibility="@{viewModel.shouldShowDateTimeForMessage ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                    android:id="@+id/time_group_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.timeGroupDay}"
+                    android:textColor="@color/layer_ui_text_gray"
+                    android:textSize="@dimen/layer_ui_text_size_message_item_metadata"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/time_group_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.groupTime}"
+                    android:textColor="@color/layer_ui_text_gray"
+                    android:textSize="@dimen/layer_ui_text_size_message_item_metadata"/>
+            </LinearLayout>
+
+            <Space
+                android:id="@+id/cluster_space"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/layer_ui_message_cluster_space_gap"
+                android:visibility="@{viewModel.clusterSpaceVisible ? View.VISIBLE : View.GONE}"/>
+
+            <TextView
+                android:id="@+id/senderName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layer_ui_message_item_sender_margin_bottom"
+                android:layout_marginLeft="@dimen/layer_ui_message_item_sender_margin_left"
+                android:text="@{viewModel.senderName}"
+                android:textColor="@color/layer_ui_text_gray"
+                android:textSize="@dimen/layer_ui_text_size_message_item_metadata"
+                android:visibility="@{viewModel.shouldShowDisplayName ? View.VISIBLE : View.GONE}"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:visibility="@{viewModel.avatarVisibility ? View.VISIBLE : View.GONE}">
+
+                        <com.layer.ui.avatar.AvatarView
+                            android:id="@+id/avatar"
+                            android:layout_width="@dimen/layer_ui_message_avatar_item_single"
+                            android:layout_height="@dimen/layer_ui_message_avatar_item_single"
+                            app:participants="@{viewModel.participants}"/>
+
+
+                        <com.layer.ui.presence.PresenceView
+                            android:id="@+id/presence"
+                            android:layout_width="@dimen/layer_ui_message_avatar_item_single"
+                            android:layout_height="@dimen/layer_ui_message_avatar_item_single"
+                            android:layout_gravity="bottom|right"
+                            android:visibility="@{viewModel.presenceVisible ? View.VISIBLE : View.GONE}"
+                            app:participants="@{viewModel.participants}"/>
+
+                    </FrameLayout>
+                    <!--Empty space when Avatar visibility is set to View.GONE so that messages can align properly-->
+                    <android.widget.Space
+                        android:layout_width="@dimen/layer_ui_message_avatar_item_single"
+                        android:layout_height="@dimen/layer_ui_message_avatar_item_single"
+                        android:visibility="@{viewModel.shouldDisplayAvatarSpace ? View.VISIBLE : View.GONE}"/>
+
+                </RelativeLayout>
+
+                <android.widget.Space
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:visibility="@{viewModel.myMessage ? View.VISIBLE : View.GONE}"/>
+
+                <FrameLayout
+                    android:id="@+id/cell"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/layer_ui_padding_normal"
+                    android:alpha="@{viewModel.messageCellAlpha}"
+                    android:minHeight="@dimen/layer_ui_message_item_cell_min_height"
+                    android:minWidth="@dimen/layer_ui_message_item_cell_min_width"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/receipt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="@dimen/layer_ui_message_item_receipt_margin"
+                android:text="@{viewModel.readReceipt}"
+                android:textColor="@color/layer_ui_text_gray"
+                android:textSize="@dimen/layer_ui_text_size_message_item_metadata"
+                android:visibility="@{viewModel.readReceiptVisible ? View.VISIBLE : View.GONE}"/>
+
+        </LinearLayout>
+    </com.layer.ui.util.views.SwipeableItem>
+</layout>

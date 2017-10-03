@@ -1,16 +1,14 @@
 package com.layer.ui.message;
 
-import android.support.annotation.LayoutRes;
 import android.view.ViewGroup;
 
-import com.layer.sdk.LayerClient;
 import com.layer.ui.R;
 import com.layer.ui.avatar.AvatarViewModelImpl;
-import com.layer.ui.databinding.UiMessageItemBinding;
+import com.layer.ui.databinding.UiMessageItemCardBinding;
 
-public class MessageItemCardViewHolder extends MessageItemViewHolder<MessageItemLegacyViewModel, UiMessageItemBinding> {
-    public MessageItemCardViewHolder(ViewGroup parent, @LayoutRes int layoutId, MessageItemLegacyViewModel viewModel) {
-        super(parent, R.layout.ui_message_item, viewModel);
+public class MessageItemCardViewHolder extends MessageItemViewHolder<MessageItemCardViewModel, UiMessageItemCardBinding> {
+    public MessageItemCardViewHolder(ViewGroup parent, MessageItemCardViewModel viewModel) {
+        super(parent, R.layout.ui_message_item_legacy, viewModel);
 
         getBinding().avatar.init(new AvatarViewModelImpl(viewModel.getImageCacheWrapper()),
                 viewModel.getIdentityFormatter());
@@ -18,7 +16,7 @@ public class MessageItemCardViewHolder extends MessageItemViewHolder<MessageItem
         getBinding().setViewModel(viewModel);
     }
 
-    public void bind(LayerClient layerClient, MessageCluster messageCluster, int position, int recipientStatusPosition, int parentWidth) {
-        getViewModel().update(messageCluster, null, position, recipientStatusPosition);
+    public void bind(MessageCluster messageCluster, int position, int recipientStatusPosition, int parentWidth) {
+        getViewModel().update(messageCluster, position, recipientStatusPosition);
     }
 }

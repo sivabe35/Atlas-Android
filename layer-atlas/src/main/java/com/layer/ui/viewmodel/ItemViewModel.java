@@ -7,7 +7,7 @@ import android.view.View;
 import com.layer.sdk.query.Queryable;
 import com.layer.ui.recyclerview.OnItemClickListener;
 
-public abstract class ItemViewModel<ITEM extends Queryable> extends BaseObservable {
+public class ItemViewModel<ITEM extends Queryable> extends BaseObservable {
 
     protected ITEM mItem;
     protected OnItemClickListener<ITEM> mItemClickListener;
