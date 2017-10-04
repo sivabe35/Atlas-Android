@@ -23,7 +23,7 @@ public class ConversationViewModel extends BaseObservable {
     protected LayerClient mLayerClient;
     protected Query<Message> mQuery;
 
-    public ConversationViewModel(Context context, LayerClient layerClient, List<CellFactory> cellFactories,
+    public ConversationViewModel(Context context, LayerClient layerClient, List<CellFactory<?,?>> cellFactories,
                                  ImageCacheWrapper imageCacheWrapper, DateFormatter dateFormatter,
                                  IdentityFormatter identityFormatter,
                                  SwipeableItem.OnItemSwipeListener<Message> onItemSwipeListener) {

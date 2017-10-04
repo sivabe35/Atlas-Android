@@ -28,9 +28,9 @@ public class ConversationItemFormatter {
     protected DateFormat mTimeFormat;
     protected DateFormat mDateFormat;
     // TODO : This is a bad place for this to exist. Need to find a better way in round 2
-    protected List<CellFactory> mCellFactories;
+    protected List<CellFactory<?,?>> mCellFactories;
 
-    public ConversationItemFormatter(Context context, DateFormat timeFormat, DateFormat dateFormat, List<CellFactory> cellFactories) {
+    public ConversationItemFormatter(Context context, DateFormat timeFormat, DateFormat dateFormat, List<CellFactory<?,?>> cellFactories) {
         mContext = context;
         mTimeFormat = timeFormat;
         mDateFormat = dateFormat;
@@ -119,7 +119,7 @@ public class ConversationItemFormatter {
         return timeText;
     }
 
-    public void setCellFactories(List<CellFactory> cellFactories) {
+    public void setCellFactories(List<CellFactory<?,?>> cellFactories) {
         mCellFactories = cellFactories;
     }
 }

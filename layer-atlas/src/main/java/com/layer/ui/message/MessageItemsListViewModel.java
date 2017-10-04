@@ -16,7 +16,7 @@ import java.util.List;
 
 public class MessageItemsListViewModel extends BaseObservable {
     protected MessageItemsAdapter mMessageItemsAdapter;
-    protected List<CellFactory> mCellFactories;
+    protected List<CellFactory<?,?>> mCellFactories;
     protected SwipeableItem.OnItemSwipeListener<Message> mItemSwipeListener;
 
     public MessageItemsListViewModel(Context context, LayerClient layerClient,
@@ -32,11 +32,11 @@ public class MessageItemsListViewModel extends BaseObservable {
     }
 
     @Bindable
-    public List<CellFactory> getCellFactories() {
+    public List<CellFactory<?,?>> getCellFactories() {
         return mCellFactories;
     }
 
-    public void setCellFactories(List<CellFactory> cellFactories) {
+    public void setCellFactories(List<CellFactory<?,?>> cellFactories) {
         mCellFactories = cellFactories;
         notifyChange();
     }

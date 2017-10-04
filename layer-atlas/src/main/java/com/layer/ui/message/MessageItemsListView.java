@@ -23,7 +23,6 @@ import com.layer.sdk.query.Query;
 import com.layer.sdk.query.SortDescriptor;
 import com.layer.ui.R;
 import com.layer.ui.TypingIndicatorLayout;
-import com.layer.ui.message.binder.BinderRegistry;
 import com.layer.ui.message.messagetypes.CellFactory;
 import com.layer.ui.message.messagetypes.MessageStyle;
 import com.layer.ui.recyclerview.ItemsRecyclerView;
@@ -186,7 +185,7 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerCha
      *
      * @see BinderRegistry#setCellFactories(List)
      */
-    public void setCellFactories(List<CellFactory> cellFactories) {
+    public void setCellFactories(List<CellFactory<?,?>> cellFactories) {
         mAdapter.getBinderRegistry().setCellFactories(cellFactories);
     }
 

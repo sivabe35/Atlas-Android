@@ -1,8 +1,5 @@
 package com.layer.ui.util.imagecache;
 
-import static com.layer.ui.util.Log.TAG;
-import static com.layer.ui.util.Log.VERBOSE;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -19,6 +16,9 @@ import com.squareup.picasso.Transformation;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import static com.layer.ui.util.Log.TAG;
+import static com.layer.ui.util.Log.VERBOSE;
 
 public class PicassoImageCacheWrapper implements ImageCacheWrapper {
     protected final static CircleTransform SINGLE_TRANSFORM = new CircleTransform(TAG + ".single");
@@ -100,7 +100,7 @@ public class PicassoImageCacheWrapper implements ImageCacheWrapper {
 
     @Override
     public void loadImage(final ImageRequestParameters imageRequestParameters,
-            ImageView imageView) {
+                          ImageView imageView) {
         RequestCreator requestCreator = mPicasso.load(imageRequestParameters.getUri())
                 .tag(imageRequestParameters.getTag())
                 .placeholder(imageRequestParameters.getPlaceholder());

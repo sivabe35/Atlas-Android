@@ -4,8 +4,8 @@ import com.layer.ui.message.messagetypes.CellFactory;
 
 public class MessageCell {
 
-    protected final boolean mMe;
-    protected final CellFactory mCellFactory;
+    public final boolean mMe;
+    public final CellFactory mCellFactory;
 
     public MessageCell(boolean me, CellFactory CellFactory) {
         mMe = me;
@@ -30,5 +30,4 @@ public class MessageCell {
         result = 31 * result + mCellFactory.hashCode();
         return result;
     }
-
 }
