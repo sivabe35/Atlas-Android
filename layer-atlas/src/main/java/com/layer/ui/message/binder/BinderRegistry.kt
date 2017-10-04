@@ -10,7 +10,7 @@ import com.layer.ui.message.messagetypes.CellFactory
 class BinderRegistry(@NonNull client: LayerClient) {
 
     private val layerClient = client
-    private var authenticatedUser: Identity? = client.authenticatedUser
+    private val authenticatedUser: Identity? = client.authenticatedUser
 
     /**
      * Number of permissible CellFactory view type cells, including my cell and their cell per type
