@@ -1,5 +1,11 @@
 # Atlas Android
 
+## 0.4.17
+
+#### Bug Fixes
+ * Fix Picasso crash when size of image is 0
+ * Fix default attach button visibility
+
 ## 0.4.16
 
 ### Major Changes

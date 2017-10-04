@@ -14,6 +14,7 @@
      limitations under the License.    
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:background="@drawable/atlas_message_composer_background"
@@ -25,9 +26,12 @@
         android:layout_width="@dimen/atlas_icon_button_size"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/atlas_icon_button_side_padding"
-        android:layout_marginRight="@dimen/atlas_icon_button_side_padding"
+        android:layout_marginStart="@dimen/atlas_icon_button_side_padding"
         android:scaleType="center"
         android:src="@drawable/ic_add_white_24dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:contentDescription="@string/attach_media"
         />
 
     <EditText
@@ -36,6 +40,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_weight="1"
+        android:layout_marginLeft="@dimen/atlas_icon_button_side_padding"
+        android:layout_marginStart="@dimen/atlas_icon_button_side_padding"
         android:hint="@string/atlas_message_composer_hint"
         android:maxLines="3"
         android:minHeight="@dimen/atlas_input_height"
