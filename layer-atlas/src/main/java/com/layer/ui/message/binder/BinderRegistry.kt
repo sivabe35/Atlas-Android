@@ -25,7 +25,8 @@ class BinderRegistry(@NonNull client: LayerClient) {
     public val viewTypeLegacyEnd: Int by lazy { viewTypeLegacyStart + numberOfLegacyViewTypes }
     public val viewTypeCard: Int by lazy { viewTypeLegacyEnd + 1 }
 
-    private lateinit var cellTypesByViewType: LinkedHashMap<Int, MessageCell>
+    public lateinit var cellTypesByViewType: LinkedHashMap<Int, MessageCell>
+        private set
 
     // Legacy Message binding with CellFactory and MessageCells
     public var cellFactories: MutableList<CellFactory<*, *>>? = null
@@ -51,11 +52,11 @@ class BinderRegistry(@NonNull client: LayerClient) {
         }
 
     public fun isLegacyMessageType(message: Message): Boolean {
-        return message.messageParts.none({ it.isRoleRoot() })
+        return message.messageParts.none({ it.isRoot() })
     }
 
     public fun getMessageCellForViewType(viewType: Int): MessageCell? {
-        return cellTypesByViewType.get(viewType)
+        return cellTypesByViewType[viewType]
     }
 
     public fun getViewType(message: Message): Int {

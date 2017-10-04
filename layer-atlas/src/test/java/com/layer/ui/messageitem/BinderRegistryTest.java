@@ -4,7 +4,6 @@ import com.layer.sdk.LayerClient;
 import com.layer.sdk.messaging.Message;
 import com.layer.sdk.messaging.MessagePart;
 import com.layer.ui.message.binder.BinderRegistry;
-import com.layer.ui.message.binder.MessagePartExtensionKt;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -44,9 +43,6 @@ public class BinderRegistryTest {
         when(message2Part1.getMimeType()).thenReturn("image/jpeg");
         when(message2Part2.getMimeType()).thenReturn("image/jpeg+preview");
         when(message2Part3.getMimeType()).thenReturn("application/json+imageSize");
-
-        MessagePartExtensionKt.getRole(message1Part1);
-
 
         List<MessagePart> message1Parts = new ArrayList<>();
         Collections.addAll(message1Parts, message1Part1, message1Part2);

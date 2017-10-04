@@ -1,26 +1,16 @@
+@file:JvmName("MessagePartUtilities")
+
 package com.layer.ui.message.binder
 
 import com.layer.sdk.messaging.MessagePart
 
-private val argumentSeparator = ";"
+private val parameterRoleRegex = "role=.+;?".toRegex()
+private val parameterIsRootRegex = ".*;role=root;?".toRegex()
 
-private val parameterSeparator = "="
-private val parameterRole = "role"
-private val parameterValueRoot = "root"
-
-fun MessagePart.getRole(): String? {
-
-    if (mimeType.contains(parameterRole)) {
-        for (part: String in mimeType.split(argumentSeparator)) {
-            if (part.startsWith(parameterRole)) {
-                return part.split(parameterSeparator)[1]
-            }
-        }
-    }
-
-    return null
+fun MessagePart.role(): String? {
+    return parameterRoleRegex.find(mimeType)?.value
 }
 
-fun MessagePart.isRoleRoot(): Boolean {
-    return getRole()?.equals(parameterValueRoot) ?: false
+fun MessagePart.isRoot(): Boolean {
+    return parameterIsRootRegex.matches(mimeType)
 }

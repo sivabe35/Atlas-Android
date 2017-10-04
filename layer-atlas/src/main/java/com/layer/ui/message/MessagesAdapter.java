@@ -317,7 +317,7 @@ public abstract class MessagesAdapter<VIEW_MODEL extends ItemViewModel<Message>,
         } else if (viewType == mBinderRegistry.getViewTypeCard()) {
             return createCardMessageItemViewHolder(parent);
         } else { // Is a legacy view type
-            MessageCell messageCell = mBinderRegistry.getMessageCellForViewType(viewType);
+            MessageCell messageCell = mBinderRegistry.getCellTypesByViewType().get(viewType);
             messageCell.mCellFactory.setStyle(getStyle());
             return createLegacyMessageItemViewHolder(parent, messageCell);
         }
