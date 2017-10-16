@@ -258,7 +258,7 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerCha
         mLayerClient.registerEventListener(this);
 
         mAdapter.setQuery(query, null);
-        Set<Identity> participants = conversation.getParticipants();
+        Set<Identity> participants = conversation!=null ? conversation.getParticipants() : null;
         if (participants != null) {
             mAdapter.setIsOneOnOneConversation(conversation.getParticipants().size() == 2);
         }

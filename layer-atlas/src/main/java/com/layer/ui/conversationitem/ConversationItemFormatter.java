@@ -85,7 +85,7 @@ public class ConversationItemFormatter {
     public String getLastMessagePreview(Conversation conversation) {
         Message message = conversation.getLastMessage();
 
-        if (mCellFactories != null && !mCellFactories.isEmpty()) {
+        if (message!= null && mCellFactories != null && !mCellFactories.isEmpty()) {
             for (CellFactory cellFactory : mCellFactories) {
                 if (cellFactory.isType(message)) {
                     return cellFactory.getPreviewText(mContext, message);

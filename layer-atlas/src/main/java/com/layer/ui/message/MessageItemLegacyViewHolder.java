@@ -1,5 +1,6 @@
 package com.layer.ui.message;
 
+import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -32,7 +33,7 @@ public class MessageItemLegacyViewHolder extends MessageItemViewHolder<MessageIt
     }
 
     private void updateCellHolderSpecs(int parentWidth) {
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) getBinding().cell.getLayoutParams();
+        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) getBinding().cell.getLayoutParams();
         View rootView = getBinding().getRoot();
 
         int maxWidth = parentWidth - rootView.getPaddingLeft() - rootView.getPaddingRight() - params.leftMargin - params.rightMargin;

@@ -1,5 +1,6 @@
 package com.layer.ui.message.binder;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.layer.sdk.LayerClient;
@@ -7,7 +8,11 @@ import com.layer.sdk.messaging.Identity;
 import com.layer.sdk.messaging.Message;
 import com.layer.sdk.messaging.MessagePart;
 import com.layer.ui.message.MessageCell;
+import com.layer.ui.message.MessagePartUtils;
 import com.layer.ui.message.messagetypes.CellFactory;
+import com.layer.ui.message.model.MessageModel;
+import com.layer.ui.message.model.MessageModelManager;
+import com.layer.ui.message.model.TextMessageModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,10 +21,6 @@ import java.util.Map;
 
 public class BinderRegistry {
 
-    private static final String MIME_TYPE_ARGUMENT_SEPARATOR = ";";
-    private static final String MIME_TYPE_PARAMETER_ROLE = "role";
-    private static final String MIME_TYPE_PARAMETER_SEPARATOR = "=";
-    private static final String MIME_TYPE_PARAMETER_ROLE_ROOT = "root";
     /**
      * Number of permissible CellFactory view type cells, including my cell and their cell per type
      */
@@ -41,12 +42,16 @@ public class BinderRegistry {
     protected final Map<CellFactory, Integer> mMyViewTypesByCell;
     protected final Map<CellFactory, Integer> mTheirViewTypesByCell;
 
-    public BinderRegistry(LayerClient layerClient) {
-        this(layerClient, 0, 1, -1);
+    // XDK Message Type Registry
+    protected final MessageModelManager mMessageModelManager;
+
+    public BinderRegistry(@NonNull Context context, LayerClient layerClient) {
+        this(context, layerClient, 0, 1, -1);
     }
 
-    public BinderRegistry(@NonNull LayerClient layerClient, final int headerViewType, final int footerViewType, final int unknownViewType) {
+    public BinderRegistry(@NonNull Context context, @NonNull LayerClient layerClient, final int headerViewType, final int footerViewType, final int unknownViewType) {
         mLayerClient = layerClient;
+
         mCellFactories = new ArrayList<>();
         mCellTypesByViewType = new HashMap<>();
         mMyViewTypesByCell = new HashMap<>();
@@ -68,20 +73,14 @@ public class BinderRegistry {
         VIEW_TYPE_LEGACY_START = Math.max(headerViewType, footerViewType) + 1;
         VIEW_TYPE_LEGACY_END = VIEW_TYPE_LEGACY_START + NUMBER_OF_LEGACY_VIEW_TYPES;
         VIEW_TYPE_CARD = VIEW_TYPE_LEGACY_END + 1;
+
+        mMessageModelManager = new MessageModelManager(context.getApplicationContext(), layerClient);
+        initMessageTypeModelRegistry();
     }
 
     public boolean isLegacyMessageType(Message message) {
         for (MessagePart messagePart : message.getMessageParts()) {
-            if (messagePart.getMimeType().contains(MIME_TYPE_ARGUMENT_SEPARATOR)) {
-                String arguments[] = messagePart.getMimeType().split(MIME_TYPE_ARGUMENT_SEPARATOR);
-
-                for (String argument : arguments) {
-                    String[] split = argument.split(MIME_TYPE_PARAMETER_SEPARATOR);
-                    if (split[0].equals(MIME_TYPE_PARAMETER_ROLE) && split[1].equals(MIME_TYPE_PARAMETER_ROLE_ROOT)) {
-                        return false;
-                    }
-                }
-            }
+            if (MessagePartUtils.isRoleRoot(messagePart)) return false;
         }
         return true;
     }
@@ -95,11 +94,17 @@ public class BinderRegistry {
                 return isMe ? mMyViewTypesByCell.get(factory) : mTheirViewTypesByCell.get(factory);
             }
         } else {
-            return VIEW_TYPE_CARD;
+            String rootMimeType = MessagePartUtils.getRootMimeType(message);
+            return mMessageModelManager.hasModel(rootMimeType) ? rootMimeType.hashCode() : VIEW_TYPE_UNKNOWN;
         }
 
         return VIEW_TYPE_UNKNOWN;
     }
+
+
+    //==============================================================================================
+    //  Legacy Bindings/CellFactory related methods
+    //==============================================================================================
 
     public CellFactory getCellFactory(Message message) {
         for (CellFactory factory : mCellFactories) {
@@ -162,5 +167,29 @@ public class BinderRegistry {
 
     public MessageCell getMessageCellForViewType(int viewType) {
         return mCellTypesByViewType.get(viewType);
+    }
+
+    //==============================================================================================
+    //  XDK Message Binding related methods
+    //==============================================================================================
+
+    private void initMessageTypeModelRegistry() {
+        mMessageModelManager.registerModel("application/vnd.layer.text+json", TextMessageModel.class);
+    }
+
+    public <T extends MessageModel> void registerModel(@NonNull String modelIdentifier, @NonNull Class<T> messageModelClass) {
+        mMessageModelManager.registerModel(modelIdentifier, messageModelClass);
+    }
+
+    public boolean hasModel(@NonNull String modelIdentifier) {
+        return mMessageModelManager.hasModel(modelIdentifier);
+    }
+
+    public void remove(@NonNull String modelIdentifier) {
+        mMessageModelManager.remove(modelIdentifier);
+    }
+
+    public MessageModelManager getMessageModelManager() {
+        return mMessageModelManager;
     }
 }

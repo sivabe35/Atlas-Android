@@ -25,10 +25,12 @@ public class GenericCellFactory extends
         StringBuilder b = new StringBuilder();
         boolean isFirst = true;
         b.append("No cell factory registered - using GenericCellFactory\n[");
-        for (MessagePart part : message.getMessageParts()) {
-            if (!isFirst) b.append(", ");
-            isFirst = false;
-            b.append(part.getSize()).append("-byte ").append(part.getMimeType());
+        if (message!=null) {
+            for (MessagePart part : message.getMessageParts()) {
+                if (!isFirst) b.append(", ");
+                isFirst = false;
+                b.append(part.getSize()).append("-byte ").append(part.getMimeType());
+            }
         }
         b.append("]");
         return b.toString();

@@ -99,6 +99,11 @@ public class MockConversation extends Conversation {
     }
 
     @Override
+    public void markAllMessagesAsRead() {
+
+    }
+
+    @Override
     public Uri getId() {
         return null;
     }

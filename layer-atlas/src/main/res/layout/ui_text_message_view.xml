@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <import type="com.layer.ui.message.model.TextMessageModel"/>
+
+        <import type="android.view.View"/>
+
+        <variable
+            name="viewModel"
+            type="TextMessageModel"/>
+    </data>
+
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/text_message_view_text"
+            android:textColor="@{viewModel.messageFromMe ? @color/ui_text_message_view_body_me : @color/ui_text_message_view_body_them}"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:autoLink="all"
+            android:linksClickable="true"
+            android:gravity="center_vertical"
+            android:text="@{viewModel.text}"
+            android:textSize="@dimen/ui_text_message_view_text_size"/>
+    </FrameLayout>
+</layout>

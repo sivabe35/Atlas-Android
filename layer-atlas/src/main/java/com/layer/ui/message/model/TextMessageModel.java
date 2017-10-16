@@ -1,0 +1,83 @@
+package com.layer.ui.message.model;
+
+import android.content.Context;
+import android.databinding.Bindable;
+import android.text.TextUtils;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.layer.sdk.LayerClient;
+import com.layer.sdk.messaging.MessagePart;
+import com.layer.ui.R;
+import com.layer.ui.message.view.MessageView;
+import com.layer.ui.message.view.TextMessageView;
+
+public class TextMessageModel extends MessageModel {
+
+    private final JsonParser mJsonParser;
+
+    private String mText;
+    private String mTitle;
+    private String mSubtitle;
+
+    public TextMessageModel(Context context, LayerClient layerClient) {
+        super(context, layerClient);
+        mJsonParser = new JsonParser();
+    }
+
+    @Override
+    public Class<? extends MessageView> getRendererType() {
+        return TextMessageView.class;
+    }
+
+    @Override
+    protected void parse(MessagePart messagePart) {
+        String data = new String(messagePart.getData());
+        JsonObject jsonObject = mJsonParser.parse(data).getAsJsonObject();
+        mText = jsonObject.get("text").getAsString().trim();
+        mSubtitle = jsonObject.has("description") ? jsonObject.get("description").getAsString() : null;
+        mTitle = jsonObject.has("title") ? jsonObject.get("title").getAsString() : null;
+    }
+
+    @Bindable
+    public String getText() {
+        return !TextUtils.isEmpty(mText) ? mText : null;
+    }
+
+    @Override
+    @Bindable
+    public String getTitle() {
+        return !TextUtils.isEmpty(mTitle) ? mTitle : null;
+    }
+
+    @Override
+    @Bindable
+    public String getDescription() {
+        return !TextUtils.isEmpty(mSubtitle) ? mSubtitle : null;
+    }
+
+    @Override
+    public boolean getHasContent() {
+        return !TextUtils.isEmpty(mText);
+    }
+
+    @Override
+    public int getBackgroundColor() {
+        return isMessageFromMe() ? R.color.ui_text_message_view_background_me : R.color.ui_text_message_view_background_them;
+    }
+
+    @Bindable
+    public String getAuthorName() {
+        return getIdentityFormatter().getDisplayName(getMessage().getSender());
+    }
+
+    @Bindable
+    public boolean isMessageFromMe() {
+        return getLayerClient().getAuthenticatedUser().equals(getMessage().getSender());
+    }
+
+    @Bindable
+    public boolean isDownloadingParts() {
+        return getNumberOfPartsCurrentlyDownloading() > 0;
+    }
+}

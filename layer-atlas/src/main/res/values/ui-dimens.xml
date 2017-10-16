@@ -100,7 +100,7 @@
     <dimen name="layer_ui_messages_max_cell_height">370dp</dimen>
 
     <!-- ####################################################################################### -->
-    <!-- # Avatar                                                                         # -->
+    <!-- # Avatar                                                                              # -->
     <!-- ####################################################################################### -->
 
     <dimen name="layer_ui_avatar_item_single">40dp</dimen>
@@ -110,7 +110,6 @@
     <!--Default Avatar width for small screen size-->
     <dimen name="layer_ui_avatar_width">32dp</dimen>
     <dimen name="layer_ui_avatar_height">32dp</dimen>
-    <dimen name="layer_ui_avatar_presence_height">12dp</dimen>
 
     <dimen name="layer_ui_avatar_width_large">48dp</dimen>
     <dimen name="layer_ui_avatar_height_large">48dp</dimen>
@@ -135,6 +134,8 @@
     <!--Default padding to align bottom, closer to message. Use: Messages-->
     <dimen name="layer_ui_avatar_left_padding_message">12dp</dimen>
     <dimen name="layer_ui_avatar_right_padding_message">8dp</dimen>
+    <dimen name="layer_ui_avatar_presence_height">12dp</dimen>
+    <dimen name="layer_ui_avatar_single_line_user_padding">16dp</dimen>
 
     <!--To calculate the sender Margin, @dimen/layer_ui_avatar_height
     + @dimen/layer_ui_avatar_left_padding_message
@@ -143,7 +144,7 @@
     <dimen name="layer_ui_message_item_sender_margin_left">64dp</dimen>
 
     <!-- ####################################################################################### -->
-    <!-- # Layer UI Item                                                                         # -->
+    <!-- # Layer UI Item                                                                       # -->
     <!-- ####################################################################################### -->
 
     <dimen name="layer_ui_item_height_large">72dp</dimen>
@@ -183,4 +184,19 @@
     <dimen name="layer_ui_compose_bar_image_button_width">@dimen/layer_ui_primary_icon_size</dimen>
     <dimen name="layer_ui_compose_bar_text_size">@dimen/layer_ui_text_size_input</dimen>
 
+    <!-- ####################################################################################### -->
+    <!-- # Text Message View                                                                   # -->
+    <!-- ####################################################################################### -->
+
+    <dimen name="ui_text_message_view_min_width">192dp</dimen>
+    <dimen name="ui_text_message_view_text_size">16sp</dimen>
+
+    <!-- ####################################################################################### -->
+    <!-- # Standard message container                                                          # -->
+    <!-- ####################################################################################### -->
+
+    <dimen name="ui_standard_message_container_background_border_corner_radius">17.5dp</dimen>
+    <dimen name="ui_standard_message_container_background_border_stroke_width">0.5dp</dimen>
+    <dimen name="ui_standard_message_container_min_width">192dp</dimen>
+    <dimen name="ui_standard_message_container_min_width_zero">0dp</dimen>
 </resources>

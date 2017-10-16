@@ -196,12 +196,11 @@ public abstract class ItemRecyclerViewAdapter<ITEM extends Queryable,
             ITEM item = getItem(position);
             if (item != null) {
                 holder.setItem(item);
+                holder.getBinding().executePendingBindings();
             } else {
                 onBindEmpty(holder);
             }
         }
-
-        holder.getBinding().executePendingBindings();
     }
 
     @Override

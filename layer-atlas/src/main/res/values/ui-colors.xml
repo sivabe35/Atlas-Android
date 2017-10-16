@@ -91,5 +91,22 @@
     <color name="layer_ui_compose_bar_send_button_text_disabled">@color/layer_ui_color_primary_gray_5</color>
     <color name="layer_ui_compose_bar_send_button_text_pressed">@color/layer_ui_color_dark_blue</color>
 
+    <!-- ########## -->
+    <!-- Standard Message Container -->
+    <!-- ########## -->
+
+    <color name="ui_standard_message_container_border_color">@color/layer_ui_color_primary_gray_3</color>
+    <color name="ui_standard_message_container_content_view_background">@color/layer_ui_color_primary_gray</color>
+    <color name="ui_standard_message_container_content_view_title">@color/layer_ui_text_black</color>
+    <color name="ui_standard_message_container_content_view_subtitle">@color/layer_ui_text_gray</color>
+
+    <!-- ########## -->
+    <!-- Text Message View -->
+    <!-- ########## -->
+
+    <color name="ui_text_message_view_body_them">@color/layer_ui_text_black</color>
+    <color name="ui_text_message_view_body_me">@color/layer_ui_text_white</color>
+    <color name="ui_text_message_view_background_me">@color/layer_ui_color_primary_blue</color>
+    <color name="ui_text_message_view_background_them">@color/layer_ui_color_primary_gray</color>
 
 </resources>

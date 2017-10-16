@@ -44,7 +44,7 @@ public class MessageItemsAdapter extends MessagesAdapter {
         viewModel.setShowAvatars(getShouldShowAvatarInOneOnOneConversations());
         viewModel.setShowPresence(getShouldShowPresence());
 
-        return new MessageItemCardViewHolder(parent, viewModel);
+        return new MessageItemCardViewHolder(parent, viewModel, getBinderRegistry().getMessageModelManager());
     }
 
     @Override

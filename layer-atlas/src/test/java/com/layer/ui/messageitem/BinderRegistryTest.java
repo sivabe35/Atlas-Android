@@ -1,5 +1,7 @@
 package com.layer.ui.messageitem;
 
+import android.content.Context;
+
 import com.layer.sdk.LayerClient;
 import com.layer.sdk.messaging.Message;
 import com.layer.sdk.messaging.MessagePart;
@@ -23,6 +25,9 @@ public class BinderRegistryTest {
 
     @Mock
     LayerClient layerClient;
+
+    @Mock
+    Context context;
 
     @Mock
     Message message1, message2;
@@ -57,14 +62,14 @@ public class BinderRegistryTest {
 
     @Test
     public void testMessageIsCardType() {
-        BinderRegistry binderRegistry = new BinderRegistry(layerClient);
+        BinderRegistry binderRegistry = new BinderRegistry(context, layerClient);
 
         assertThat(binderRegistry.isLegacyMessageType(message1), is(false));
     }
 
     @Test
     public void testMessageIsLegacyType() {
-        BinderRegistry binderRegistry = new BinderRegistry(layerClient);
+        BinderRegistry binderRegistry = new BinderRegistry(context, layerClient);
 
         assertThat(binderRegistry.isLegacyMessageType(message2), is(true));
     }

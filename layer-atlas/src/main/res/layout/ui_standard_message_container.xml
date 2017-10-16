@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.layer.ui.message.model.MessageModel"/>
+
+        <import type="android.view.View"/>
+
+        <variable
+            name="viewModel"
+            type="MessageModel"/>
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/ui_standard_message_container_background_border_stroke_width">
+
+        <FrameLayout
+            android:id="@+id/ui_standard_message_container_content_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="@{viewModel.hasMetadata ? @dimen/ui_standard_message_container_min_width : @dimen/ui_standard_message_container_min_width_zero}"
+            android:paddingBottom="@dimen/layer_ui_margin_small"
+            android:paddingEnd="@dimen/layer_ui_margin_large"
+            android:paddingLeft="@dimen/layer_ui_margin_large"
+            android:paddingRight="@dimen/layer_ui_margin_large"
+            android:paddingStart="@dimen/layer_ui_margin_large"
+            android:paddingTop="@dimen/layer_ui_margin_small"
+            android:visibility="@{viewModel.hasContent ? View.VISIBLE : View.GONE}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/ui_standard_message_container_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/layer_ui_margin_large"
+            android:layout_marginLeft="@dimen/layer_ui_margin_large"
+            android:layout_marginRight="@dimen/layer_ui_margin_large"
+            android:layout_marginStart="@dimen/layer_ui_margin_large"
+            android:layout_marginTop="@dimen/layer_ui_margin_small"
+            android:text="@{viewModel.title}"
+            android:textColor="@color/ui_standard_message_container_content_view_title"
+            android:visibility="@{viewModel.title!=null ? View.VISIBLE : View.GONE}"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="@+id/ui_standard_message_container_content_view"
+            app:layout_constraintRight_toRightOf="@+id/ui_standard_message_container_content_view"
+            app:layout_constraintTop_toBottomOf="@+id/ui_standard_message_container_content_view"/>
+
+        <TextView
+            android:id="@+id/ui_standard_message_container_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/layer_ui_margin_large"
+            android:layout_marginLeft="@dimen/layer_ui_margin_large"
+            android:layout_marginRight="@dimen/layer_ui_margin_large"
+            android:layout_marginStart="@dimen/layer_ui_margin_large"
+            android:layout_marginTop="@dimen/layer_ui_margin_tiny"
+            android:paddingBottom="@dimen/layer_ui_margin_large"
+            android:text="@{viewModel.description}"
+            android:textColor="@color/ui_standard_message_container_content_view_subtitle"
+            android:visibility="@{viewModel.description != null ? View.VISIBLE : View.GONE}"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="@+id/ui_standard_message_container_content_view"
+            app:layout_constraintRight_toRightOf="@+id/ui_standard_message_container_content_view"
+            app:layout_constraintTop_toBottomOf="@+id/ui_standard_message_container_title"/>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

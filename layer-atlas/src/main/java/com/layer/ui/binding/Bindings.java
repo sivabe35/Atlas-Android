@@ -7,8 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.firebase.jobdispatcher.Constraint;
-
 public class Bindings {
 
     @BindingAdapter({"bind:typeface"})
@@ -65,6 +63,11 @@ public class Bindings {
         view.setLayoutParams(layoutParams);
     }
 
+    @BindingAdapter("android:minWidth")
+    public static void setMinWidth(View view, float width) {
+        view.setMinimumWidth((int) width);
+    }
+
     @BindingAdapter("android:layout_height")
     public static void setLayoutHeight(View view, float height) {
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
@@ -73,9 +76,15 @@ public class Bindings {
     }
 
     @BindingAdapter("app:layout_constraintVertical_bias")
-    public static void setVerticalBias(TextView view, float bias) {
+    public static void setVerticalBias(View view, float bias) {
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) view.getLayoutParams();
         params.verticalBias = bias;
 
+    }
+
+    @BindingAdapter("app:layout_constraintHorizontal_bias")
+    public static void setHorizontalBias(View view, float bias) {
+        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) view.getLayoutParams();
+        params.horizontalBias = bias;
     }
 }
