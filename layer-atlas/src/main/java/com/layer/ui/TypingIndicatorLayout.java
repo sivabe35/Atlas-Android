@@ -24,6 +24,7 @@ import com.layer.sdk.LayerClient;
 import com.layer.sdk.listeners.LayerTypingIndicatorListener;
 import com.layer.sdk.messaging.Conversation;
 import com.layer.sdk.messaging.Identity;
+import com.layer.sdk.messaging.MessagingPattern;
 
 import java.util.Map;
 import java.util.Set;
@@ -120,9 +121,9 @@ public class TypingIndicatorLayout extends FrameLayout implements LayerTypingInd
     }
 
     @Override
-    public void onTypingIndicator(LayerClient layerClient, Conversation conversation, Identity user, TypingIndicator typingIndicator) {
+    public void onTypingIndicator(LayerClient layerClient, MessagingPattern messagingPattern, Identity user, TypingIndicator typingIndicator) {
         // Only monitor typing in this indicator's conversation.
-        if (mConversation != conversation) return;
+        if (mConversation != messagingPattern) return;
 
         // Notify ActivityListener to active/inactive typists.
         boolean isEmpty;

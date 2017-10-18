@@ -207,7 +207,7 @@ public class MessageItemLegacyViewModel extends ItemViewModel<Message> {
     }
 
     protected boolean isInAOneOnOneConversation() {
-        return getItem().getConversation().getParticipants().size() == 2;
+        return getItem().getMessagingPattern().getParticipants().size() == 2;
     }
 
     public ImageCacheWrapper getImageCacheWrapper() {

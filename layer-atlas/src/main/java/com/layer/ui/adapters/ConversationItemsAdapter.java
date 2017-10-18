@@ -142,9 +142,10 @@ public class ConversationItemsAdapter extends ItemRecyclerViewAdapter<Conversati
                 for (int i = start; i < start + length; i++) {
                     try {
                         final Conversation conversation = getItem(i);
-                        if (conversation == null || conversation.getHistoricSyncStatus() != Conversation.HistoricSyncStatus.MORE_AVAILABLE) {
-                            continue;
-                        }
+                        // TODO Determine what to do with this in AND-1101
+//                        if (conversation == null || conversation.getHistoricSyncStatus() != Conversation.HistoricSyncStatus.MORE_AVAILABLE) {
+//                            continue;
+//                        }
                         Query<Message> localCountQuery = Query.builder(Message.class)
                                 .predicate(new Predicate(Message.Property.CONVERSATION, Predicate.Operator.EQUAL_TO, conversation))
                                 .build();

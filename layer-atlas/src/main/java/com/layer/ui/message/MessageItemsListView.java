@@ -74,9 +74,7 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerDat
         setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (mConversation.getHistoricSyncStatus() == Conversation.HistoricSyncStatus.MORE_AVAILABLE) {
-                    mConversation.syncMoreHistoricMessages(mNumberOfItemsPerSync);
-                }
+                mConversation.syncMoreHistoricMessages(mNumberOfItemsPerSync);
             }
         });
     }
@@ -153,9 +151,10 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerDat
                     setRefreshing(false);
                     return;
                 }
-                Conversation.HistoricSyncStatus status = mConversation.getHistoricSyncStatus();
-                setEnabled(status == Conversation.HistoricSyncStatus.MORE_AVAILABLE);
-                setRefreshing(status == Conversation.HistoricSyncStatus.SYNC_PENDING);
+                // TODO Determine what to do with this in AND-1101
+//                Conversation.HistoricSyncStatus status = mConversation.getHistoricSyncStatus();
+//                setEnabled(status == Conversation.HistoricSyncStatus.MORE_AVAILABLE);
+//                setRefreshing(status == Conversation.HistoricSyncStatus.SYNC_PENDING);
             }
         });
     }
@@ -260,7 +259,7 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerDat
      */
     public void setConversation(LayerClient layerClient, Conversation conversation, Query<Message> query) {
         if (conversation != null) {
-            mAdapter.setReadReceiptsEnabled(conversation.isReadReceiptsEnabled());
+            mAdapter.setReadReceiptsEnabled(true);
         }
 
         mConversation = conversation;

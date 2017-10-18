@@ -1,6 +1,5 @@
 package com.layer.ui.message;
 
-import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.databinding.ViewDataBinding;
 import android.net.Uri;
@@ -306,6 +305,7 @@ public abstract class MessagesAdapter<VIEW_MODEL extends ItemViewModel<Message>,
      * @param readReceiptsEnabled true if the conversation is adapter is used for supports read
      *                            receipts
      */
+    // TODO If this can handle any messaging pattern then maybe we should expose this field there so this is not needed (AND-1107)
     public void setReadReceiptsEnabled(boolean readReceiptsEnabled) {
         mReadReceiptsEnabled = readReceiptsEnabled;
     }
