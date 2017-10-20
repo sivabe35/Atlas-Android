@@ -11,7 +11,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.layer.sdk.messaging.Identity;
-import com.layer.sdk.messaging.Presence;
+import com.layer.sdk.messaging.PresenceStatus;
 import com.layer.ui.R;
 
 import java.util.Arrays;
@@ -69,7 +69,7 @@ public class PresenceView extends View {
 
     private void drawPresence(Canvas canvas) {
 
-        Presence.PresenceStatus currentStatus = mIdentity != null ? mIdentity.getPresenceStatus() : null;
+        PresenceStatus currentStatus = mIdentity != null ? mIdentity.getPresenceStatus() : null;
         if (currentStatus == null) {
             return;
         }
