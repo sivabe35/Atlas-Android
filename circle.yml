@@ -10,7 +10,7 @@ dependencies:
   pre:
     # Update android sdk + tools + the specific emulator we want
     - echo y | android update sdk --no-ui --all --filter tools
-    - echo y | android update sdk --no-ui --all --filter build-tools-25.0.2
+    - echo y | android update sdk --no-ui --all --filter build-tools-26.0.2
     - echo y | android update sdk --no-ui --all --filter android-19
     - echo y | android update sdk --no-ui --all --filter sys-img-armeabi-v7a-google_apis-19
     - echo y | android update sdk --no-ui --all --filter platform-tools
