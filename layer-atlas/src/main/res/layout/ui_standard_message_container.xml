@@ -21,8 +21,8 @@
 
         <FrameLayout
             android:id="@+id/ui_standard_message_container_content_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:minWidth="@{viewModel.hasMetadata ? @dimen/ui_standard_message_container_min_width : @dimen/ui_standard_message_container_min_width_zero}"
             android:paddingBottom="@dimen/layer_ui_margin_small"
             android:paddingEnd="@dimen/layer_ui_margin_large"
@@ -31,6 +31,8 @@
             android:paddingStart="@dimen/layer_ui_margin_large"
             android:paddingTop="@dimen/layer_ui_margin_small"
             android:visibility="@{viewModel.hasContent ? View.VISIBLE : View.GONE}"
+            app:layout_constraintWidth_default="wrap"
+            app:layout_constraintHeight_default="wrap"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -38,8 +40,8 @@
 
         <TextView
             android:id="@+id/ui_standard_message_container_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginEnd="@dimen/layer_ui_margin_large"
             android:layout_marginLeft="@dimen/layer_ui_margin_large"
             android:layout_marginRight="@dimen/layer_ui_margin_large"
@@ -49,14 +51,16 @@
             android:textColor="@color/ui_standard_message_container_content_view_title"
             android:visibility="@{viewModel.title!=null ? View.VISIBLE : View.GONE}"
             app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintWidth_default="wrap"
+            app:layout_constraintHeight_default="wrap"
             app:layout_constraintLeft_toLeftOf="@+id/ui_standard_message_container_content_view"
             app:layout_constraintRight_toRightOf="@+id/ui_standard_message_container_content_view"
             app:layout_constraintTop_toBottomOf="@+id/ui_standard_message_container_content_view"/>
 
         <TextView
             android:id="@+id/ui_standard_message_container_subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginEnd="@dimen/layer_ui_margin_large"
             android:layout_marginLeft="@dimen/layer_ui_margin_large"
             android:layout_marginRight="@dimen/layer_ui_margin_large"
@@ -67,6 +71,8 @@
             android:textColor="@color/ui_standard_message_container_content_view_subtitle"
             android:visibility="@{viewModel.description != null ? View.VISIBLE : View.GONE}"
             app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintWidth_default="wrap"
+            app:layout_constraintHeight_default="wrap"
             app:layout_constraintLeft_toLeftOf="@+id/ui_standard_message_container_content_view"
             app:layout_constraintRight_toRightOf="@+id/ui_standard_message_container_content_view"
             app:layout_constraintTop_toBottomOf="@+id/ui_standard_message_container_title"/>

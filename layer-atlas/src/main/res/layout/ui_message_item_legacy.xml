@@ -144,7 +144,7 @@
 
                 <FrameLayout
                     android:id="@+id/cell"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/layer_ui_message_item_padding"
                     android:layout_marginLeft="@dimen/layer_ui_padding_normal"
@@ -153,6 +153,7 @@
                     android:alpha="@{viewModel.messageCellAlpha}"
                     android:minHeight="@dimen/layer_ui_message_item_cell_min_height"
                     android:minWidth="@dimen/layer_ui_message_item_cell_min_width"
+                    app:layout_constraintWidth_default="wrap"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="@{viewModel.myCellType ? 1.0f : 0.0f}"
                     app:layout_constraintLeft_toRightOf="@+id/avatar_container"

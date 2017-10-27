@@ -371,8 +371,10 @@ public abstract class MessagesAdapter<VIEW_MODEL extends ItemViewModel<Message>,
             MessageCell messageCell = mBinderRegistry.getMessageCellForViewType(viewType);
             messageCell.mCellFactory.setStyle(getStyle());
             return createLegacyMessageItemViewHolder(parent, messageCell);
-        } else {
+        } else if (viewType != mBinderRegistry.VIEW_TYPE_UNKNOWN) {
             return createCardMessageItemViewHolder(parent);
+        } else {
+            throw new IllegalStateException("Unknown View Type");
         }
     }
 
