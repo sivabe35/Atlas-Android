@@ -116,10 +116,12 @@
 
                 <FrameLayout
                     android:id="@+id/avatar_container"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/layer_ui_message_item_padding"
                     android:visibility="@{viewModel.shouldDisplayAvatarSpace ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintWidth_default="wrap"
+                    app:layout_constraintHeight_default="wrap"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -154,6 +156,7 @@
                     android:minHeight="@dimen/layer_ui_message_item_cell_min_height"
                     android:minWidth="@dimen/layer_ui_message_item_cell_min_width"
                     app:layout_constraintWidth_default="wrap"
+                    app:layout_constraintHeight_default="wrap"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="@{viewModel.myCellType ? 1.0f : 0.0f}"
                     app:layout_constraintLeft_toRightOf="@+id/avatar_container"
