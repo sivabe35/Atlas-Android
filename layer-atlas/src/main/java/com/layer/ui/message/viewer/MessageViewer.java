@@ -48,6 +48,7 @@ public class MessageViewer extends FrameLayout {
     }
 
     // TODO : This only works for one message part... fix to add more
+    // TODO : Handle these nulls appropriately
     @Nullable
     private MessageModel getMessageTypeModel() {
         String mimeType = MessagePartUtils.getMimeType(mMessage.getMessageParts().get(0));

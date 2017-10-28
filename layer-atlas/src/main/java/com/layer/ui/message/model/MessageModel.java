@@ -81,13 +81,18 @@ public abstract class MessageModel extends BaseObservable implements LayerProgre
     public abstract String getDescription();
 
     @Bindable
+    public abstract String getFooter();
+
+    @Bindable
     public abstract
     @ColorRes
     int getBackgroundColor();
 
     @Bindable
     public boolean getHasMetadata() {
-        return (!TextUtils.isEmpty(getTitle())) || !TextUtils.isEmpty(getDescription());
+        return (!TextUtils.isEmpty(getTitle()))
+                || !TextUtils.isEmpty(getDescription())
+                || !TextUtils.isEmpty(getFooter());
     }
 
     @Bindable

@@ -6,6 +6,8 @@
 
         <import type="com.layer.ui.message.model.MessageModel"/>
 
+        <import type="android.text.TextUtils"/>
+
         <import type="android.view.View"/>
 
         <variable
@@ -17,12 +19,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/ui_standard_message_container_background_border_stroke_width">
+        android:paddingBottom="@{viewModel.hasMetadata ? @dimen/layer_ui_margin_tiny : 0}">
 
         <FrameLayout
             android:id="@+id/ui_standard_message_container_content_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginBottom="@{viewModel.hasMetadata ? @dimen/layer_ui_margin_tiny : 0}"
             android:minWidth="@{viewModel.hasMetadata ? @dimen/ui_standard_message_container_min_width : @dimen/ui_standard_message_container_min_width_zero}"
             android:paddingBottom="@dimen/layer_ui_margin_small"
             android:paddingEnd="@dimen/layer_ui_margin_large"
@@ -31,11 +34,11 @@
             android:paddingStart="@dimen/layer_ui_margin_large"
             android:paddingTop="@dimen/layer_ui_margin_small"
             android:visibility="@{viewModel.hasContent ? View.VISIBLE : View.GONE}"
-            app:layout_constraintWidth_default="wrap"
             app:layout_constraintHeight_default="wrap"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_default="wrap">
         </FrameLayout>
 
         <TextView
@@ -46,36 +49,62 @@
             android:layout_marginLeft="@dimen/layer_ui_margin_large"
             android:layout_marginRight="@dimen/layer_ui_margin_large"
             android:layout_marginStart="@dimen/layer_ui_margin_large"
-            android:layout_marginTop="@dimen/layer_ui_margin_small"
+            android:layout_marginTop="@dimen/layer_ui_margin_tiny"
             android:text="@{viewModel.title}"
             android:textColor="@color/ui_standard_message_container_content_view_title"
-            android:visibility="@{viewModel.title!=null ? View.VISIBLE : View.GONE}"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintWidth_default="wrap"
+            android:textSize="@dimen/ui_standard_message_container_title_text_size"
+            android:visibility="@{TextUtils.isEmpty(viewModel.title) ? View.GONE : View.VISIBLE}"
             app:layout_constraintHeight_default="wrap"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="@+id/ui_standard_message_container_content_view"
             app:layout_constraintRight_toRightOf="@+id/ui_standard_message_container_content_view"
-            app:layout_constraintTop_toBottomOf="@+id/ui_standard_message_container_content_view"/>
+            app:layout_constraintTop_toBottomOf="@+id/ui_standard_message_container_content_view"
+            app:layout_constraintWidth_default="wrap"
+            app:layout_goneMarginTop="0dp"/>
 
         <TextView
             android:id="@+id/ui_standard_message_container_subtitle"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/layer_ui_margin_large"
             android:layout_marginEnd="@dimen/layer_ui_margin_large"
             android:layout_marginLeft="@dimen/layer_ui_margin_large"
             android:layout_marginRight="@dimen/layer_ui_margin_large"
             android:layout_marginStart="@dimen/layer_ui_margin_large"
             android:layout_marginTop="@dimen/layer_ui_margin_tiny"
-            android:paddingBottom="@dimen/layer_ui_margin_large"
             android:text="@{viewModel.description}"
             android:textColor="@color/ui_standard_message_container_content_view_subtitle"
-            android:visibility="@{viewModel.description != null ? View.VISIBLE : View.GONE}"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintWidth_default="wrap"
+            android:textSize="@dimen/ui_standard_message_container_subtitle_text_size"
+            android:visibility="@{TextUtils.isEmpty(viewModel.description) ? View.GONE : View.VISIBLE}"
             app:layout_constraintHeight_default="wrap"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="@+id/ui_standard_message_container_content_view"
             app:layout_constraintRight_toRightOf="@+id/ui_standard_message_container_content_view"
-            app:layout_constraintTop_toBottomOf="@+id/ui_standard_message_container_title"/>
+            app:layout_constraintTop_toBottomOf="@+id/ui_standard_message_container_title"
+            app:layout_constraintWidth_default="wrap"/>
+
+        <TextView
+            android:id="@+id/ui_standard_message_container_footer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/layer_ui_margin_large"
+            android:layout_marginEnd="@dimen/layer_ui_margin_large"
+            android:layout_marginLeft="@dimen/layer_ui_margin_large"
+            android:layout_marginRight="@dimen/layer_ui_margin_large"
+            android:layout_marginStart="@dimen/layer_ui_margin_large"
+            android:layout_marginTop="@dimen/layer_ui_margin_tiny"
+            android:text="@{viewModel.footer}"
+            android:textColor="@color/ui_standard_message_container_content_view_subtitle"
+            android:textSize="@dimen/ui_standard_message_container_footer_text_size"
+            android:visibility="@{TextUtils.isEmpty(viewModel.footer) ? View.GONE : View.VISIBLE}"
+            app:layout_constraintHeight_default="wrap"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="@+id/ui_standard_message_container_content_view"
+            app:layout_constraintRight_toRightOf="@+id/ui_standard_message_container_content_view"
+            app:layout_constraintTop_toBottomOf="@+id/ui_standard_message_container_subtitle"
+            app:layout_constraintWidth_default="wrap"
+            app:layout_goneMarginTop="@dimen/layer_ui_margin_large"/>
+
 
     </android.support.constraint.ConstraintLayout>
 </layout>

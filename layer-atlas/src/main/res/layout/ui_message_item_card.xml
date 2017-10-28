@@ -160,7 +160,8 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.5"
-                    app:message="@{viewModel.item}"/>
+                    app:message="@{viewModel.item}"
+                    android:padding="@dimen/ui_message_viewer_background_border_stroke_width"/>
 
             </android.support.constraint.ConstraintLayout>
 

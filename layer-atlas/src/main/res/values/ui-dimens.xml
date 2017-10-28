@@ -24,8 +24,7 @@
     <dimen name="layer_ui_margin_small">8dp</dimen>
     <dimen name="layer_ui_margin_tiny">4dp</dimen>
     <dimen name="layer_ui_margin_normal">6dp</dimen>
-
-
+    
     <dimen name="layer_ui_padding_normal">16dp</dimen>
     <dimen name="layer_ui_padding_narrow">8dp</dimen>
     <dimen name="layer_ui_primary_item_height">72dp</dimen>
@@ -189,14 +188,22 @@
     <!-- ####################################################################################### -->
 
     <dimen name="ui_text_message_view_min_width">192dp</dimen>
-    <dimen name="ui_text_message_view_text_size">16sp</dimen>
+    <dimen name="ui_text_message_view_text_size">14sp</dimen>
+
+    <!-- ####################################################################################### -->
+    <!-- # Message Viewer                                                          # -->
+    <!-- ####################################################################################### -->
+
+    <dimen name="ui_message_viewer_background_border_stroke_width">0.5dp</dimen>
 
     <!-- ####################################################################################### -->
     <!-- # Standard message container                                                          # -->
     <!-- ####################################################################################### -->
 
     <dimen name="ui_standard_message_container_background_border_corner_radius">17.5dp</dimen>
-    <dimen name="ui_standard_message_container_background_border_stroke_width">0.5dp</dimen>
     <dimen name="ui_standard_message_container_min_width">192dp</dimen>
     <dimen name="ui_standard_message_container_min_width_zero">0dp</dimen>
+    <dimen name="ui_standard_message_container_title_text_size">14sp</dimen>
+    <dimen name="ui_standard_message_container_subtitle_text_size">12sp</dimen>
+    <dimen name="ui_standard_message_container_footer_text_size">12sp</dimen>
 </resources>

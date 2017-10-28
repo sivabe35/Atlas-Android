@@ -19,6 +19,7 @@ public class TextMessageModel extends MessageModel {
     private String mText;
     private String mTitle;
     private String mSubtitle;
+    private String mAuthor;
 
     public TextMessageModel(Context context, LayerClient layerClient) {
         super(context, layerClient);
@@ -34,26 +35,32 @@ public class TextMessageModel extends MessageModel {
     protected void parse(MessagePart messagePart) {
         String data = new String(messagePart.getData());
         JsonObject jsonObject = mJsonParser.parse(data).getAsJsonObject();
-        mText = jsonObject.get("text").getAsString().trim();
-        mSubtitle = jsonObject.has("description") ? jsonObject.get("description").getAsString() : null;
-        mTitle = jsonObject.has("title") ? jsonObject.get("title").getAsString() : null;
+        mText = jsonObject.has("text") ? jsonObject.get("text").getAsString() : null;
+        mSubtitle = jsonObject.has("subtitle") ? jsonObject.get("subtitle").getAsString().trim() : null;
+        mTitle = jsonObject.has("title") ? jsonObject.get("title").getAsString().trim() : null;
+        mAuthor = jsonObject.has("author") ? jsonObject.get("author").getAsString().trim() : null;
     }
 
     @Bindable
     public String getText() {
-        return !TextUtils.isEmpty(mText) ? mText : null;
+        return mText;
     }
 
     @Override
     @Bindable
     public String getTitle() {
-        return !TextUtils.isEmpty(mTitle) ? mTitle : null;
+        return mTitle;
     }
 
     @Override
     @Bindable
     public String getDescription() {
-        return !TextUtils.isEmpty(mSubtitle) ? mSubtitle : null;
+        return mSubtitle;
+    }
+
+    @Override
+    public String getFooter() {
+        return mAuthor;
     }
 
     @Override
