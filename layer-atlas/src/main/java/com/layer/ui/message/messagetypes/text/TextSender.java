@@ -2,7 +2,6 @@ package com.layer.ui.message.messagetypes.text;
 
 import android.content.Context;
 
-import com.google.gson.JsonObject;
 import com.layer.sdk.LayerClient;
 import com.layer.sdk.messaging.Identity;
 import com.layer.sdk.messaging.Message;

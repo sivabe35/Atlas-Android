@@ -174,7 +174,7 @@ public class BinderRegistry {
     //==============================================================================================
 
     private void initMessageTypeModelRegistry() {
-        mMessageModelManager.registerModel("application/vnd.layer.text+json", TextMessageModel.class);
+        mMessageModelManager.registerModel(TextMessageModel.ROOT_MIME_TYPE, TextMessageModel.class);
     }
 
     public <T extends MessageModel> void registerModel(@NonNull String modelIdentifier, @NonNull Class<T> messageModelClass) {

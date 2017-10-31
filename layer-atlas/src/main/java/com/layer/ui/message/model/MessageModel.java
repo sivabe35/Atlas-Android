@@ -42,7 +42,7 @@ public abstract class MessageModel extends BaseObservable implements LayerProgre
         for (MessagePart messagePart : message.getMessageParts()) {
             if (messagePart.isContentReady()) {
                 parse(messagePart);
-            } else {
+            } else if (shouldAutoDownloadMessagePart(messagePart)) {
                 messagePart.download(this);
             }
         }
@@ -51,6 +51,8 @@ public abstract class MessageModel extends BaseObservable implements LayerProgre
     public abstract Class<? extends MessageView> getRendererType();
 
     protected abstract void parse(MessagePart messagePart);
+
+    protected abstract boolean shouldAutoDownloadMessagePart(MessagePart messagePart);
 
     @Override
     public void onProgressStart(MessagePart messagePart, Operation operation) {

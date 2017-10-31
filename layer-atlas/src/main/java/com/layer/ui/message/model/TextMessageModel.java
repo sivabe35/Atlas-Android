@@ -14,6 +14,7 @@ import com.layer.ui.message.view.TextMessageView;
 
 public class TextMessageModel extends MessageModel {
 
+    public final static String ROOT_MIME_TYPE = "application/vnd.layer.text+json";
     private final JsonParser mJsonParser;
 
     private String mText;
@@ -29,6 +30,11 @@ public class TextMessageModel extends MessageModel {
     @Override
     public Class<? extends MessageView> getRendererType() {
         return TextMessageView.class;
+    }
+
+    @Override
+    protected boolean shouldAutoDownloadMessagePart(MessagePart messagePart) {
+        return true;
     }
 
     @Override
