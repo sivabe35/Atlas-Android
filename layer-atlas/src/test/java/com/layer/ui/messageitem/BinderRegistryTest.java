@@ -5,6 +5,7 @@ import android.content.Context;
 import com.layer.sdk.LayerClient;
 import com.layer.sdk.messaging.Message;
 import com.layer.sdk.messaging.MessagePart;
+import com.layer.ui.message.MessagePartUtils;
 import com.layer.ui.message.binder.BinderRegistry;
 
 import org.junit.Before;
@@ -72,5 +73,12 @@ public class BinderRegistryTest {
         BinderRegistry binderRegistry = new BinderRegistry(context, layerClient);
 
         assertThat(binderRegistry.isLegacyMessageType(message2), is(true));
+    }
+
+    @Test
+    public void testGetViewTypeForUnknownCardType() {
+        BinderRegistry binderRegistry = new BinderRegistry(context, layerClient);
+
+        assertThat(binderRegistry.getViewType(message1), is(binderRegistry.VIEW_TYPE_UNKNOWN));
     }
 }
