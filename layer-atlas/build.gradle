@@ -17,7 +17,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 26
         versionName = "${version}"
-
+        multiDexEnabled true
         testInstrumentationRunner "com.layer.ui.TestButlerRunner"
     }
 
