@@ -79,13 +79,13 @@ public class MessageViewer extends FrameLayout {
             mMessageContainer.setMessageModel(model);
 
         } catch (NoSuchMethodException e) {
-            throw new IllegalStateException("Cannot instantiate view with class: " + modelType.getName());
+            throw new IllegalStateException("Cannot instantiate view with class: " + modelType.getName() + " : " + e.getMessage());
         } catch (IllegalAccessException e) {
-            throw new IllegalStateException("Cannot instantiate view with class: " + modelType.getName());
+            throw new IllegalStateException("Cannot instantiate view with class: " + modelType.getName() + " : " + e.getMessage());
         } catch (InvocationTargetException e) {
-            throw new IllegalStateException("Cannot instantiate view with class: " + modelType.getName());
+            throw new IllegalStateException("Cannot instantiate view with class: " + modelType.getName() + " : " + e.getMessage());
         } catch (InstantiationException e) {
-            throw new IllegalStateException("Cannot instantiate view with class: " + modelType.getName());
+            throw new IllegalStateException("Cannot instantiate view with class: " + modelType.getName() + " : " + e.getMessage());
         }
     }
 
