@@ -1,23 +1,29 @@
-package com.layer.ui.messageitem;
+package com.layer.ui.message.model;
 
 import android.content.Context;
+import android.support.test.InstrumentationRegistry;
 
 import com.layer.sdk.LayerClient;
-import com.layer.ui.message.model.MessageModelManager;
-import com.layer.ui.message.model.TextMessageModel;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+
 import static org.junit.Assert.assertNotNull;
 
-public class MessageModelRegistryTest {
+public class MessageModelManagerTest {
+
+    private Context mContext;
     private MessageModelManager mMessageModelManager;
 
+    @Mock
     private LayerClient mLayerClient;
-    private Context mContext;
 
     @Before
     public void setup() {
+        mContext = InstrumentationRegistry.getTargetContext();
         mMessageModelManager = new MessageModelManager(mContext, mLayerClient);
     }
 
