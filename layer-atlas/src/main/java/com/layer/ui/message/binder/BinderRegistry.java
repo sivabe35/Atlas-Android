@@ -12,7 +12,7 @@ import com.layer.ui.message.MessagePartUtils;
 import com.layer.ui.message.messagetypes.CellFactory;
 import com.layer.ui.message.model.MessageModel;
 import com.layer.ui.message.model.MessageModelManager;
-import com.layer.ui.message.model.TextMessageModel;
+import com.layer.ui.message.text.TextMessageModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;

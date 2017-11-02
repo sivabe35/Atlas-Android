@@ -4,11 +4,11 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
 import com.layer.sdk.LayerClient;
+import com.layer.ui.message.text.TextMessageModel;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 
 import static org.junit.Assert.assertNotNull;

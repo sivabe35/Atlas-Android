@@ -1,4 +1,4 @@
-package com.layer.ui.message.view;
+package com.layer.ui.message.text;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import com.layer.ui.databinding.UiTextMessageViewBinding;
 import com.layer.ui.message.container.MessageContainer;
 import com.layer.ui.message.container.StandardMessageContainer;
-import com.layer.ui.message.model.TextMessageModel;
+import com.layer.ui.message.view.MessageView;
 
 public class TextMessageView extends MessageView<TextMessageModel> {
     private UiTextMessageViewBinding mBinding;

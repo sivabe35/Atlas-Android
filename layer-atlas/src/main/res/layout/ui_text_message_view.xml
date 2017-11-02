@@ -3,7 +3,7 @@
 
     <data>
 
-        <import type="com.layer.ui.message.model.TextMessageModel"/>
+        <import type="com.layer.ui.message.text.TextMessageModel"/>
 
         <import type="android.view.View"/>
 

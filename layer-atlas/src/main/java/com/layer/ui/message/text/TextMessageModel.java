@@ -1,4 +1,4 @@
-package com.layer.ui.message.model;
+package com.layer.ui.message.text;
 
 import android.content.Context;
 import android.databinding.Bindable;
@@ -9,8 +9,9 @@ import com.google.gson.JsonParser;
 import com.layer.sdk.LayerClient;
 import com.layer.sdk.messaging.MessagePart;
 import com.layer.ui.R;
+import com.layer.ui.message.model.MessageModel;
 import com.layer.ui.message.view.MessageView;
-import com.layer.ui.message.view.TextMessageView;
+import com.layer.ui.message.text.TextMessageView;
 
 public class TextMessageModel extends MessageModel {
 
