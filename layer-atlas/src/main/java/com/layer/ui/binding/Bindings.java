@@ -5,7 +5,14 @@ import android.graphics.Typeface;
 import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.layer.ui.message.image.ImageMessageMetadata;
+import com.layer.ui.message.image.ImageMessageModel;
+import com.layer.ui.util.display.DisplayUtils;
+import com.layer.ui.util.imagecache.ImageCacheWrapper;
+import com.layer.ui.util.imagecache.ImageRequestParameters;
 
 public class Bindings {
 
@@ -63,16 +70,21 @@ public class Bindings {
         view.setLayoutParams(layoutParams);
     }
 
-    @BindingAdapter("android:minWidth")
-    public static void setMinWidth(View view, float width) {
-        view.setMinimumWidth((int) width);
-    }
-
     @BindingAdapter("android:layout_height")
     public static void setLayoutHeight(View view, float height) {
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
         layoutParams.height = (int) height;
         view.setLayoutParams(layoutParams);
+    }
+
+    @BindingAdapter("android:minWidth")
+    public static void setMinWidth(View view, float width) {
+        view.setMinimumWidth((int) width);
+    }
+
+    @BindingAdapter("android:minHeight")
+    public static void setMinHeight(View view, float height) {
+        view.setMinimumHeight((int) height);
     }
 
     @BindingAdapter("app:layout_constraintVertical_bias")
@@ -86,5 +98,14 @@ public class Bindings {
     public static void setHorizontalBias(View view, float bias) {
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) view.getLayoutParams();
         params.horizontalBias = bias;
+    }
+
+    @BindingAdapter({"app:loadFrom", "app:usingImageLoader"})
+    public static void loadFrom(ImageView imageView, ImageRequestParameters parameters, ImageCacheWrapper imageCacheWrapper) {
+        if (parameters!=null) {
+            imageCacheWrapper.loadImage(parameters, imageView);
+        } else {
+            imageCacheWrapper.loadDefaultPlaceholder(imageView);
+        }
     }
 }

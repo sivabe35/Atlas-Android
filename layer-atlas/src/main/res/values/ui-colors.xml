@@ -109,4 +109,10 @@
     <color name="ui_text_message_view_background_me">@color/layer_ui_color_primary_blue</color>
     <color name="ui_text_message_view_background_them">@color/layer_ui_color_primary_gray</color>
 
+    <!-- ########## -->
+    <!-- Image Message View -->
+    <!-- ########## -->
+
+    <color name="ui_image_message_view_background_them">@color/layer_ui_color_primary_gray</color>
+
 </resources>

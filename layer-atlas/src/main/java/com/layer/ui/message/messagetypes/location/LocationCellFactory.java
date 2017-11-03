@@ -116,12 +116,16 @@ public class LocationCellFactory extends
         String url = "https://maps.googleapis.com/maps/api/staticmap?zoom=16&maptype=roadmap&scale=2&center=" + location.mLatitude + "," + location.mLongitude + "&markers=color:red%7C" + location.mLatitude + "," + location.mLongitude + "&size=" + mapWidth + "x" + mapHeight;
 
         ImageRequestParameters imageRequestParameters = new ImageRequestParameters
-                .Builder(Uri.parse(url), PLACEHOLDER, cellDims[0], cellDims[1], callback)
-                .setTag(IMAGE_CACHING_TAG)
-                .setShouldCenterImage(false)
-                .setShouldScaleDownTo(false)
-                .setShouldTransformIntoRound(true)
-                .setRotateAngleTo(0).build();
+                .Builder(Uri.parse(url))
+                .placeHolder(PLACEHOLDER)
+                .resize(cellDims[0], cellDims[1])
+                .tag(IMAGE_CACHING_TAG)
+                .centerCrop(false)
+                .onlyScaleDown(false)
+                .defaultCircularTransform(true)
+                .rotate(0)
+                .callback(callback)
+                .build();
 
         mImageCacheWrapper.loadImage(imageRequestParameters, cellHolder.mImageView);
     }

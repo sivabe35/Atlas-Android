@@ -34,13 +34,14 @@ public class StandardMessageContainer extends MessageContainer {
         mBinding = UiStandardMessageContainerBinding.inflate(inflater, this, true);
         mBinding.uiStandardMessageContainerTitle.setVisibility(GONE);
         mBinding.uiStandardMessageContainerSubtitle.setVisibility(GONE);
+        setCornerRadius(context.getResources().getDimension(R.dimen.ui_standard_message_container_corner_radius));
     }
 
     public void setMessageView(MessageView view) {
         mMessageView = view;
         view.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
         mBinding.uiStandardMessageContainerContentView.addView(view);
     }
 
@@ -54,17 +55,8 @@ public class StandardMessageContainer extends MessageContainer {
 
     @Override
     protected <T extends MessageModel> void setContentBackground(T model) {
-        GradientDrawable background;
-        if (model.getHasMetadata()) {
-            background = (GradientDrawable) ContextCompat.getDrawable(getContext(), R.drawable.ui_standard_message_container_content_with_metadata_background);
-        } else {
-            background = (GradientDrawable) ContextCompat.getDrawable(getContext(), R.drawable.ui_standard_message_container_content_background);
-        }
-
+        GradientDrawable background = (GradientDrawable) ContextCompat.getDrawable(getContext(), R.drawable.ui_standard_message_container_content_background);
         background.setColor(ContextCompat.getColor(getContext(), model.getBackgroundColor()));
-
-        if (!background.equals(mBinding.uiStandardMessageContainerContentView.getBackground())) {
-            mBinding.uiStandardMessageContainerContentView.setBackgroundDrawable(background);
-        }
+        mBinding.uiStandardMessageContainerContentView.setBackgroundDrawable(background);
     }
 }

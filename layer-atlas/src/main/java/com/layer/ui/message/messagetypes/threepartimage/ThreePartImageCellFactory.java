@@ -122,13 +122,17 @@ public class ThreePartImageCellFactory extends
         };
 
         ImageRequestParameters imageRequestParameters = new ImageRequestParameters
-                .Builder(preview.getId(), PLACEHOLDER, width, height, callback)
-                .setTag(IMAGE_CACHING_TAG)
-                .setRotateAngleTo(rotate)
-                .setShouldCenterImage(false)
-                .setShouldScaleDownTo(false)
-                .setShouldTransformIntoRound(true)
+                .Builder(preview.getId())
+                .placeHolder(PLACEHOLDER)
+                .resize(width, height)
+                .tag(IMAGE_CACHING_TAG)
+                .rotate(rotate)
+                .centerCrop(false)
+                .onlyScaleDown(false)
+                .defaultCircularTransform(true)
+                .callback(callback)
                 .build();
+
         mImageCacheWrapper.loadImage(imageRequestParameters, cellHolder.mImageView);
 
         cellHolder.mImageView.setOnLongClickListener(new View.OnLongClickListener() {

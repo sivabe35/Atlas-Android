@@ -9,6 +9,7 @@ import com.layer.sdk.messaging.Message;
 import com.layer.sdk.messaging.MessagePart;
 import com.layer.ui.message.MessageCell;
 import com.layer.ui.message.MessagePartUtils;
+import com.layer.ui.message.image.ImageMessageModel;
 import com.layer.ui.message.messagetypes.CellFactory;
 import com.layer.ui.message.model.MessageModel;
 import com.layer.ui.message.model.MessageModelManager;
@@ -86,16 +87,18 @@ public class BinderRegistry {
     }
 
     public int getViewType(Message message) {
-        if (isLegacyMessageType(message)) {
-            Identity authenticatedUser = mLayerClient.getAuthenticatedUser();
-            boolean isMe = authenticatedUser != null && authenticatedUser.equals(message.getSender());
-            for (CellFactory factory : mCellFactories) {
-                if (!factory.isBindable(message)) continue;
-                return isMe ? mMyViewTypesByCell.get(factory) : mTheirViewTypesByCell.get(factory);
-            }
-        } else {
+        if (!isLegacyMessageType(message)) {
             String rootMimeType = MessagePartUtils.getRootMimeType(message);
-            return mMessageModelManager.hasModel(rootMimeType) ? rootMimeType.hashCode() : VIEW_TYPE_UNKNOWN;
+            if (mMessageModelManager.hasModel(rootMimeType)) {
+                return rootMimeType.hashCode();
+            }
+        }
+
+        Identity authenticatedUser = mLayerClient.getAuthenticatedUser();
+        boolean isMe = authenticatedUser != null && authenticatedUser.equals(message.getSender());
+        for (CellFactory factory : mCellFactories) {
+            if (!factory.isBindable(message)) continue;
+            return isMe ? mMyViewTypesByCell.get(factory) : mTheirViewTypesByCell.get(factory);
         }
 
         return VIEW_TYPE_UNKNOWN;
@@ -175,6 +178,7 @@ public class BinderRegistry {
 
     private void initMessageTypeModelRegistry() {
         mMessageModelManager.registerModel(TextMessageModel.ROOT_MIME_TYPE, TextMessageModel.class);
+        mMessageModelManager.registerModel(ImageMessageModel.ROOT_MIME_TYPE, ImageMessageModel.class);
     }
 
     public <T extends MessageModel> void registerModel(@NonNull String modelIdentifier, @NonNull Class<T> messageModelClass) {

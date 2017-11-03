@@ -197,7 +197,7 @@
     <!-- # Standard message container                                                          # -->
     <!-- ####################################################################################### -->
 
-    <dimen name="ui_standard_message_container_background_border_corner_radius">17.5dp</dimen>
+    <dimen name="ui_standard_message_container_corner_radius">17.5dp</dimen>
     <dimen name="ui_standard_message_container_min_width">192dp</dimen>
     <dimen name="ui_standard_message_container_min_width_zero">0dp</dimen>
     <dimen name="ui_standard_message_container_title_text_size">14sp</dimen>

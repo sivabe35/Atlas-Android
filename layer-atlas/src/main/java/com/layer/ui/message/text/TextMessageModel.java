@@ -11,7 +11,6 @@ import com.layer.sdk.messaging.MessagePart;
 import com.layer.ui.R;
 import com.layer.ui.message.model.MessageModel;
 import com.layer.ui.message.view.MessageView;
-import com.layer.ui.message.text.TextMessageView;
 
 public class TextMessageModel extends MessageModel {
 
@@ -83,11 +82,6 @@ public class TextMessageModel extends MessageModel {
     @Bindable
     public String getAuthorName() {
         return getIdentityFormatter().getDisplayName(getMessage().getSender());
-    }
-
-    @Bindable
-    public boolean isMessageFromMe() {
-        return getLayerClient().getAuthenticatedUser().equals(getMessage().getSender());
     }
 
     @Bindable

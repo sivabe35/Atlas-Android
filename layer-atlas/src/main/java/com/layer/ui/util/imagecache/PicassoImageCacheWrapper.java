@@ -1,11 +1,9 @@
 package com.layer.ui.util.imagecache;
 
-import static com.layer.ui.util.Log.TAG;
-import static com.layer.ui.util.Log.VERBOSE;
-
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.widget.ImageView;
 
@@ -15,16 +13,18 @@ import com.layer.ui.util.imagecache.transformations.RoundedTransform;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Target;
-import com.squareup.picasso.Transformation;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.layer.ui.util.Log.TAG;
+import static com.layer.ui.util.Log.VERBOSE;
+
 public class PicassoImageCacheWrapper implements ImageCacheWrapper {
     protected final static CircleTransform SINGLE_TRANSFORM = new CircleTransform(TAG + ".single");
     protected final static CircleTransform MULTI_TRANSFORM = new CircleTransform(TAG + ".multi");
+
     protected final Picasso mPicasso;
-    protected Transformation mTransform;
     /*
         Picasso keeps a weak reference to the target when you load into a target,
         hence we need to keep a strong reference to the targets to prevent Garbage Collector from
@@ -100,55 +100,88 @@ public class PicassoImageCacheWrapper implements ImageCacheWrapper {
 
     @Override
     public void loadImage(final ImageRequestParameters imageRequestParameters, ImageView imageView) {
+        RequestCreator requestCreator;
 
-        RequestCreator requestCreator = mPicasso.load(imageRequestParameters.getUri())
-                .tag(imageRequestParameters.getTag())
-                .placeholder(imageRequestParameters.getPlaceholder());
+        if (imageRequestParameters.getUri() != null) {
+            requestCreator = mPicasso.load(imageRequestParameters.getUri());
+        } else if (imageRequestParameters.getUrl() != null) {
+            requestCreator = mPicasso.load(imageRequestParameters.getUrl());
+        } else {
+            requestCreator = mPicasso.load(imageRequestParameters.getResourceId());
+        }
 
-        if (imageRequestParameters.isShouldCenterImage()) {
+        requestCreator.config(Bitmap.Config.RGB_565);
+
+        if (imageRequestParameters.noFade()) {
+            requestCreator.noFade();
+        }
+
+        if (imageRequestParameters.getTag() != null) {
+            requestCreator.tag(imageRequestParameters.getTag());
+        }
+
+        if (imageRequestParameters.getPlaceholder() > 0) {
+            requestCreator.placeholder(imageRequestParameters.getPlaceholder());
+        }
+
+        if (imageRequestParameters.centerCrop()) {
             requestCreator = requestCreator.centerCrop();
+        } else if (imageRequestParameters.centerInside()) {
+            requestCreator.centerInside();
         }
 
-        if (imageRequestParameters.getResizeWidthTo() > 0 && imageRequestParameters.getResizeHeightTo() > 0) {
-            requestCreator.resize(imageRequestParameters.getResizeWidthTo(), imageRequestParameters.getResizeHeightTo());
+        if (imageRequestParameters.fit()) {
+            requestCreator.fit();
         }
 
-        if (imageRequestParameters.getRotateAngleTo() != 0) {
-            requestCreator.rotate(imageRequestParameters.getRotateAngleTo());
+        if (imageRequestParameters.getTargetWidth() > 0 && imageRequestParameters.getTargetHeight() > 0) {
+            requestCreator.resize(imageRequestParameters.getTargetWidth(), imageRequestParameters.getTargetHeight());
         }
 
-        if (imageRequestParameters.shouldScaleDownTo()) {
+        float rotationAngle = imageRequestParameters.getRotationDegrees() +
+                imageRequestParameters.getExifRotationInDegrees(imageView.getContext());
+
+        requestCreator.rotate(rotationAngle);
+
+        if (imageRequestParameters.shouldScaleDown()) {
             requestCreator.onlyScaleDown();
         }
 
-        if (imageRequestParameters.shouldTransformIntoRound()) {
-            requestCreator.transform(getTransform(imageView.getContext()));
+        if (imageRequestParameters.shouldApplyCirclularTransform()) {
+            RoundedTransform transformation = new RoundedTransform();
+            transformation.setCornerRadius(imageRequestParameters.getCornerRadius());
+            transformation.setHasRoundTopCorners(imageRequestParameters.hasRoundedTopCorners());
+            transformation.setHasRoundBottomCorners(imageRequestParameters.hasRoundedBottomCorners());
+
+            requestCreator.transform(transformation);
         }
 
-        requestCreator.into(imageView, new com.squareup.picasso.Callback() {
-            @Override
-            public void onSuccess() {
-                imageRequestParameters.getCallback().onSuccess();
-            }
+        final Callback callback = imageRequestParameters.getCallback();
+        if (callback != null) {
+            requestCreator.into(imageView, new com.squareup.picasso.Callback() {
+                @Override
+                public void onSuccess() {
+                    callback.onSuccess();
+                }
 
-            @Override
-            public void onError() {
-                imageRequestParameters.getCallback().onFailure();
-            }
-        });
-    }
-
-
-    //==============================================================================================
-    // private methods
-    //==============================================================================================
-
-    private Transformation getTransform(Context context) {
-        if (mTransform == null) {
-            float radius = context.getResources().getDimension(
-                    com.layer.ui.R.dimen.layer_ui_message_item_cell_radius);
-            mTransform = new RoundedTransform(radius);
+                @Override
+                public void onError() {
+                    callback.onFailure();
+                }
+            });
+        } else {
+            requestCreator.into(imageView);
         }
-        return mTransform;
     }
+
+    @Override
+    public void loadDefaultPlaceholder(ImageView imageView) {
+        String path = null;
+        mPicasso.load(path).into(imageView);
+    }
+
+    private boolean isLocalContent(@NonNull Uri uri) {
+        return uri != null && (uri.getScheme().equals("file") || uri.getScheme().equals("content"));
+    }
+
 }

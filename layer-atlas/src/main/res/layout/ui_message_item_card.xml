@@ -57,8 +57,6 @@
             android:background="@drawable/ui_swipeable_item_foreground_selector"
             android:duplicateParentState="true"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/layer_ui_padding_normal"
-            android:paddingRight="@dimen/layer_ui_padding_normal"
             android:paddingTop="@dimen/layer_ui_message_cluster_space">
 
             <LinearLayout
@@ -148,6 +146,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/layer_ui_padding_normal"
                     android:layout_marginStart="@dimen/layer_ui_padding_normal"
+                    android:layout_marginRight="@dimen/layer_ui_padding_normal"
+                    android:layout_marginEnd="@dimen/layer_ui_padding_normal"
                     android:alpha="@{viewModel.messageCellAlpha}"
                     android:background="@drawable/ui_message_viewer_background"
                     android:minHeight="@dimen/layer_ui_message_item_cell_min_height"

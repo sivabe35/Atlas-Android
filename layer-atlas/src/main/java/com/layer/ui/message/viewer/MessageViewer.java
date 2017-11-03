@@ -62,6 +62,7 @@ public class MessageViewer extends FrameLayout {
     protected void bindMessageToView() {
         // Get the model
         MessageModel model = getMessageTypeModel();
+        // TODO : Deal with possible null
         model.setMessage(mMessage);
         Class<? extends MessageView> modelType = model.getRendererType();
 

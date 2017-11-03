@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 
+import com.layer.ui.BR;
 import com.layer.ui.databinding.UiTextMessageViewBinding;
 import com.layer.ui.message.container.MessageContainer;
 import com.layer.ui.message.container.StandardMessageContainer;
@@ -33,7 +34,7 @@ public class TextMessageView extends MessageView<TextMessageModel> {
     }
 
     @Override
-    public Class<? extends MessageContainer> getContainerClass() {
+    public Class<StandardMessageContainer> getContainerClass() {
         return StandardMessageContainer.class;
     }
 }

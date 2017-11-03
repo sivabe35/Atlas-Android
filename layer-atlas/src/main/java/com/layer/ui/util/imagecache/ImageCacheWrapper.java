@@ -28,6 +28,8 @@ public interface ImageCacheWrapper {
 
     void loadImage(ImageRequestParameters imageRequestParameters, ImageView imageView);
 
+    void loadDefaultPlaceholder(ImageView imageView);
+
     /**
      * Callback when the Bitmap or Image is loaded from the ImageCache Library
      */

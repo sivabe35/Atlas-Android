@@ -311,7 +311,6 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerCha
         }
 
         mLayerClient.registerEventListener(this);
-        mAdapter.setQuery(query, null);
         mAdapter.refresh();
     }
 

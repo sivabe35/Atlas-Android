@@ -70,13 +70,16 @@ public class SinglePartImageCellFactory extends
         };
 
         ImageRequestParameters imageRequestParameters = new ImageRequestParameters
-                .Builder(index.mId, PLACEHOLDER, specs.maxWidth, specs.maxHeight, callback)
-                .setRotateAngleTo(0)
-                .setTag(IMAGE_CACHING_TAG)
-                .setShouldCenterImage(true)
-                .setShouldScaleDownTo(true)
-                .setShouldTransformIntoRound(true)
-                .setRotateAngleTo(0)
+                .Builder(index.mId)
+                .placeHolder(PLACEHOLDER)
+                .resize(specs.maxWidth, specs.maxHeight)
+                .rotate(0)
+                .tag(IMAGE_CACHING_TAG)
+                .centerCrop(true)
+                .onlyScaleDown(true)
+                .defaultCircularTransform(true)
+                .rotate(0)
+                .callback(callback)
                 .build();
         mImageCacheWrapper.loadImage(imageRequestParameters, cellHolder.mImageView);
     }
