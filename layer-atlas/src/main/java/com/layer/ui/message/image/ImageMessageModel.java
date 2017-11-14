@@ -2,7 +2,6 @@ package com.layer.ui.message.image;
 
 import android.content.Context;
 import android.support.annotation.ColorRes;
-import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,8 +19,6 @@ import com.layer.ui.util.json.AndroidFieldNamingStrategy;
 import com.squareup.picasso.Picasso;
 
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.List;
 
 public class ImageMessageModel extends MessageModel {
 

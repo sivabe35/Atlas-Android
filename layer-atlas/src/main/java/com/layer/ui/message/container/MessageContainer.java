@@ -59,6 +59,8 @@ public abstract class MessageContainer extends FrameLayout {
             canvas.clipPath(getCornerClippingPath());
             super.dispatchDraw(canvas);
             canvas.restoreToCount(save);
+        } else {
+            super.dispatchDraw(canvas);
         }
     }
 
