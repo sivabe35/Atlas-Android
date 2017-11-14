@@ -9,7 +9,7 @@ import com.layer.ui.util.display.DisplayUtils;
 import java.util.Map;
 
 public class ImageMessageMetadata extends BaseObservable {
-    public String mTitle;
+    private String mTitle;
     private String mArtist;
     private String mSubtitle;
 
