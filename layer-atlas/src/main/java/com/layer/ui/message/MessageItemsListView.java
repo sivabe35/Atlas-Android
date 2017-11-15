@@ -42,7 +42,7 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerCha
 
     protected LayerClient mLayerClient;
     protected Conversation mConversation;
-    private int mNumberOfItemsPerSync;
+    private int mNumberOfItemsPerSync = 20;
     private View mHeaderView;
 
     private RecyclerView.AdapterDataObserver dataObserver = new RecyclerView.AdapterDataObserver() {
@@ -197,7 +197,6 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerCha
                 Conversation.HistoricSyncStatus status = mConversation.getHistoricSyncStatus();
                 setEnabled(status == Conversation.HistoricSyncStatus.MORE_AVAILABLE);
                 setRefreshing(status == Conversation.HistoricSyncStatus.SYNC_PENDING);
-                mAdapter.refresh();
             }
         });
     }
