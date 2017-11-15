@@ -251,9 +251,9 @@ public class ImageRequestParameters {
         private int mTargetHeight;
 
         @Dimension
-        private float mCornerRadius = 17.5f;
-        private boolean mRoundedTopCorners = true;
-        private boolean mRoundedBottomCorners = true;
+        private float mCornerRadius;
+        private boolean mRoundedTopCorners = false;
+        private boolean mRoundedBottomCorners = false;
         private boolean mNoFade;
 
         public Builder() {
