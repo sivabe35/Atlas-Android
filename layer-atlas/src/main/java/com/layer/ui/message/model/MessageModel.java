@@ -43,17 +43,19 @@ public abstract class MessageModel extends BaseObservable implements LayerProgre
     }
 
     public void setMessage(Message message) {
-        mMessage = message;
-        for (MessagePart messagePart : message.getMessageParts()) {
-            boolean isRoot = MessagePartUtils.isRoleRoot(messagePart);
-            if (isRoot) {
-                mRootMessagePart = messagePart;
-            }
+        if (!message.equals(mMessage)) {
+            mMessage = message;
+            for (MessagePart messagePart : message.getMessageParts()) {
+                boolean isRoot = MessagePartUtils.isRoleRoot(messagePart);
+                if (isRoot) {
+                    mRootMessagePart = messagePart;
+                }
 
-            if (messagePart.isContentReady()) {
-                parse(messagePart);
-            } else if (shouldDownloadContentIfNotReady(messagePart) || isRoot) { // Always download root message part
-                download(messagePart);
+                if (messagePart.isContentReady()) {
+                    parse(messagePart);
+                } else if (shouldDownloadContentIfNotReady(messagePart) || isRoot) { // Always download root message part
+                    download(messagePart);
+                }
             }
         }
     }
