@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.layer.sdk.LayerClient;
+import com.layer.sdk.messaging.Message;
 import com.layer.sdk.messaging.MessagePart;
 import com.layer.ui.R;
 import com.layer.ui.message.MessagePartUtils;
@@ -35,8 +36,8 @@ public class ImageMessageModel extends MessageModel {
 
     private final Gson mGson;
     private ImageMessageMetadata mMetadata;
-    private ImageRequestParameters mPreviewRequestParameters;
 
+    private ImageRequestParameters mPreviewRequestParameters;
     private ImageRequestParameters mSourceRequestParameters;
 
     public ImageMessageModel(Context context, LayerClient layerClient) {
@@ -80,6 +81,46 @@ public class ImageMessageModel extends MessageModel {
     private void parseRootMessagePart(MessagePart messagePart) {
         JsonReader reader = new JsonReader(new InputStreamReader(messagePart.getDataStream()));
         mMetadata = mGson.fromJson(reader, ImageMessageMetadata.class);
+
+        Message message = getMessage();
+        if (!MessagePartUtils.hasMessagePartWithRole(message, ROLE_PREVIEW, ROLE_SOURCE)) {
+            ImageRequestParameters.Builder previewRequestBuilder = new ImageRequestParameters.Builder();
+            ImageRequestParameters.Builder sourceRequestBuilder = new ImageRequestParameters.Builder();
+            String previewUrl;
+            int width = 0;
+            int height = 0;
+            if (mMetadata.getPreviewUrl() != null) {
+                previewUrl = mMetadata.getPreviewUrl();
+                width = mMetadata.getPreviewWidth();
+                height = mMetadata.getPreviewHeight();
+            } else if (mMetadata.getSourceUrl() != null) {
+                previewUrl = mMetadata.getSourceUrl();
+                width = mMetadata.getWidth();
+                height = mMetadata.getHeight();
+
+                sourceRequestBuilder.url(mMetadata.getSourceUrl());
+                if (width > 0 && height > 0) {
+                    sourceRequestBuilder.resize(width, height);
+                }
+                sourceRequestBuilder.exifOrientation(mMetadata.getOrientation())
+                        .tag(getClass().getSimpleName());
+
+                mSourceRequestParameters = sourceRequestBuilder.build();
+            } else {
+                previewUrl = null;
+            }
+
+            if (width > 0 && height > 0) {
+                previewRequestBuilder.resize(width, height);
+            }
+
+            previewRequestBuilder.url(previewUrl)
+                    .placeHolder(PLACEHOLDER)
+                    .exifOrientation(mMetadata.getOrientation())
+                    .tag(getClass().getSimpleName());
+
+            mPreviewRequestParameters = previewRequestBuilder.build();
+        }
     }
 
     private void parsePreviewPart(MessagePart messagePart) {
@@ -91,7 +132,7 @@ public class ImageMessageModel extends MessageModel {
         }
 
         builder.placeHolder(PLACEHOLDER)
-                .resize(getMetadata().getPreviewWidth(), getMetadata().getPreviewHeight())
+                .resize(mMetadata.getPreviewWidth(), mMetadata.getPreviewHeight())
                 .exifOrientation(mMetadata.getOrientation())
                 .tag(getClass().getSimpleName());
 
@@ -107,7 +148,7 @@ public class ImageMessageModel extends MessageModel {
         }
 
         builder.placeHolder(PLACEHOLDER)
-                .resize(getMetadata().getWidth(), getMetadata().getHeight())
+                .resize(mMetadata.getWidth(), mMetadata.getHeight())
                 .exifOrientation(mMetadata.getOrientation())
                 .tag(getClass().getSimpleName());
 

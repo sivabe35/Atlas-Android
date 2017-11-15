@@ -42,8 +42,18 @@ public class MessagePartUtils {
         return arguments;
     }
 
-    public static boolean hasMessagePartWithRole(Message message, String role) {
+    public static boolean hasMessagePartWithRole(@NonNull Message message, @NonNull String role) {
         return getMessagePartWithRole(message, role) != null;
+    }
+
+    public static boolean hasMessagePartWithRole(@NonNull Message message, @NonNull String... roles) {
+        for (String role : roles) {
+            if (hasMessagePartWithRole(message, role)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Nullable
