@@ -29,9 +29,6 @@ public class ImageMessageMetadata extends BaseObservable {
     private String mPreviewUrl;
     private int mOrientation;
 
-    private Map<String, String> mActionData;
-    private String mAction;
-
     @Nullable
     public String getTitle() {
         return mTitle;

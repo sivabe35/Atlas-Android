@@ -2,6 +2,7 @@ package com.layer.ui.message.image;
 
 import android.content.Context;
 import android.support.annotation.ColorRes;
+import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -113,6 +114,7 @@ public class ImageMessageModel extends MessageModel {
         mSourceRequestParameters = builder.build();
     }
 
+    @Nullable
     public ImageMessageMetadata getMetadata() {
         return mMetadata;
     }

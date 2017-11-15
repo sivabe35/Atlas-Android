@@ -41,9 +41,11 @@ public class ImageMessageView extends MessageView<ImageMessageModel> {
 
     private void setupImageViewDimensions(ImageMessageModel model) {
         ImageMessageMetadata metadata = model.getMetadata();
-        ViewGroup.LayoutParams layoutParams = mBinding.image.getLayoutParams();
-        layoutParams.width = metadata.getPreviewWidth() > 0 ? metadata.getPreviewWidth() : metadata.getWidth();
-        layoutParams.height = metadata.getPreviewHeight() > 0 ? metadata.getPreviewHeight() : metadata.getHeight();
-        mBinding.image.setLayoutParams(layoutParams);
+        if (metadata != null) {
+            ViewGroup.LayoutParams layoutParams = mBinding.image.getLayoutParams();
+            layoutParams.width = metadata.getPreviewWidth() > 0 ? metadata.getPreviewWidth() : metadata.getWidth();
+            layoutParams.height = metadata.getPreviewHeight() > 0 ? metadata.getPreviewHeight() : metadata.getHeight();
+            mBinding.image.setLayoutParams(layoutParams);
+        }
     }
 }
