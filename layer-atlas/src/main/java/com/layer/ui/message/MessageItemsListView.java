@@ -197,6 +197,7 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerCha
                 Conversation.HistoricSyncStatus status = mConversation.getHistoricSyncStatus();
                 setEnabled(status == Conversation.HistoricSyncStatus.MORE_AVAILABLE);
                 setRefreshing(status == Conversation.HistoricSyncStatus.SYNC_PENDING);
+                mAdapter.refresh();
             }
         });
     }
