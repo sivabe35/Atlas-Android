@@ -52,7 +52,7 @@ public class ImageMessageModel extends MessageModel {
     @Override
     protected void parse(MessagePart messagePart) {
         if (MessagePartUtils.isRoleRoot(messagePart)) {
-            mMetadata = parseRootMessagePart(messagePart);
+            parseRootMessagePart(messagePart);
         } else if (MessagePartUtils.isRole(messagePart, ROLE_PREVIEW)) {
             parsePreviewPart(messagePart);
         } else if (MessagePartUtils.isRole(messagePart, ROLE_SOURCE)) {
@@ -62,7 +62,7 @@ public class ImageMessageModel extends MessageModel {
 
     @Override
     protected boolean shouldDownloadContentIfNotReady(MessagePart messagePart) {
-        if (MessagePartUtils.getMimeType(messagePart).equals(ROOT_MIME_TYPE)) {
+        if (MessagePartUtils.isRoleRoot(messagePart)) {
             return true;
         } else if (MessagePartUtils.isRole(messagePart, ROLE_PREVIEW)) {
             return true;
@@ -77,9 +77,9 @@ public class ImageMessageModel extends MessageModel {
     * Private methods
     */
 
-    private ImageMessageMetadata parseRootMessagePart(MessagePart messagePart) {
+    private void parseRootMessagePart(MessagePart messagePart) {
         JsonReader reader = new JsonReader(new InputStreamReader(messagePart.getDataStream()));
-        return mGson.fromJson(reader, ImageMessageMetadata.class);
+        mMetadata = mGson.fromJson(reader, ImageMessageMetadata.class);
     }
 
     private void parsePreviewPart(MessagePart messagePart) {
