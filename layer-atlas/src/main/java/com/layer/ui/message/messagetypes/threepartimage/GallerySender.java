@@ -13,6 +13,7 @@ import com.layer.sdk.messaging.Identity;
 import com.layer.sdk.messaging.Message;
 import com.layer.sdk.messaging.PushNotificationPayload;
 import com.layer.ui.R;
+import com.layer.ui.message.image.ImageMessageComposer;
 import com.layer.ui.message.messagetypes.AttachmentSender;
 import com.layer.ui.util.Log;
 import com.layer.ui.util.Util;
@@ -21,7 +22,8 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 /**
- * GallerySender creates a ThreePartImage from the a selected image from the user's gallety.
+ * GallerySender creates a Image Message from the a selected image from the user's gallery, and
+ * the supplied ImageMessageComposer
  * Requires `Manifest.permission.READ_EXTERNAL_STORAGE` to read photos from external storage.
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -31,14 +33,28 @@ public class GallerySender extends AttachmentSender {
     public static final int PERMISSION_REQUEST_CODE = 11;
 
     private WeakReference<Activity> mActivity = new WeakReference<Activity>(null);
+    private ImageMessageComposer mImageMessageComposer;
 
     public GallerySender(int titleResId, Integer iconResId, Activity activity, LayerClient layerClient) {
         this(activity.getString(titleResId), iconResId, activity, layerClient);
     }
 
+    public GallerySender(int titleResId, Integer iconResId, Activity activity,
+                         ImageMessageComposer imageMessageComposer, LayerClient layerClient) {
+        this(activity.getString(titleResId), iconResId, activity, imageMessageComposer, layerClient);
+    }
+
     public GallerySender(String title, Integer iconResId, Activity activity, LayerClient layerClient) {
+        this(title, iconResId, activity,
+                new ThreePartImageMessageComposer(activity.getApplicationContext(), layerClient),
+                layerClient);
+    }
+
+    public GallerySender(String title, Integer iconResId, Activity activity,
+                         ImageMessageComposer imageMessageComposer, LayerClient layerClient) {
         super(activity.getApplicationContext(), layerClient, title, iconResId);
         mActivity = new WeakReference<Activity>(activity);
+        mImageMessageComposer = imageMessageComposer;
     }
 
     private void startGalleryIntent(Activity activity) {
@@ -96,7 +112,7 @@ public class GallerySender extends AttachmentSender {
             Identity me = getLayerClient().getAuthenticatedUser();
             String myName = me == null ? "" : Util.getDisplayName(me);
             Uri uri = data.getData();
-            Message message = ThreePartImageUtils.newThreePartImageMessage(activity, getLayerClient(), uri);
+            Message message = mImageMessageComposer.newImageMessage(uri);
 
             PushNotificationPayload payload = new PushNotificationPayload.Builder()
                     .text(getContext().getString(R.string.layer_ui_notification_image, myName))
