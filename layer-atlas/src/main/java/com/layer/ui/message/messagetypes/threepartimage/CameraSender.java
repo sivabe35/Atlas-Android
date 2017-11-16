@@ -15,13 +15,14 @@ import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 
 import com.layer.sdk.LayerClient;
-import com.layer.ui.R;
-import com.layer.ui.message.messagetypes.AttachmentSender;
-import com.layer.ui.util.Log;
-import com.layer.ui.util.Util;
 import com.layer.sdk.messaging.Identity;
 import com.layer.sdk.messaging.Message;
 import com.layer.sdk.messaging.PushNotificationPayload;
+import com.layer.ui.R;
+import com.layer.ui.message.image.ImageMessageComposer;
+import com.layer.ui.message.messagetypes.AttachmentSender;
+import com.layer.ui.util.Log;
+import com.layer.ui.util.Util;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +30,8 @@ import java.lang.ref.WeakReference;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * CameraSender creates a ThreePartImage from the device's camera.
+ * CameraSender takes an Image from the device's camera, and composes a Message via the supplied
+ * ImageMessageComposer
  * <p>
  * Note: If your AndroidManifest declares that it uses the CAMERA permission, then CameraSender will
  * require that the CAMERA permission is also granted.  If your AndroidManifest does not declare
@@ -46,16 +48,36 @@ public class CameraSender extends AttachmentSender {
 
     private WeakReference<Activity> mActivity = new WeakReference<Activity>(null);
 
+    private ImageMessageComposer mImageMessageComposer;
+
     private final AtomicReference<String> mPhotoFilePath = new AtomicReference<String>(null);
     private final String mFileProviderAuthority;
 
-    public CameraSender(int titleResId, Integer iconResId, Activity activity, LayerClient layerClient, @NonNull String fileProviderAuthority) {
+    public CameraSender(int titleResId, Integer iconResId, Activity activity, LayerClient layerClient,
+                        @NonNull String fileProviderAuthority) {
         this(activity.getString(titleResId), iconResId, activity, layerClient, fileProviderAuthority);
     }
 
-    public CameraSender(String title, Integer iconResId, Activity activity, LayerClient layerClient, @NonNull String fileProviderAuthority) {
+    public CameraSender(int titleResId, Integer iconResId, Activity activity,
+                        ImageMessageComposer imageMessageComposer, LayerClient layerClient,
+                        @NonNull String fileProviderAuthority) {
+        this(activity.getString(titleResId), iconResId, activity, imageMessageComposer,
+                layerClient, fileProviderAuthority);
+    }
+
+    public CameraSender(String title, Integer iconResId, Activity activity, LayerClient layerClient,
+                        @NonNull String fileProviderAuthority) {
+        this(title, iconResId, activity,
+                new ThreePartImageMessageComposer(activity.getApplicationContext(), layerClient),
+                layerClient, fileProviderAuthority);
+    }
+
+    public CameraSender(String title, Integer iconResId, Activity activity,
+                        ImageMessageComposer imageMessageComposer, LayerClient layerClient,
+                        @NonNull String fileProviderAuthority) {
         super(activity.getApplicationContext(), layerClient, title, iconResId);
         mActivity = new WeakReference<Activity>(activity);
+        mImageMessageComposer = imageMessageComposer;
         if (TextUtils.isEmpty(fileProviderAuthority)) {
             throw new IllegalArgumentException("Empty file provider authority");
         }
@@ -122,7 +144,7 @@ public class CameraSender extends AttachmentSender {
             }
             Identity me = getLayerClient().getAuthenticatedUser();
             String myName = me == null ? "" : Util.getDisplayName(me);
-            Message message = ThreePartImageUtils.newThreePartImageMessage(activity, getLayerClient(), new File(mPhotoFilePath.get()));
+            Message message = mImageMessageComposer.newImageMessage(new File(mPhotoFilePath.get()));
 
             PushNotificationPayload payload = new PushNotificationPayload.Builder()
                     .text(getContext().getString(R.string.layer_ui_notification_image, myName))
