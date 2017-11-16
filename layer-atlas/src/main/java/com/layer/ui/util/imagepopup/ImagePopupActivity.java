@@ -10,7 +10,7 @@ import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.layer.ui.R;
 import com.layer.ui.message.messagetypes.threepartimage.ThreePartImageCellFactory;
-import com.layer.ui.message.messagetypes.threepartimage.ThreePartImageUtils;
+import com.layer.ui.message.messagetypes.threepartimage.ThreePartImageConstants;
 import com.layer.ui.util.Log;
 import com.layer.sdk.LayerClient;
 import com.layer.sdk.listeners.LayerProgressListener;
@@ -53,25 +53,25 @@ public class ImagePopupActivity extends Activity implements LayerProgressListene
         if (previewId != null && info != null) {
             // ThreePartImage
             switch (info.orientation) {
-                case ThreePartImageUtils.ORIENTATION_0:
+                case ThreePartImageConstants.ORIENTATION_0:
                     mImageView.setOrientation(SubsamplingScaleImageView.ORIENTATION_0);
                     mImageView.setImage(
                             ImageSource.uri(mMessagePartId).dimensions(info.width, info.height),
                             ImageSource.uri(previewId));
                     break;
-                case ThreePartImageUtils.ORIENTATION_90:
+                case ThreePartImageConstants.ORIENTATION_90:
                     mImageView.setOrientation(SubsamplingScaleImageView.ORIENTATION_270);
                     mImageView.setImage(
                             ImageSource.uri(mMessagePartId).dimensions(info.height, info.width),
                             ImageSource.uri(previewId));
                     break;
-                case ThreePartImageUtils.ORIENTATION_180:
+                case ThreePartImageConstants.ORIENTATION_180:
                     mImageView.setOrientation(SubsamplingScaleImageView.ORIENTATION_180);
                     mImageView.setImage(
                             ImageSource.uri(mMessagePartId).dimensions(info.width, info.height),
                             ImageSource.uri(previewId));
                     break;
-                case ThreePartImageUtils.ORIENTATION_270:
+                case ThreePartImageConstants.ORIENTATION_270:
                     mImageView.setOrientation(SubsamplingScaleImageView.ORIENTATION_90);
                     mImageView.setImage(
                             ImageSource.uri(mMessagePartId).dimensions(info.height, info.width),
