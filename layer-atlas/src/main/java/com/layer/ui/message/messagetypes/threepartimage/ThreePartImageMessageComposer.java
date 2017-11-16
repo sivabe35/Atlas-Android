@@ -62,7 +62,7 @@ public class ThreePartImageMessageComposer extends ImageMessageComposer {
     @Override
     public Message newImageMessage(@NonNull Uri imageUri) throws IOException {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return newThreePartImageMessageFromUri(getContext(), getLayerClient(), imageUri);
+            return newThreePartImageMessageFromUri(imageUri);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             ParcelFileDescriptor parcelFileDescriptor = null;
             try {
@@ -120,11 +120,11 @@ public class ThreePartImageMessageComposer extends ImageMessageComposer {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private Message newThreePartImageMessageFromUri(Context context, LayerClient client, @NonNull Uri uri) throws IOException {
-        if (client == null) throw new IllegalArgumentException("Null LayerClient");
-
-        InputStream inputStream = context.getContentResolver().openInputStream(uri);
+    private Message newThreePartImageMessageFromUri(@NonNull Uri uri) throws IOException {
+        InputStream inputStream = getContext().getContentResolver().openInputStream(uri);
         ExifInterface exifData = getExifData(inputStream);
+
+        Context context = getContext();
 
         inputStream = context.getContentResolver().openInputStream(uri);
         BitmapFactory.Options bounds = getBounds(inputStream);
@@ -142,7 +142,7 @@ public class ThreePartImageMessageComposer extends ImageMessageComposer {
         // Create Full message part
         inputStream = context.getContentResolver().openInputStream(uri);
         long fileSize = getFileSizeFromUri(context, uri);
-        MessagePart full = client.newMessagePart(MIME_TYPE_IMAGE_JPEG, inputStream, fileSize);
+        MessagePart full = getLayerClient().newMessagePart(MIME_TYPE_IMAGE_JPEG, inputStream, fileSize);
         if (Log.isLoggable(Log.VERBOSE)) {
             Log.v(String.format(Locale.US, "Full image bytes: %d, preview bytes: %d, info bytes: %d", full.getSize(), preview.getSize(), info.getSize()));
         }
@@ -151,7 +151,7 @@ public class ThreePartImageMessageComposer extends ImageMessageComposer {
         parts[PART_INDEX_FULL] = full;
         parts[PART_INDEX_PREVIEW] = preview;
         parts[PART_INDEX_INFO] = info;
-        return client.newMessage(parts);
+        return getLayerClient().newMessage(parts);
     }
 
     /**
