@@ -86,4 +86,52 @@ public class ImageMessageMetadata extends BaseObservable {
     public int getOrientation() {
         return mOrientation;
     }
+
+    public void setTitle(String title) {
+        mTitle = title;
+    }
+
+    public void setArtist(String artist) {
+        mArtist = artist;
+    }
+
+    public void setSubtitle(String subtitle) {
+        mSubtitle = subtitle;
+    }
+
+    public void setFileName(String fileName) {
+        mFileName = fileName;
+    }
+
+    public void setMimeType(String mimeType) {
+        mMimeType = mimeType;
+    }
+
+    public void setWidth(int width) {
+        mWidth = width;
+    }
+
+    public void setHeight(int height) {
+        mHeight = height;
+    }
+
+    public void setPreviewWidth(int previewWidth) {
+        mPreviewWidth = previewWidth;
+    }
+
+    public void setPreviewHeight(int previewHeight) {
+        mPreviewHeight = previewHeight;
+    }
+
+    public void setSourceUrl(String sourceUrl) {
+        mSourceUrl = sourceUrl;
+    }
+
+    public void setPreviewUrl(String previewUrl) {
+        mPreviewUrl = previewUrl;
+    }
+
+    public void setOrientation(int orientation) {
+        mOrientation = orientation;
+    }
 }
