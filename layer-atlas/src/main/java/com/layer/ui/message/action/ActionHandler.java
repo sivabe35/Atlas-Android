@@ -3,11 +3,13 @@ package com.layer.ui.message.action;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-public abstract class Action<CUSTOM_DATA> {
-    private  String mEvent;
-    private CUSTOM_DATA mData;
+import com.google.gson.JsonObject;
 
-    public Action(String event, CUSTOM_DATA data) {
+public abstract class ActionHandler {
+    private  String mEvent;
+    private JsonObject mData;
+
+    public ActionHandler(String event, JsonObject data) {
         mEvent = event;
         mData = data;
     }
@@ -16,17 +18,17 @@ public abstract class Action<CUSTOM_DATA> {
         return mEvent;
     }
 
-    public CUSTOM_DATA getData() {
+    public JsonObject getData() {
         return mData;
     }
 
-    public void setData(CUSTOM_DATA data) {
+    public void setData(JsonObject data) {
         mData = data;
     }
 
     public abstract void performAction(@NonNull Context context);
 
-    public void performAction(@NonNull Context context, @NonNull CUSTOM_DATA customData) {
+    public void performAction(@NonNull Context context, @NonNull JsonObject customData) {
         // Default behavior is no-op
     }
 }
