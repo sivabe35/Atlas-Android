@@ -120,7 +120,7 @@ public class SinglePartImageCellFactory extends
     @Override
     public boolean isType(Message message) {
         return message.getMessageParts().size() == 1
-                && message.getMessageParts().get(0).getMimeType().startsWith("image/");
+                && message.getMessageParts().iterator().next().getMimeType().startsWith("image/");
     }
 
     @Override

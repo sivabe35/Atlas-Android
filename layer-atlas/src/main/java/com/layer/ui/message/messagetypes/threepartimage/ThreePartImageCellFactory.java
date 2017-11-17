@@ -31,7 +31,7 @@ import com.layer.ui.util.imagepopup.ImagePopupActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * ThreePartImage handles image Messages with three parts: full image, preview image, and
@@ -191,11 +191,20 @@ public class ThreePartImageCellFactory extends
     //==============================================================================================
 
     public boolean isType(Message message) {
-        List<MessagePart> parts = message.getMessageParts();
-        return parts.size() == 3 &&
-                parts.get(ThreePartImageUtils.PART_INDEX_FULL).getMimeType().startsWith("image/") &&
-                parts.get(ThreePartImageUtils.PART_INDEX_PREVIEW).getMimeType().equals(ThreePartImageUtils.MIME_TYPE_PREVIEW) &&
-                parts.get(ThreePartImageUtils.PART_INDEX_INFO).getMimeType().equals(ThreePartImageUtils.MIME_TYPE_INFO);
+        Set<MessagePart> parts = message.getMessageParts();
+        boolean hasFull = false;
+        boolean hasPreview = false;
+        boolean hasInfo = false;
+        for (MessagePart part : parts) {
+            if (part.getMimeType().startsWith("image/")) {
+                hasFull = true;
+            } else if (part.getMimeType().equals(ThreePartImageUtils.MIME_TYPE_PREVIEW)) {
+                hasPreview = true;
+            } else if (part.getMimeType().equals(ThreePartImageUtils.MIME_TYPE_INFO)) {
+                hasInfo = true;
+            }
+        }
+        return parts.size() == 3 && hasFull && hasPreview && hasInfo;
     }
 
     @Override

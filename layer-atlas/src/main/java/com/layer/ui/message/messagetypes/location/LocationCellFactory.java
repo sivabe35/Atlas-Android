@@ -46,7 +46,8 @@ public class LocationCellFactory extends
     }
 
     public boolean isType(Message message) {
-        return message.getMessageParts().size() == 1 && message.getMessageParts().get(0).getMimeType().equals(MIME_TYPE);
+        return message.getMessageParts().size() == 1 && message.getMessageParts().iterator().next()
+                .getMimeType().equals(MIME_TYPE);
     }
 
     @Override
@@ -73,7 +74,8 @@ public class LocationCellFactory extends
     @Override
     public Location parseContent(LayerClient layerClient, Message message) {
         try {
-            JSONObject o = new JSONObject(new String(message.getMessageParts().get(0).getData()));
+            JSONObject o = new JSONObject(new String(message.getMessageParts().iterator().next()
+                    .getData()));
             Location c = new Location();
             c.mLatitude = o.optDouble(KEY_LATITUDE, 0);
             c.mLongitude = o.optDouble(KEY_LONGITUDE, 0);

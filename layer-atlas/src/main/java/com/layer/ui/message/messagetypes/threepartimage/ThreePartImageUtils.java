@@ -39,10 +39,6 @@ public class ThreePartImageUtils {
     public static final String MIME_TYPE_PREVIEW = "image/jpeg+preview";
     public static final String MIME_TYPE_INFO = "application/json+imageSize";
 
-    public static final int PART_INDEX_FULL = 0;
-    public static final int PART_INDEX_PREVIEW = 1;
-    public static final int PART_INDEX_INFO = 2;
-
     public static final int PREVIEW_COMPRESSION_QUALITY = 75;
     public static final int PREVIEW_MAX_WIDTH = 512;
     public static final int PREVIEW_MAX_HEIGHT = 512;
@@ -50,15 +46,30 @@ public class ThreePartImageUtils {
     public static final String MIME_TYPE_IMAGE_JPEG = "image/jpeg";
 
     public static MessagePart getInfoPart(Message message) {
-        return message.getMessageParts().get(PART_INDEX_INFO);
+        for (MessagePart messagePart : message.getMessageParts()) {
+            if (messagePart.getMimeType().equals(MIME_TYPE_INFO)) {
+                return messagePart;
+            }
+        }
+        return null;
     }
 
     public static MessagePart getPreviewPart(Message message) {
-        return message.getMessageParts().get(PART_INDEX_PREVIEW);
+        for (MessagePart messagePart : message.getMessageParts()) {
+            if (messagePart.getMimeType().equals(MIME_TYPE_PREVIEW)) {
+                return messagePart;
+            }
+        }
+        return null;
     }
 
     public static MessagePart getFullPart(Message message) {
-        return message.getMessageParts().get(PART_INDEX_FULL);
+        for (MessagePart messagePart : message.getMessageParts()) {
+            if (messagePart.getMimeType().startsWith("image/")) {
+                return messagePart;
+            }
+        }
+        return null;
     }
 
     /**
@@ -146,11 +157,7 @@ public class ThreePartImageUtils {
             Log.v(String.format(Locale.US, "Full image bytes: %d, preview bytes: %d, info bytes: %d", full.getSize(), preview.getSize(), info.getSize()));
         }
 
-        MessagePart[] parts = new MessagePart[3];
-        parts[PART_INDEX_FULL] = full;
-        parts[PART_INDEX_PREVIEW] = preview;
-        parts[PART_INDEX_INFO] = info;
-        return client.newMessage(parts);
+        return client.newMessage(full, preview, info);
     }
 
     private static ExifInterface getExifData(File imageFile) throws IOException {
@@ -303,11 +310,7 @@ public class ThreePartImageUtils {
             Log.v(String.format(Locale.US, "Full image bytes: %d, preview bytes: %d, info bytes: %d", full.getSize(), preview.getSize(), info.getSize()));
         }
 
-        MessagePart[] parts = new MessagePart[3];
-        parts[PART_INDEX_FULL] = full;
-        parts[PART_INDEX_PREVIEW] = preview;
-        parts[PART_INDEX_INFO] = info;
-        return client.newMessage(parts);
+        return client.newMessage(full, preview, info);
     }
 
     /**
