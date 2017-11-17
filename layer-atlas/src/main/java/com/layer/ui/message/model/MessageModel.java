@@ -43,7 +43,7 @@ public abstract class MessageModel extends BaseObservable implements LayerProgre
     }
 
     public void setMessage(Message message) {
-       // if (!message.equals(mMessage)) {
+        if (!message.equals(mMessage)) {
             mMessage = message;
             for (MessagePart messagePart : message.getMessageParts()) {
                 boolean isRoot = MessagePartUtils.isRoleRoot(messagePart);
@@ -57,7 +57,7 @@ public abstract class MessageModel extends BaseObservable implements LayerProgre
                     download(messagePart);
                 }
             }
-        //}
+        }
     }
 
     public abstract Class<? extends MessageView> getRendererType();

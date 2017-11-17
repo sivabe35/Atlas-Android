@@ -93,6 +93,8 @@ public class RichImageMessageComposer extends ImageMessageComposer {
         ImageMessageMetadata metadata = new ImageMessageMetadata();
         metadata.setHeight(bounds.outHeight);
         metadata.setWidth(bounds.outWidth);
+        metadata.setPreviewHeight(bounds.outHeight);
+        metadata.setPreviewWidth(bounds.outWidth);
         metadata.setMimeType(bounds.outMimeType);
         metadata.setOrientation(exifData.getAttributeInt(ExifInterface.TAG_ORIENTATION, 0));
 
