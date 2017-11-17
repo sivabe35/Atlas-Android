@@ -2,10 +2,12 @@ package com.layer.ui.message.text;
 
 import android.content.Context;
 
+import com.google.gson.JsonObject;
 import com.layer.sdk.LayerClient;
 import com.layer.sdk.messaging.Message;
 import com.layer.sdk.messaging.MessagePart;
 import com.layer.ui.identity.IdentityFormatter;
+import com.layer.ui.message.MessagePartUtils;
 import com.layer.ui.util.Log;
 
 public class RichTextSender extends TextSender {
@@ -35,7 +37,10 @@ public class RichTextSender extends TextSender {
             Log.perf("PlainTextSender is attempting to send a message");
         }
 
-        MessagePart root = getLayerClient().newMessagePart(ROOT_MIME_TYPE, text.getBytes());
+        String mimeType = MessagePartUtils.getAsRoleRoot(ROOT_MIME_TYPE);
+        JsonObject contents = new JsonObject();
+        contents.addProperty("text", text);
+        MessagePart root = getLayerClient().newMessagePart(mimeType, contents.toString().getBytes());
         Message message = getLayerClient().newMessage(root);
 
         return send(message);
