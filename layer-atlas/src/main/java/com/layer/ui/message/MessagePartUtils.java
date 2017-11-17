@@ -97,4 +97,26 @@ public class MessagePartUtils {
 
         return null;
     }
+
+    public static String getAsRoleRoot(String mimeType) {
+        StringBuilder builder = new StringBuilder(mimeType);
+        return builder.append(";role=").append("root").append(";node-id=").append("root").toString();
+    }
+
+    public static String getAsRoleWithParentId(String mimeType, @NonNull String role,
+                                               @Nullable String nodeId,
+                                               @Nullable String parentNodeId) {
+        StringBuilder builder = new StringBuilder(mimeType);
+        builder.append(";role=").append(role);
+
+        if (nodeId != null) {
+            builder.append("node-id=").append(nodeId);
+        }
+
+        if (parentNodeId != null) {
+            builder.append("; parent-node-id=").append(parentNodeId).toString();
+        }
+
+        return builder.toString();
+    }
 }

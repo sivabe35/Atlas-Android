@@ -5,11 +5,9 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.media.ExifInterface;
 
 import com.layer.sdk.LayerClient;
@@ -33,7 +31,7 @@ public abstract class ImageMessageComposer {
     private Context mContext;
     private LayerClient mLayerClient;
 
-    public ImageMessageComposer(@NonNull Context context, @NonNull LayerClient layerClient) {
+    public ImageMessageComposer(Context context, LayerClient layerClient) {
         mContext = context;
         mLayerClient = layerClient;
     }
@@ -42,11 +40,11 @@ public abstract class ImageMessageComposer {
 
     public abstract Message newImageMessage(@NonNull File file) throws IOException;
 
-    public Context getContext() {
+    protected Context getContext() {
         return mContext;
     }
 
-    public LayerClient getLayerClient() {
+    protected LayerClient getLayerClient() {
         return mLayerClient;
     }
 
@@ -85,11 +83,9 @@ public abstract class ImageMessageComposer {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     protected ExifInterface getExifData(@NonNull InputStream inputStream) throws IOException {
         try {
-            ExifInterface exifInterface = new ExifInterface(inputStream);
-            return exifInterface;
+            return new ExifInterface(inputStream);
         } catch (IOException e) {
             if (Log.isLoggable(Log.ERROR)) {
                 Log.e(e.getMessage(), e);

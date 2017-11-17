@@ -14,6 +14,7 @@ import com.layer.sdk.messaging.Message;
 import com.layer.sdk.messaging.PushNotificationPayload;
 import com.layer.ui.R;
 import com.layer.ui.message.image.ImageMessageComposer;
+import com.layer.ui.message.image.RichImageMessageComposer;
 import com.layer.ui.message.messagetypes.AttachmentSender;
 import com.layer.ui.util.Log;
 import com.layer.ui.util.Util;
@@ -46,7 +47,7 @@ public class GallerySender extends AttachmentSender {
 
     public GallerySender(String title, Integer iconResId, Activity activity, LayerClient layerClient) {
         this(title, iconResId, activity,
-                new ThreePartImageMessageComposer(activity.getApplicationContext(), layerClient),
+                new RichImageMessageComposer(activity.getApplicationContext(), layerClient),
                 layerClient);
     }
 
