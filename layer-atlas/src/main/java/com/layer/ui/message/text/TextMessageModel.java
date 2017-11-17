@@ -21,6 +21,8 @@ public class TextMessageModel extends MessageModel {
     private String mTitle;
     private String mSubtitle;
     private String mAuthor;
+    private String mActionEvent;
+    private JsonObject mCustomData;
 
     public TextMessageModel(Context context, LayerClient layerClient) {
         super(context, layerClient);
@@ -45,6 +47,14 @@ public class TextMessageModel extends MessageModel {
         mSubtitle = jsonObject.has("subtitle") ? jsonObject.get("subtitle").getAsString().trim() : null;
         mTitle = jsonObject.has("title") ? jsonObject.get("title").getAsString().trim() : null;
         mAuthor = jsonObject.has("author") ? jsonObject.get("author").getAsString().trim() : null;
+        if (jsonObject.has("action")) {
+            JsonObject action = jsonObject.getAsJsonObject("action");
+            mActionEvent = action.get("event").getAsString();
+            mCustomData = action.get("data").getAsJsonObject();
+        } else {
+            mActionEvent = null;
+            mCustomData = null;
+        }
     }
 
     @Bindable
@@ -62,6 +72,20 @@ public class TextMessageModel extends MessageModel {
     @Bindable
     public String getDescription() {
         return mSubtitle;
+    }
+
+    @Override
+    public String getActionEvent() {
+        return mActionEvent;
+    }
+
+    @Override
+    public JsonObject getActionData() {
+        if (mCustomData != null) {
+            return mCustomData;
+        } else {
+            return super.getActionData();
+        }
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
+import com.google.gson.JsonObject;
 import com.layer.ui.message.container.MessageContainer;
 import com.layer.ui.message.model.MessageModel;
 
@@ -24,4 +25,12 @@ public abstract class MessageView<VIEW_MODEL extends MessageModel> extends Frame
     public abstract void setMessageModel(VIEW_MODEL model);
 
     public abstract Class<? extends MessageContainer> getContainerClass();
+
+    public void performAction(String event) {
+
+    }
+
+    public void performAction(String event, JsonObject customData) {
+
+    }
 }

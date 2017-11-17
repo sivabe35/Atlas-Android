@@ -4,10 +4,9 @@ import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.support.annotation.ColorRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.google.gson.JsonObject;
 import com.layer.sdk.LayerClient;
 import com.layer.sdk.listeners.LayerProgressListener;
 import com.layer.sdk.messaging.Message;
@@ -19,7 +18,6 @@ import com.layer.ui.message.view.MessageView;
 import com.layer.ui.util.DateFormatter;
 import com.layer.ui.util.DateFormatterImpl;
 
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class MessageModel extends BaseObservable implements LayerProgressListener.Weak {
@@ -104,6 +102,12 @@ public abstract class MessageModel extends BaseObservable implements LayerProgre
 
     @Bindable
     public abstract String getFooter();
+
+    public abstract String getActionEvent();
+
+    public JsonObject getActionData() {
+        return new JsonObject();
+    }
 
     @Bindable
     @ColorRes
