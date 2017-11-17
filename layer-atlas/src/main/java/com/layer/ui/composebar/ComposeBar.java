@@ -34,7 +34,8 @@ import com.layer.ui.databinding.UiComposeBarAttachmentMenuItemBinding;
 import com.layer.ui.databinding.UiComposeBarBinding;
 import com.layer.ui.message.messagetypes.AttachmentSender;
 import com.layer.ui.message.messagetypes.MessageSender;
-import com.layer.ui.message.messagetypes.text.TextSender;
+import com.layer.ui.message.text.TextSender;
+import com.layer.ui.message.text.RichTextSender;
 import com.layer.ui.util.EditTextUtil;
 
 import java.util.ArrayList;
@@ -246,7 +247,7 @@ public class ComposeBar extends FrameLayout implements TextWatcher {
     public void setConversation(LayerClient layerClient, Conversation conversation) {
         mConversation = conversation;
         mLayerClient = layerClient;
-        mTextSender = new TextSender(getContext(), layerClient);
+        mTextSender = new RichTextSender(getContext(), layerClient);
         mTextSender.setConversation(conversation);
         for (AttachmentSender attachmentSender : mAttachmentSenders) {
             attachmentSender.setConversation(conversation);

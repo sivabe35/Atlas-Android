@@ -25,7 +25,7 @@ import java.io.InputStream;
 import java.util.Locale;
 
 public class RichImageMessageComposer extends ImageMessageComposer {
-    private static final String ROOT_MIME_TYPE = "application/vnd.layer.image+json";
+    private static final String ROOT_MIME_TYPE = ImageMessageModel.ROOT_MIME_TYPE;
 
     private Gson mGson;
 
