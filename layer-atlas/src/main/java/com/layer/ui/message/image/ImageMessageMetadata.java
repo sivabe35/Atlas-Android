@@ -4,6 +4,7 @@ import android.databinding.BaseObservable;
 import android.support.annotation.Dimension;
 import android.support.annotation.Nullable;
 
+import com.layer.ui.message.model.Action;
 import com.layer.ui.util.display.DisplayUtils;
 
 import java.util.Map;
@@ -28,6 +29,8 @@ public class ImageMessageMetadata extends BaseObservable {
     private String mSourceUrl;
     private String mPreviewUrl;
     private int mOrientation;
+
+    private Action mAction;
 
     @Nullable
     public String getTitle() {
@@ -83,6 +86,10 @@ public class ImageMessageMetadata extends BaseObservable {
         return DisplayUtils.dpToPx(mPreviewHeight > 0 ? mPreviewHeight : mHeight);
     }
 
+    public Action getAction() {
+        return mAction;
+    }
+
     public int getOrientation() {
         return mOrientation;
     }
@@ -133,5 +140,9 @@ public class ImageMessageMetadata extends BaseObservable {
 
     public void setOrientation(int orientation) {
         mOrientation = orientation;
+    }
+
+    public void setAction(Action action) {
+        mAction = action;
     }
 }

@@ -23,6 +23,8 @@ import com.layer.sdk.query.Query;
 import com.layer.sdk.query.SortDescriptor;
 import com.layer.ui.R;
 import com.layer.ui.TypingIndicatorLayout;
+import com.layer.ui.message.action.ActionHandlerRegistry;
+import com.layer.ui.message.action.OpenUrlActionHandler;
 import com.layer.ui.message.binder.BinderRegistry;
 import com.layer.ui.message.messagetypes.CellFactory;
 import com.layer.ui.message.messagetypes.MessageStyle;
@@ -117,6 +119,7 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerCha
             mAdapter.setShouldShowHeader(false);
         }
     }
+
     public void removeHeaderView() {
         mAdapter.setHeaderView(null);
     }
@@ -288,6 +291,8 @@ public class MessageItemsListView extends SwipeRefreshLayout implements LayerCha
                 .predicate(new Predicate(Message.Property.CONVERSATION, Predicate.Operator.EQUAL_TO, conversation))
                 .sortDescriptor(new SortDescriptor(Message.Property.POSITION, SortDescriptor.Order.ASCENDING))
                 .build());
+
+        ActionHandlerRegistry.registerHandler(new OpenUrlActionHandler(layerClient));
     }
 
 

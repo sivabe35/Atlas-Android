@@ -6,12 +6,14 @@ import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import com.layer.sdk.LayerClient;
 import com.layer.sdk.messaging.Message;
 import com.layer.sdk.messaging.MessagePart;
 import com.layer.ui.R;
 import com.layer.ui.message.MessagePartUtils;
+import com.layer.ui.message.model.Action;
 import com.layer.ui.message.model.MessageModel;
 import com.layer.ui.util.imagecache.ImageCacheWrapper;
 import com.layer.ui.util.imagecache.ImageRequestParameters;
@@ -24,7 +26,7 @@ import java.io.InputStreamReader;
 
 public class ImageMessageModel extends MessageModel {
 
-    public static final String ACTION_OPEN_URL = "open-url";
+    public static final String ACTION_EVENT_OPEN_URL = "open-url";
 
     public static final String ROOT_MIME_TYPE = "application/vnd.layer.image+json";
     private static final String ROLE_SOURCE = "source";
@@ -72,6 +74,49 @@ public class ImageMessageModel extends MessageModel {
         }
 
         return false;
+    }
+
+    @Override
+    public String getActionEvent() {
+        if (mMetadata.getAction() != null) {
+            return mMetadata.getAction().getEvent();
+        } else {
+            return ACTION_EVENT_OPEN_URL;
+        }
+    }
+
+    @Override
+    public JsonObject getActionData() {
+        if (mMetadata.getAction() != null) {
+            return mMetadata.getAction().getData();
+        } else {
+            Action action = new Action(ACTION_EVENT_OPEN_URL);
+            String url;
+            int width, height;
+            if (mMetadata.getPreviewUrl() != null) {
+                url = mMetadata.getPreviewUrl();
+                width = mMetadata.getPreviewWidth();
+                height = mMetadata.getPreviewHeight();
+            } else if (mMetadata.getSourceUrl() != null) {
+                url = mMetadata.getSourceUrl();
+                width = mMetadata.getWidth();
+                height = mMetadata.getHeight();
+            } else {
+                if (mPreviewRequestParameters != null && mPreviewRequestParameters.getUri() != null) {
+                    url = mPreviewRequestParameters.getUri().toString();
+                } else {
+                    url = mSourceRequestParameters.getUri().toString();
+                }
+                width = mMetadata.getWidth();
+                height = mMetadata.getHeight();
+            }
+
+            action.getData().addProperty("url", url);
+            action.getData().addProperty("mime-type", mMetadata.getMimeType());
+            action.getData().addProperty("width", width);
+            action.getData().addProperty("height", height);
+            return action.getData();
+        }
     }
 
     /*

@@ -4,31 +4,25 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.google.gson.JsonObject;
+import com.layer.sdk.LayerClient;
 
 public abstract class ActionHandler {
     private  String mEvent;
-    private JsonObject mData;
+    private LayerClient mLayerClient;
 
-    public ActionHandler(String event, JsonObject data) {
+    public ActionHandler(LayerClient layerClient, String event) {
         mEvent = event;
-        mData = data;
     }
 
     public String getEvent() {
         return mEvent;
     }
 
-    public JsonObject getData() {
-        return mData;
+    public LayerClient getLayerClient() {
+        return mLayerClient;
     }
 
-    public void setData(JsonObject data) {
-        mData = data;
-    }
-
-    public abstract void performAction(@NonNull Context context);
-
-    public void performAction(@NonNull Context context, @NonNull JsonObject customData) {
+    public void performAction(@NonNull Context context, JsonObject data) {
         // Default behavior is no-op
     }
 }

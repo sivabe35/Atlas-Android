@@ -4,17 +4,20 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.media.ExifInterface;
 import android.support.v4.widget.ContentLoadingProgressBar;
 
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+import com.layer.sdk.LayerClient;
+import com.layer.sdk.listeners.LayerProgressListener;
+import com.layer.sdk.messaging.MessagePart;
 import com.layer.ui.R;
 import com.layer.ui.message.messagetypes.threepartimage.ThreePartImageCellFactory;
 import com.layer.ui.message.messagetypes.threepartimage.ThreePartImageConstants;
 import com.layer.ui.util.Log;
-import com.layer.sdk.LayerClient;
-import com.layer.sdk.listeners.LayerProgressListener;
-import com.layer.sdk.messaging.MessagePart;
+
+import java.io.Serializable;
 
 /**
  * ImagePopupActivity implements a ful resolution image viewer Activity.  This Activity
@@ -22,6 +25,8 @@ import com.layer.sdk.messaging.MessagePart;
  */
 public class ImagePopupActivity extends Activity implements LayerProgressListener.BackgroundThread.Weak, SubsamplingScaleImageView.OnImageEventListener {
     private static LayerClient sLayerClient;
+
+    public static final String EXTRA_PARAMS = "extra_params";
 
     private SubsamplingScaleImageView mImageView;
     private ContentLoadingProgressBar mProgressBar;
@@ -44,7 +49,78 @@ public class ImagePopupActivity extends Activity implements LayerProgressListene
         mImageView.setRegionDecoderClass(MessagePartRegionDecoder.class);
 
         Intent intent = getIntent();
-        if (intent == null) return;
+        if (intent == null) {
+            return;
+        }
+        if (intent.getExtras().containsKey(EXTRA_PARAMS)) {
+            Parameters parameters = (Parameters) intent.getExtras().getSerializable(EXTRA_PARAMS);
+            displayImage(parameters);
+        } else {
+            displayThreePartImage(intent);
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sLayerClient.registerProgressListener(null, this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sLayerClient.unregisterProgressListener(null, this);
+    }
+
+    public static void init(LayerClient layerClient) {
+        sLayerClient = layerClient;
+        MessagePartDecoder.init(layerClient);
+        MessagePartRegionDecoder.init(layerClient);
+    }
+
+    private void displayImage(Parameters parameters) {
+        mMessagePartId = Uri.parse(parameters.mSourceUri);
+        mProgressBar.show();
+        int orientation;
+        if (parameters.mOrientation == SubsamplingScaleImageView.ORIENTATION_USE_EXIF) {
+            orientation = parameters.mOrientation;
+        } else {
+            Uri uri = Uri.parse(parameters.mPreviewUri != null ? parameters.mPreviewUri : parameters.mSourceUri);
+            switch (parameters.mOrientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    orientation = SubsamplingScaleImageView.ORIENTATION_90;
+                    mImageView.setImage(
+                            ImageSource.uri(mMessagePartId).dimensions(parameters.mWidth, parameters.mHeight),
+                            ImageSource.uri(uri));
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    orientation = SubsamplingScaleImageView.ORIENTATION_180;
+                    mImageView.setImage(
+                            ImageSource.uri(mMessagePartId).dimensions(parameters.mHeight, parameters.mWidth),
+                            ImageSource.uri(uri));
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    orientation = SubsamplingScaleImageView.ORIENTATION_270;
+                    mImageView.setImage(
+                            ImageSource.uri(mMessagePartId).dimensions(parameters.mHeight, parameters.mWidth),
+                            ImageSource.uri(uri));
+                    break;
+                case ExifInterface.ORIENTATION_NORMAL:
+                default:
+                    orientation = SubsamplingScaleImageView.ORIENTATION_0;
+                    mImageView.setImage(
+                            ImageSource.uri(mMessagePartId).dimensions(parameters.mWidth, parameters.mHeight),
+                            ImageSource.uri(uri));
+                    break;
+            }
+        }
+
+        mImageView.setOrientation(orientation);
+        mImageView.setOnImageEventListener(this);
+    }
+
+    private void displayThreePartImage(Intent intent) {
         mMessagePartId = intent.getParcelableExtra("fullId");
         Uri previewId = intent.getParcelableExtra("previewId");
         ThreePartImageCellFactory.Info info = intent.getParcelableExtra("info");
@@ -84,25 +160,6 @@ public class ImagePopupActivity extends Activity implements LayerProgressListene
         }
         mImageView.setOnImageEventListener(this);
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        sLayerClient.registerProgressListener(null, this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        sLayerClient.unregisterProgressListener(null, this);
-    }
-
-    public static void init(LayerClient layerClient) {
-        sLayerClient = layerClient;
-        MessagePartDecoder.init(layerClient);
-        MessagePartRegionDecoder.init(layerClient);
-    }
-
 
     //==============================================================================================
     // SubsamplingScaleImageView.OnImageEventListener: hide progress bar when full part loaded
@@ -167,4 +224,51 @@ public class ImagePopupActivity extends Activity implements LayerProgressListene
         if (Log.isLoggable(Log.ERROR)) Log.e(e.getMessage(), e);
     }
 
+    public static class Parameters implements Serializable {
+        private String mSourceUri;
+        private String mPreviewUri;
+        private int mWidth;
+        private int mHeight;
+        private int mOrientation = SubsamplingScaleImageView.ORIENTATION_USE_EXIF;
+
+        public Parameters() {
+        }
+
+        public Parameters source(Uri uri) {
+            mSourceUri = uri.toString();
+
+            return this;
+        }
+
+        public Parameters preview(Uri uri) {
+            mPreviewUri = uri.toString();
+
+            return this;
+        }
+
+        public Parameters source(String url) {
+            mSourceUri = url;
+
+            return this;
+        }
+
+        public Parameters preview(String url) {
+            mPreviewUri = url;
+
+            return this;
+        }
+
+        public Parameters dimensions(int height, int width) {
+            mHeight = height;
+            mWidth = width;
+
+            return this;
+        }
+
+        public Parameters orientation(int orientation) {
+            mOrientation = orientation;
+
+            return this;
+        }
+    }
 }

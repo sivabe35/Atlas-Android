@@ -26,10 +26,6 @@ public abstract class MessageView<VIEW_MODEL extends MessageModel> extends Frame
 
     public abstract Class<? extends MessageContainer> getContainerClass();
 
-    public void performAction(String event) {
-
-    }
-
     public void performAction(String event, JsonObject customData) {
 
     }
